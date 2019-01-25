@@ -148,6 +148,21 @@ main {
     text-align: center;
     content: '...';
   }
+
+  &.toggleable {
+    height: 0;
+    overflow: hidden;
+    transition: height 0s ease; /* make it faster when it goes away */
+    padding: 0;
+    margin: 0;
+
+    &.show {
+      height: 200px;
+      flex-shrink: 0;
+      overflow: visible;
+      transition: height 1s ease;
+    }
+  }
 }
 
 .footer-legend {
