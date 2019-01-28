@@ -12,20 +12,14 @@ function interpolateCosine(p1, p2, mu) {
 
 class ShoppingFeed {
 
-  constructor(config, output, progress, ending) {
+  constructor(config, output, weight, progress, ending) {
 
     this.config = config;
-    this.output = output;
-    this.progress = progress;
-    this.ending = ending;
-    this.productPickList = [];
-    for (const product of Object.keys(this.config.products)) {
-      let pick = this.config.products[product].weight;
-      while (pick > 0) {
-        this.productPickList.push(product);
-        pick--;
-      }
-    }
+    this.handleOutput = output;
+    this.handleWeight = weight;
+    this.handleProgress = progress;
+    this.handleEnding = ending;
+    this.updateWeights();
     this.counts = {
       BROWSE: 0,
       ADD: 0,
@@ -80,6 +74,36 @@ class ShoppingFeed {
     }
     this.sessions.delete(id);
     this.sessionKeys = [...this.sessions.keys()];
+  }
+
+  updateWeights() {
+    this.productPickList = [];
+    for (const name of Object.keys(this.config.products)) {
+      const product = this.config.products[name];
+      const cat = product.category;
+      let pick = this.config.categories[cat].weight;
+      while (pick > 0) {
+        this.productPickList.push(name);
+        pick--;
+      }
+    }
+    this.handleWeight(this.config.categories);
+  }
+
+  handleCmd(cmd) {
+    if (cmd.cmd === 'weight') {
+      if (!this.config.categories.hasOwnProperty(cmd.category)) return;
+      if (cmd.change > 0 && this.config.categories[cmd.category].weight < 100) {
+        this.config.categries[cmd.category].weight++;
+      } else if (cmd.change < 0 && this.config.categories[cmd.category].weight > 0) {
+        this.config.categries[cmd.category].weight--;
+      }
+      this.updateWeights();
+      this.handleWeight(this.config.categories);
+    }
+  }
+
+  updateVolumeMult(volume) {
   }
 
   getVolume() {
@@ -148,6 +172,7 @@ class ShoppingFeed {
       step = 'WISHLIST';
     }
     const event = {
+      type: 'activity',
       time: this.now.format(),
       session: session.id,
       action: step,
@@ -207,10 +232,10 @@ class ShoppingFeed {
 
     if (this.now.diff(this.lastProgress, 'ms') >= 500) {
       this.lastProgress = this.now.clone();
-      this.progress(this.now)
+      this.handleProgress(this.now)
     }
     if (!this.config.skipBatchEvents) {
-      await this.output(event);
+      await this.handleOutput(event);
     }
 
     if (!this.now.isAfter(this.end) && ((until && !this.now.isAfter(until)) || !until)) {
@@ -219,7 +244,7 @@ class ShoppingFeed {
       });
     } else {
       console.log(this.counts);
-      this.ending();
+      this.handleEnding();
     }
   }
 
@@ -241,10 +266,10 @@ class ShoppingFeed {
 
     if (this.now.diff(this.lastProgress, 'ms') >= 500) {
       this.lastProgress = this.now.clone();
-      this.progress(this.now)
+      this.handleProgress(this.now)
     }
 
-    await this.output(event);
+    await this.handleOutput(event);
 
     if (!this.now.isAfter(this.end)) {
       if (timeout > 0) {
@@ -258,7 +283,7 @@ class ShoppingFeed {
       }
     } else {
       console.log(this.counts);
-      this.ending();
+      this.handleEnding();
     }
   }
 

@@ -12,7 +12,9 @@ const config = {
   "mode": "",
   "output": {
     "type": "kafka",
-    "topic": "ecommerce-logs",
+    "topic": `${process.env.KAFKA_PREFIX ? process.env.KAFKA_PREFIX : ''}${process.env.KAFKA_TOPIC}` || "ecommerce-logs",
+    "cmd_topic": `${process.env.KAFKA_PREFIX ? process.env.KAFKA_PREFIX : ''}${process.env.KAFKA_CMD_TOPIC}` || "viz_cmds",
+    "weight_topic": `${process.env.KAFKA_PREFIX ? process.env.KAFKA_PREFIX : ''}${process.env.KAFKA_WEIGHT_TOPIC}` || "weights",
     "kafka": {
         "connectionString": process.env.KAFKA_URL || "kafka://localhost:9092",
         "ssl": {
@@ -22,6 +24,29 @@ const config = {
     }
   },
   "badCategory": "EKUX",
+  categories: {
+    EKUX: {
+      weight: 60,
+    },
+    '3W3U': {
+      weight: 42,
+    },
+    '6GF4': {
+      weight: 12,
+    },
+    '3RUM': {
+      weight: 30,
+    },
+    'UZZA': {
+      weight: 75
+    },
+    'YRFF': {
+      weight: 93
+    },
+    'UGAH': {
+      weight: 7
+    }
+  },
   "products": {
     "ACME-EKUX-3QVB4Z-5": {
         "category": "EKUX",

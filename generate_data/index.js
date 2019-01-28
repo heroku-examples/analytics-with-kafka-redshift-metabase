@@ -51,7 +51,7 @@ if (config.output.type === "csv") {
     csvStream.end();
   };
 
-  const sf = new ShoppingFeed(config, csvOutput, updateProgress, endCallback);
+  const sf = new ShoppingFeed(config, csvOutput, () => { }, updateProgress, endCallback);
   //sf.updateBatch(Moment(config.primeUntil));
   //sf.updateLive();
   sf.updateBatch();
@@ -65,13 +65,46 @@ if (config.output.type === "csv") {
   let last = start.clone();
 
   const producer = new Kafka.Producer(config.output.kafka);
+  const consumer = new Kafka.SimpleConsumer({
+    idleTimeout: 1000,
+    connectionTimeout: 10 * 1000,
+    clientId: config.output.cmd_topic,
+    consumer: config.output.kafka
+  });
+
+
   let ended = 0;
   let sf = null;
+
+  const handleCmdTopic = (messageSet) => {
+    const items = messageSet.map((m) => JSON.parse(m.message.values.toString('utf8')));
+    for (const cmd of items) {
+      sf.handleCmd(cmd);
+    }
+  };
 
   const handleOutput = (event) => {
     producer.send({
       topic: config.output.topic,
       message: { value: JSON.stringify(event) },
+      partition: 0
+    })
+    .then((r) => {
+    })
+    .catch((e) => {
+      console.log(e);
+      throw e;
+    });
+  };
+
+  const handleWeight = (event) => {
+    output = {
+      type: 'weights',
+      weights: event
+    };
+    producer.send({
+      topic: config.output.weight_topic,
+      message: { value: JSON.stringify(output) },
       partition: 0
     })
       .then((r) => {
@@ -101,9 +134,13 @@ if (config.output.type === "csv") {
     }
   };
 
-  sf = new ShoppingFeed(config, handleOutput, handleProgress, handleEnd);
+  sf = new ShoppingFeed(config, handleOutput, handleWeight, handleProgress, handleEnd);
 
   producer.init().then(() => {
+    return consumer.init();
+  }).then(() => {
+    return consumer.subscribe(config.output.cmd_topic, handleCmdTopic);
+  }).then(() => {
     sf.updateBatch(Moment(config.primeUntil));
   });
 

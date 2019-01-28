@@ -21,6 +21,7 @@ if (NODB) {
 
 const webpackConfig = require('./webpack.config')
 const Consumer = require('./consumer')
+const Kafka = require('no-kafka')
 const app = express()
 const constants = require('./consumer/constants')
 let dataGeneratorProcess = null
@@ -147,6 +148,28 @@ if (!NOKAFKA) {
     }
   })
 
+  const consumer2 = new Consumer({
+    broadcast: (data) =>
+      wss.clients.forEach((client) => client.send(JSON.stringify(data))),
+    interval: constants.INTERVAL,
+    topic: constants.KAFKA_WEIGHT_TOPIC,
+    consumer: {
+      connectionString: process.env.KAFKA_URL.replace(/\+ssl/g, ''),
+      ssl: {
+        cert: './client.crt',
+        key: './client.key'
+      }
+    }
+  })
+
+  const producer = new Kafka.Producer({
+    connectionString: process.env.KAFKA_URL.replace(/\+ssl/g, ''),
+    ssl: {
+      cert: './client.crt',
+      key: './client.key'
+    }
+  })
+
   consumer
     .init()
     .catch((err) => {
@@ -154,6 +177,27 @@ if (!NOKAFKA) {
       if (PRODUCTION) throw err
     })
     .then(() => {
+      return consumer2.init().catch((err) => {
+        console.error(`Consumer2 could not be initialized: ${err}`)
+        if (PRODUCTION) throw err
+      })
+    })
+    .then(() => {
+      return producer.init().catch((err) => {
+        console.error(`Producer could not be initialized: ${err}`)
+        if (PRODUCTION) throw err
+      })
+    })
+    .then(() => {
+      wss.on('connection', function connection(ws) {
+        ws.on('message', function incoming(message) {
+          producer.send({
+            topic: constants.KAFKA_CMD_TOPIC,
+            message: message,
+            partition: 0
+          })
+        })
+      })
       server.listen(PORT, () =>
         console.log(`http/ws server listening on http://localhost:${PORT}`)
       )

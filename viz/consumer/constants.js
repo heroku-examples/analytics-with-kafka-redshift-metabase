@@ -9,4 +9,12 @@ module.exports.MAX_BUFFER_SIZE = Math.floor(maxSize * 1.1)
 module.exports.KAFKA_TOPIC = `${
   process.env.KAFKA_PREFIX ? process.env.KAFKA_PREFIX : ''
 }${process.env.KAFKA_TOPIC}`
+module.exports.KAFKA_CMD_TOPIC = `${
+  process.env.KAFKA_PREFIX ? process.env.KAFKA_PREFIX : ''
+}${process.env.KAFKA_CMD_TOPIC}`
+module.exports.KAFKA_WEIGHT_TOPIC = `${
+  process.env.KAFKA_PREFIX ? process.env.KAFKA_PREFIX : ''
+}${process.env.KAFKA_WEIGHT_TOPIC}`
 console.log(`Kafka topic: ${module.exports.KAFKA_TOPIC}`) // eslint-disable-line no-console
+console.log(`Kafka cmd topic: ${module.exports.KAFKA_CMD_TOPIC}`) // eslint-disable-line no-console
+console.log(`Kafka weight topic: ${module.exports.KAFKA_WEIGHT_TOPIC}`) // eslint-disable-line no-console

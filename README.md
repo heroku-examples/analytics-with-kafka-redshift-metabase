@@ -39,6 +39,8 @@ heroku addons:create heroku-kafka:basic-0
 heroku kafka:topics:create ecommerce-logs
 heroku kafka:consumer-groups:create redshift-batch
 heroku config:set KAFKA_TOPIC=ecommerce-logs
+heroku config:set KAFKA_CMD_TOPIC=audience-cmds
+heroku config:set KAFKA_WEIGHT_TOPIC=weight-updates
 heroku config:set KAFKA_CONSUMER_GROUP=redshift-batch
 heroku config:set FIXTURE_DATA_S3='s3://aws-heroku-integration-demo/fixture.csv'
 git push heroku master
