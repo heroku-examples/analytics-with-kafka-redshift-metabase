@@ -87,19 +87,25 @@ class ShoppingFeed {
         pick--;
       }
     }
-    this.handleWeight(this.config.categories);
+    const weights = {};
+    for (const cat of Object.keys(this.config.categories)) {
+      weights[cat] = this.config.categories[cat].weight
+    }
+    this.handleWeight(weights);
   }
 
   handleCmd(cmd) {
+
     if (cmd.cmd === 'weight') {
-      if (!this.config.categories.hasOwnProperty(cmd.category)) return;
-      if (cmd.change > 0 && this.config.categories[cmd.category].weight < 100) {
-        this.config.categries[cmd.category].weight++;
-      } else if (cmd.change < 0 && this.config.categories[cmd.category].weight > 0) {
-        this.config.categries[cmd.category].weight--;
+      if (this.config.categories.hasOwnProperty(cmd.category)) {
+        if (cmd.change > 0 && this.config.categories[cmd.category].weight < 100) {
+          this.config.categries[cmd.category].weight++;
+        } else if (cmd.change < 0 && this.config.categories[cmd.category].weight > 0) {
+          this.config.categries[cmd.category].weight--;
+        }
+        //this.handleWeight(this.config.categories);
       }
       this.updateWeights();
-      this.handleWeight(this.config.categories);
     }
   }
 

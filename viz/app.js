@@ -207,11 +207,17 @@ if (!NOKAFKA) {
     .then(() => {
       wss.on('connection', function connection(ws) {
         ws.on('message', function incoming(message) {
-          producer.send({
-            topic: constants.KAFKA_CMD_TOPIC,
-            message: message,
-            partition: 0
-          })
+          try {
+            producer.send({
+              topic: constants.KAFKA_CMD_TOPIC,
+              message: {
+                value: message
+              },
+              partition: 0
+            })
+          } catch (e) {
+            console.error(e)
+          }
         })
       })
       server.listen(PORT, () =>

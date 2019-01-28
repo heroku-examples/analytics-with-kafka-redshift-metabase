@@ -108,6 +108,7 @@ if (config.output.type === "csv") {
       partition: 0
     })
       .then((r) => {
+        //console.log('sent', output);
       })
     .catch((e) => {
       console.log(e);

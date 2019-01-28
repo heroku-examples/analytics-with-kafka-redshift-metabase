@@ -21,10 +21,15 @@ const aggregate = [
 
 const url = `ws${window.location.href.match(/^http(s?:\/\/.*)\/.*$/)[1]}`
 const ws = new window.WebSocket(url)
+window.ws = ws
 
 aggregate.forEach((a) => a.init())
 
 ws.onmessage = (e) => {
-  const { data } = JSON.parse(e.data)
-  aggregate.forEach((a) => a.update(data))
+  const msg = JSON.parse(e.data)
+  if (msg.type === 'weights') {
+    //console.log(msg)
+  } else if (msg.type === 'ecommerce') {
+    aggregate.forEach((a) => a.update(msg.data))
+  }
 }
