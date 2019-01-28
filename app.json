@@ -33,6 +33,16 @@
       "value": "ecommerce-logs",
       "required": true
     },
+    "KAFKA_CMD_TOPIC": {
+      "description": "Kafka topic name for audience cmds. Leave the default unless you have a reason to change it.",
+      "value": "audience-cmds",
+      "required": true
+    },
+    "KAFKA_WEIGHT_TOPIC": {
+      "description": "Kafka topic name for category weight updates. Leave the default unless you have a reason to change it.",
+      "value": "weight-updates",
+      "required": true
+    },
     "KAFKA_CONSUMER_GROUP": {
       "description": "Kafka consumer group name that is used by `redshift_batch` process type. Leave the default unless you have a reason to change it.",
       "value": "redshift-batch",
