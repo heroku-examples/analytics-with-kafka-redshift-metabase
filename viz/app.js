@@ -135,8 +135,10 @@ const wss = new WebSocketServer({ server })
  */
 if (!NOKAFKA) {
   const consumer = new Consumer({
-    broadcast: (data) =>
-      wss.clients.forEach((client) => client.send(JSON.stringify(data))),
+    broadcast: (data) => {
+      data.type = 'ecommerce'
+      wss.clients.forEach((client) => client.send(JSON.stringify(data)))
+    },
     interval: constants.INTERVAL,
     topic: constants.KAFKA_TOPIC,
     consumer: {
@@ -148,11 +150,10 @@ if (!NOKAFKA) {
     }
   })
 
-  const consumer2 = new Consumer({
-    broadcast: (data) =>
-      wss.clients.forEach((client) => client.send(JSON.stringify(data))),
-    interval: constants.INTERVAL,
-    topic: constants.KAFKA_WEIGHT_TOPIC,
+  const consumer2 = new Kafka.SimpleConsumer({
+    idleTimeout: 1000,
+    connectionTimeout: 10 * 1000,
+    clientId: constants.KAFKA_WEIGHT_TOPIC,
     consumer: {
       connectionString: process.env.KAFKA_URL.replace(/\+ssl/g, ''),
       ssl: {
@@ -181,6 +182,21 @@ if (!NOKAFKA) {
         console.error(`Consumer2 could not be initialized: ${err}`)
         if (PRODUCTION) throw err
       })
+    })
+    .then(() => {
+      return consumer2
+        .subscribe(constants.KAFKA_WEIGHT_TOPIC, (messageSet) => {
+          const items = messageSet.map((m) =>
+            JSON.parse(m.message.value.toString('utf8'))
+          )
+          for (const msg of items) {
+            wss.clients.forEach((client) => client.send(JSON.stringify(msg)))
+          }
+        })
+        .catch((err) => {
+          console.error(`Consumer2 could not be initialized: ${err}`)
+          if (PRODUCTION) throw err
+        })
     })
     .then(() => {
       return producer.init().catch((err) => {

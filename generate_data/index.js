@@ -77,7 +77,7 @@ if (config.output.type === "csv") {
   let sf = null;
 
   const handleCmdTopic = (messageSet) => {
-    const items = messageSet.map((m) => JSON.parse(m.message.values.toString('utf8')));
+    const items = messageSet.map((m) => JSON.parse(m.message.value.toString('utf8')));
     for (const cmd of items) {
       sf.handleCmd(cmd);
     }
