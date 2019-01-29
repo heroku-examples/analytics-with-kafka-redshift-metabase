@@ -24,6 +24,26 @@ const config = {
     }
   },
   "badCategory": "EKUX",
+  scenarios: {
+    default: {
+      'EKUX': 60,
+      '3W3U': 42,
+      '6GF4': 12,
+      '3RUM': 30,
+      'UZZA': 75,
+      'YRFF': 93,
+      'UGAH': 7
+    },
+    kitchsale: {
+      'EKUX': 5,
+      '3W3U': 5,
+      '6GF4': 99,
+      '3RUM': 5,
+      'UZZA': 5,
+      'YRFF': 5,
+      'UGAH': 5
+    }
+  },
   categories: {
     EKUX: {
       weight: 60,
