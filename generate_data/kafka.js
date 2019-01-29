@@ -25,7 +25,7 @@ const config = {
   },
   "badCategory": "EKUX",
   scenarios: {
-    default: {
+    no_sale: {
       'EKUX': 60,
       '3W3U': 42,
       '6GF4': 12,
@@ -34,7 +34,7 @@ const config = {
       'YRFF': 93,
       'UGAH': 7
     },
-    kitchsale: {
+    kitchen_sale: {
       'EKUX': 5,
       '3W3U': 5,
       '6GF4': 99,
@@ -42,7 +42,35 @@ const config = {
       'UZZA': 5,
       'YRFF': 5,
       'UGAH': 5
-    }
+    },
+    bedroom_sale: {
+        'EKUX': 15,
+        '3W3U': 90,
+        '6GF4': 3,
+        '3RUM': 35,
+        'UZZA': 22,
+        'YRFF': 12,
+        'UGAH': 85
+    },
+    living_room_sale: {
+        'EKUX': 1,
+        '3W3U': 34,
+        '6GF4': 22,
+        '3RUM': 18,
+        'UZZA': 98,
+        'YRFF': 17,
+        'UGAH': 12
+    },
+    media_sale: {
+        'EKUX': 41,
+        '3W3U': 4,
+        '6GF4': 2,
+        '3RUM': 22,
+        'UZZA': 15,
+        'YRFF': 87,
+        'UGAH': 12
+    },
+
   },
   categories: {
     EKUX: {

@@ -108,7 +108,7 @@ class ShoppingFeed {
       }
       this.updateWeights();
     } else if (cmd.cmd === 'scenario') {
-      if (cmd.name === 'default') {
+      if (cmd.name === 'no_sale') {
         this.volumeOverride = null;
       } else {
         this.volumeOverride = .99;

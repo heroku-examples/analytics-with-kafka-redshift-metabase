@@ -5,10 +5,10 @@
 .big-button {
   background: $button-color;
   border: none;
-  padding: 20px 30px;
+  padding: 10px 15px;
   border-radius: 3px;
   color: white;
-  font-size: 27px;
+  font-size: 20px;
   margin: 0 auto;
   display: block;
 }
