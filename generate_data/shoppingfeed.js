@@ -35,6 +35,7 @@ class ShoppingFeed {
     this.lastTimeout = 0;
     this.end = Moment(this.config.endTime);
     this.campaignStart = Moment(config.campaignTime);
+    this.volumeOverride = null;
 
     this.afterCampaign = false;
     this.lastProgress = this.now.clone();
@@ -104,6 +105,19 @@ class ShoppingFeed {
           this.config.categries[cmd.category].weight--;
         }
         //this.handleWeight(this.config.categories);
+      }
+      this.updateWeights();
+    } else if (cmd.cmd === 'scenario') {
+      if (cmd.name === 'default') {
+        this.volumeOverride = null;
+      } else {
+        this.volumeOverride = .99;
+      }
+      if (this.config.scenarios.hasOwnProperty(cmd.name)) {
+        for (const cat of Object.keys(this.config.scenarios[cmd.name])) {
+          console.log(cmd.name, cat);
+          this.config.categories[cat].weight = this.config.scenarios[cmd.name][cat];
+        }
       }
       this.updateWeights();
     }
