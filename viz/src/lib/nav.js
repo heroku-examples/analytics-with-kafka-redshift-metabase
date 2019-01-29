@@ -5,7 +5,9 @@ module.exports = class Nav {
     this.main = document.querySelector('main')
     this.architectureFrame = document.querySelector('.architecture-iframe')
 
-    this.architecture()
+    if (this.architectureLink) {
+      this.architecture()
+    }
   }
 
   formatData(data) {
@@ -31,6 +33,7 @@ module.exports = class Nav {
   init() {}
 
   update(data) {
+    if (!this.architectureLink) return
     this.formatData(data).forEach((topic, index) => {
       if (!this.legend.querySelector(`#topic-${topic}`)) {
         const li = document.createElement('li')

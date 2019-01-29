@@ -79,3 +79,4 @@ typings/
 dist/
 client.crt
 client.key
+.DS_Store

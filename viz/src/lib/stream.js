@@ -5,6 +5,7 @@ import SizedArray from './sizedArray'
 export default class StreamChart {
   constructor(options) {
     this.container = document.querySelector(options.selector)
+    if (!this.container) return
 
     this.xVariable = options.x
     this.yVariable = options.y
@@ -100,6 +101,7 @@ export default class StreamChart {
   }
 
   init() {
+    if (!this.container) return
     this._lastData = new SizedArray(this.maxSize)
 
     this.updateScaleAndAxesData({ first: true })
@@ -120,6 +122,8 @@ export default class StreamChart {
   }
 
   update(data) {
+    if (!this.container) return
+
     if (!this._initialized) return
 
     const fmtData = this.formatData(data)

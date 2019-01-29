@@ -99,9 +99,9 @@ class ShoppingFeed {
     if (cmd.cmd === 'weight') {
       if (this.config.categories.hasOwnProperty(cmd.category)) {
         if (cmd.change > 0 && this.config.categories[cmd.category].weight < 100) {
-          this.config.categries[cmd.category].weight++;
+          this.config.categories[cmd.category].weight++;
         } else if (cmd.change < 0 && this.config.categories[cmd.category].weight > 0) {
-          this.config.categries[cmd.category].weight--;
+          this.config.categories[cmd.category].weight--;
         }
         //this.handleWeight(this.config.categories);
       }

@@ -11,6 +11,10 @@
   }
 }
 
+.category-controls-wrapper {
+  width: 500px;
+}
+
 .category-controls {
   width: 100%;
   max-width: 500px;
@@ -74,7 +78,7 @@
   text-align: center;
   margin: 0 10px;
 
-  dispay: flex;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-content: center;
@@ -109,7 +113,7 @@
 
 /* Colors */
 
-.category-controls.category-1 {
+.category-controls:nth-child(1) {
   button {
     background: $hColor1;
   }
@@ -121,7 +125,7 @@
   }
 }
 
-.category-controls.category-2 {
+.category-controls:nth-child(2) {
   button {
     background: $hColor2;
   }
@@ -133,7 +137,7 @@
   }
 }
 
-.category-controls.category-3 {
+.category-controls:nth-child(3) {
   button {
     background: $hColor3;
   }
@@ -145,7 +149,7 @@
   } /* this one's a little darker because it's not a suitable text color */
 }
 
-.category-controls.category-4 {
+.category-controls:nth-child(4) {
   button {
     background: $hColor4;
   }
@@ -157,7 +161,7 @@
   } /* this one's a little darker because it's not a suitable text color */
 }
 
-.category-controls.category-5 {
+.category-controls:nth-child(5) {
   button {
     background: $hColor5;
   }
