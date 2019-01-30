@@ -4,7 +4,7 @@ module.exports = class Nav {
     this.architectureLink = document.querySelector(options.architecture)
     this.main = document.querySelector('main')
     this.architectureFrame = document.querySelector('.architecture-iframe')
-    
+
     if (this.architectureLink) {
       this.architecture()
     }
