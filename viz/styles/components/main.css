@@ -176,16 +176,17 @@ main {
 }
 
 .footer-legend {
-  margin-bottom: 40px;
+  margin: 20px auto;
 
   ul {
     margin: 0;
     padding: 0;
-    background: white;
+    text-align: center;
 
     li {
       position: relative;
       display: inline-block;
+      text-align: center;
       margin-right: 25px;
       padding: 11px 0;
       padding-left: 25px;
