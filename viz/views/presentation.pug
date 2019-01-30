@@ -1,8 +1,17 @@
 extends layout
 
 block nav
-  include nav-home
+  ul.nav-items
+    li.nav-link.architecture-link
+      a(href="#")
+        object(type='image/svg+xml' data='/public/images/metrics-28.svg')
+          img(src='/public/images/metrics-28.svg')
+
+block architecture
+  .architecture
+    iframe.architecture-iframe(width='100%', height='500px', scrolling='no', seamless)
 
 block content
-  p presentation
-  
+  .chart-container.chart-stream
+    h1.title Wishlist Additions By Product Category
+    .chart.loading
