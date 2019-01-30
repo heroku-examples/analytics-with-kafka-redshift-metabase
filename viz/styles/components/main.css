@@ -27,7 +27,7 @@ html {
 }
 
 section.content-container {
-  max-width: 700px;
+  max-width: 800px;
   margin: 0 auto;
 }
 
@@ -56,10 +56,10 @@ section.content-container {
 
 main {
   height: calc(100vh - $headerHeight);
-  padding: 7vh 5vw 0;
+  padding: 30px 20px;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  /* justify-content: space-around; */
   position: relative;
   z-index: 1;
   background: linear-gradient(to bottom, #f2f2f4, #fff);
@@ -71,6 +71,10 @@ main {
 
   body.salesforce & {
     height: calc(100vh - $sfHeaderHeight);
+  }
+
+  @media screen and (min-width: 600px) {
+    padding: 50px 20px;
   }
 }
 
@@ -104,7 +108,7 @@ main {
   min-height: 30vw;
   display: flex;
   flex-direction: column;
-  margin-bottom: 30px;
+  margin-bottom: 120px;
 
   svg,
   svg > g {

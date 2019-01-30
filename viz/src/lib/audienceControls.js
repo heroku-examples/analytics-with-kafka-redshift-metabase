@@ -36,8 +36,8 @@ export default class AudienceControl {
 
     minusButton.classList.add('minus')
     plusButton.classList.add('plus')
-    minusButton.textContent = '-'
-    plusButton.textContent = '+'
+    minusButton.innerHTML = '<img src="/public/images/remove-mark-28.svg">'
+    plusButton.innerHTML = '<img src="/public/images/add-mark-28.svg">'
 
     plusButton.onclick = () => this.change({ category, type: 'increment' })
     minusButton.onclick = () => this.change({ category, type: 'decrement' })
