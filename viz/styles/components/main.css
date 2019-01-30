@@ -167,7 +167,7 @@ main {
     margin: 0;
 
     &.show {
-      height: 200px;
+      height: auto; /* this won't animate */
       flex-shrink: 0;
       overflow: visible;
       transition: height 1s ease;

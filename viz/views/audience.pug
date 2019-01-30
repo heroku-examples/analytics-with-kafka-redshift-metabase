@@ -2,14 +2,12 @@ extends layout
 
 block nav
   ul.nav-items
-    li.nav-link.architecture-link
+    li.nav-link.icon.architecture-link
       a(href="#")
-        object(type='image/svg+xml' data='/public/images/metrics-28.svg')
-          img(src='/public/images/metrics-28.svg')
-    li.nav-link
+        img(src='/public/images/metrics-28.svg')
+    li.nav-link.icon
       a(href='#' name='chart').toggle
-        object(type='image/svg+xml' data='/public/images/usage-28.svg')
-          img(src='/public/images/usage-28.svg')
+        img(src='/public/images/usage-28.svg')
 
 block architecture
   .architecture
@@ -19,6 +17,8 @@ block content
 
   .chart-container.chart-stream.toggleable(name='chart')
     .chart.loading
+    footer.footer-legend
+      ul
 
   h1.title Wishlist additions by product category
   p Brief instructions: uisque mattis nisi velit, et faucibus dolor volutpat quis.

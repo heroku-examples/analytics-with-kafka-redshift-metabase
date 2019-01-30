@@ -2,7 +2,10 @@
   text-align: center;
 
   .chart-container {
-    min-height: 500px;
+    min-height: 150px;
+  }
+
+  .footer-legend {
     padding-bottom: 30px;
   }
 }

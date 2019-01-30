@@ -46,6 +46,15 @@ header {
       margin-left: 0;
       padding: 17px 15px;
 
+      &.icon {
+        padding: 0;
+
+        a {
+          display: block;
+          padding: 17px 15px;
+        }
+      }
+
       &:first-of-type {
         border-left: 2px solid $hLinkBorder !important;
       }

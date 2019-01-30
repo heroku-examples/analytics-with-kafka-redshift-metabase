@@ -1,9 +1,10 @@
 $hColor1: #482d8c;
 $hColor2: #3ca1da;
-$hColor3: #79c36d;
-$hColor4: #f9a151;
-$hColor5: #d64242;
-$hColor6: #596981;
+$hColor3: #51854A;
+$hColor4: #79c36d;
+$hColor5: #f9a151;
+$hColor6: #d64242;
+$hColor7: #BC5FB2;
 $hChartText: #757a7d;
 
 $sfColor1: #18afe5;
@@ -38,6 +39,10 @@ body.heroku {
   .chart-color-6 {
     background: $hColor6;
     fill: $hColor6;
+  }
+  .chart-color-7 {
+    background: $hColor7;
+    fill: $hColor7;
   }
   path.domain {
     stroke: $hChartText;

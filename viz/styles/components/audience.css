@@ -4,10 +4,19 @@
   }
 
   .chart-container {
+    height: 0;
     min-height: 0;
 
     &.show {
-      margin-bottom: 70px;
+      margin-bottom: 30px;
+
+      .chart {
+        height: auto;
+      }
+    }
+
+    .footer-legend {
+      margin-top: 50px;
     }
   }
 
@@ -179,7 +188,7 @@
     background: $hColor4;
   }
   h2 {
-    color: #d08542;
+    color: #599551;
   } /* this one's a little darker because it's not a suitable text color */
 }
 
@@ -191,6 +200,30 @@
     background: $hColor5;
   }
   h2 {
-    color: $hColor5;
+    color: #d08542;
+  } /* this one's a little darker because it's not a suitable text color */
+}
+
+.category-controls:nth-child(6) {
+  button {
+    background: $hColor6;
+  }
+  progress::-webkit-progress-value {
+    background: $hColor6;
+  }
+  h2 {
+    color: $hColor6;
+  }
+}
+
+.category-controls:nth-child(7) {
+  button {
+    background: $hColor7;
+  }
+  progress::-webkit-progress-value {
+    background: $hColor7;
+  }
+  h2 {
+    color: $hColor7;
   }
 }
