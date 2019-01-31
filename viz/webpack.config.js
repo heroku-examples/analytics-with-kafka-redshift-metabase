@@ -97,20 +97,20 @@ module.exports = {
       bodyClass: THEME
     }),
     htmlPlugin({
-      filename: 'audience/index.html',
+      filename: 'audience.html',
       title: 'Audience',
       template: path.join(__dirname, 'views', 'audience.pug'),
       bodyClass: `${THEME} audience`
     }),
     htmlPlugin({
-      filename: 'presentation/index.html',
+      filename: 'presentation.html',
       title: 'Presentation',
       header: 'Kafka AWS',
       template: path.join(__dirname, 'views', 'presentation.pug'),
       bodyClass: `${THEME} presentation`
     }),
     htmlPlugin({
-      filename: 'booth/index.html',
+      filename: 'booth.html',
       title: 'Booth',
       template: path.join(__dirname, 'views', 'booth.pug'),
       bodyClass: `${THEME} booth`

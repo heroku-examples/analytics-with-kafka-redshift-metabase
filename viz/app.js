@@ -113,11 +113,24 @@ app.get('/admin/kill', auth, (req, res) => {
 
 if (PRODUCTION) {
   app.use(express.static(path.join(__dirname, 'dist')))
-  app.get('/', (req, res) =>
-    res.sendFile(path.join(__dirname, 'dist/index.html'))
-  )
+  app.get('/:route', (req, res) => {
+    if (!req.params) res.sendFile(path.join(__dirname, 'dist/index.html'))
+    else res.sendFile(path.join(__dirname, `dist/${req.params}.html`))
+  })
 } else {
-  app.use(history({ verbose: false }))
+  app.use(
+    history({
+      rewrites: [
+        {
+          from: /\/(audience|booth|presentation)/,
+          to: function(context) {
+            return `${context.parsedUrl.pathname}.html`
+          }
+        }
+      ],
+      verbose: false
+    })
+  )
   app.use(webpackDev(webpack(webpackConfig), { stats: 'minimal' }))
 }
 
