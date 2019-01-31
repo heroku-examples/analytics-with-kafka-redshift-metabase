@@ -17,6 +17,7 @@ module.exports = class Nav {
 
   architecture() {
     this.architectureLink.addEventListener('click', () => {
+      const toggleables = document.querySelectorAll('.toggleable')
       const isOpen = this.main.classList.contains('open')
       if (isOpen) {
         this.architectureFrame.removeAttribute('src')
@@ -28,6 +29,11 @@ module.exports = class Nav {
         )
         this.main.classList.add('open')
       }
+      toggleables.forEach((toggleable) => {
+        if (toggleable.classList.contains('show')) {
+          toggleable.classList.remove('show')
+        }
+      })
     })
   }
 
