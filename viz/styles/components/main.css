@@ -78,26 +78,24 @@ main {
   }
 }
 
-.text-wrapper {
-  .title,
-  .current-sale {
-    text-transform: uppercase;
-    text-align: center;
-    margin: 0 0 25px 0;
-    font-size: 0.8em;
-    line-height: 1.3;
-    letter-spacing: 1px;
-    font-weight: bold;
-    font-size: 16px;
-    margin-bottom: 10px;
+.title,
+.current-sale {
+  text-transform: uppercase;
+  text-align: center;
+  margin: 0 0 25px 0;
+  font-size: 0.8em;
+  line-height: 1.3;
+  letter-spacing: 1px;
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 10px;
 
-    body.heroku & {
-      color: $hText;
-    }
+  body.heroku & {
+    color: $hText;
+  }
 
-    body.salesforce & {
-      color: $sfText;
-    }
+  body.salesforce & {
+    color: $sfText;
   }
 }
 
