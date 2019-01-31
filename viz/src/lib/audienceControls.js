@@ -36,11 +36,22 @@ export default class AudienceControl {
 
     minusButton.classList.add('minus')
     plusButton.classList.add('plus')
-    minusButton.innerHTML = '<span></span><img src="/public/images/remove-mark-28.svg">'
-    plusButton.innerHTML = '<span></span><img src="/public/images/add-mark-28.svg">'
+    minusButton.innerHTML =
+      '<span></span><img src="/public/images/remove-mark-28.svg">'
+    plusButton.innerHTML =
+      '<span></span><img src="/public/images/add-mark-28.svg">'
 
     plusButton.onclick = () => this.change({ category, type: 'increment' })
     minusButton.onclick = () => this.change({ category, type: 'decrement' })
+    // Prevent double tap zoom on buttons
+    plusButton.ontouchend = function(e) {
+      e.preventDefault()
+      this.click()
+    }
+    minusButton.ontouchend = function(e) {
+      e.preventDefault()
+      this.click()
+    }
 
     categoryName.textContent = category
     progressBarWrapper.classList.add('progress-bar')
