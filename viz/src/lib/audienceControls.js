@@ -24,8 +24,8 @@ export default class AudienceControl {
   makeCategoryControl({ category, weight, totalProducts }) {
     const wrapper = document.querySelector('.category-controls-wrapper')
     const section = document.createElement('section')
-    const minusButton = document.createElement('button')
-    const plusButton = document.createElement('button')
+    const minusButton = document.createElement('a')
+    const plusButton = document.createElement('a')
     const progressBarWrapper = document.createElement('div')
     const progressBar = document.createElement('progress')
     const categoryName = document.createElement('h2')
@@ -36,8 +36,8 @@ export default class AudienceControl {
 
     minusButton.classList.add('minus')
     plusButton.classList.add('plus')
-    minusButton.innerHTML = '<img src="/public/images/remove-mark-28.svg">'
-    plusButton.innerHTML = '<img src="/public/images/add-mark-28.svg">'
+    minusButton.innerHTML = '<span></span><img src="/public/images/remove-mark-28.svg">'
+    plusButton.innerHTML = '<span></span><img src="/public/images/add-mark-28.svg">'
 
     plusButton.onclick = () => this.change({ category, type: 'increment' })
     minusButton.onclick = () => this.change({ category, type: 'decrement' })
