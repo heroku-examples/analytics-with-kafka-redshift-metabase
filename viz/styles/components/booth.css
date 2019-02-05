@@ -3,6 +3,7 @@
 
   .chart-container {
     min-height: 150px;
+    margin-bottom: 50px;
   }
 
   .footer-legend {

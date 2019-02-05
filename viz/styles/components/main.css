@@ -78,8 +78,7 @@ main {
   }
 }
 
-.title,
-.current-sale {
+.title {
   text-transform: uppercase;
   text-align: center;
   margin: 0 0 25px 0;
