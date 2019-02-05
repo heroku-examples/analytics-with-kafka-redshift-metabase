@@ -1,3 +1,4 @@
+import kafkaConfig from '../../../generate_data/kafka.js'
 // {
 //   "type": "cmd",
 //   "cmd": "weight",
@@ -53,7 +54,7 @@ export default class AudienceControl {
       this.click()
     }
 
-    categoryName.textContent = category
+    categoryName.textContent = kafkaConfig.categories[category].name
     progressBarWrapper.classList.add('progress-bar')
     progressBarWrapper.appendChild(categoryName)
     progressBar.setAttribute('max', '100')

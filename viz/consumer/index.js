@@ -31,7 +31,7 @@ module.exports = class Consumer {
   onMessage(messageSet) {
     const items = messageSet
       .map((m) => JSON.parse(m.message.value.toString('utf8')))
-      .filter(({ action }) => action === 'WISHLIST')
+      .filter(({ action }) => action === 'BROWSE')
 
     for (const item of items) {
       const time = Moment(item.time)
@@ -60,7 +60,7 @@ module.exports = class Consumer {
     const items = []
     for (const category of Object.keys(this.categories)) {
       const collate = this.categories[category]
-      const cullFrom = this.latestTime.clone().subtract(60, 'seconds')
+      const cullFrom = this.latestTime.clone().subtract(5, 'seconds')
       let idx = 0
       let cullCount = 0
       do {
@@ -78,7 +78,7 @@ module.exports = class Consumer {
         collate.times.shift()
       }
 
-      let timeRange = 60
+      let timeRange = 5
       let avgPerSecond = 0
       if (this.latestTime !== null && collate.times.length > 0) {
         if (collate.first.isAfter(cullFrom)) {
@@ -93,11 +93,12 @@ module.exports = class Consumer {
       })
     }
     const time = new Date().valueOf()
-    this._broadcast({
+    const bcast = {
       data: items.reduce((res, cat) => {
         res[cat.id] = [{ ...cat, time }]
         return res
       }, {})
-    })
+    }
+    this._broadcast(bcast)
   }
 }

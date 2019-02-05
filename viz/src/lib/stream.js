@@ -130,6 +130,7 @@ export default class StreamChart {
     if (fmtData === null) {
       return
     }
+
     this._lastData.push(fmtData)
 
     this.updateScaleAndAxesData({ transition: this.transition })

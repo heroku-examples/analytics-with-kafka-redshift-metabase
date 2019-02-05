@@ -25,34 +25,48 @@ const config = {
   },
   "badCategory": "EKUX",
   scenarios: {
-    no_sale: {
-      'EKUX': 60,
-      '3W3U': 42,
-      '6GF4': 12,
-      '3RUM': 30,
-      'UZZA': 75,
-      'YRFF': 93,
-      'UGAH': 7
+    new_console: {
+      text: 'Awesome! A new game console was released, and there’s plenty in stock!',
+      weights: {
+        'EKUX': 40,
+        '3W3U': 99,
+        '6GF4': 12,
+        '3RUM': 23,
+        'UZZA': 23,
+        'YRFF': 20,
+        'UGAH': 7
+      },
+      maxWait: 8
     },
-    kitchen_sale: {
-      'EKUX': 5,
-      '3W3U': 5,
-      '6GF4': 99,
-      '3RUM': 5,
-      'UZZA': 5,
-      'YRFF': 5,
-      'UGAH': 5
+    electronics_shortage: {
+      text: 'Oh, no! Shortages of electronic components leave manufacturers unable to fill current orders.',
+      weights: {
+        'EKUX': 60,
+        '3W3U': 0,
+        '6GF4': 12,
+        '3RUM': 30,
+        'UZZA': 75,
+        'YRFF': 93,
+        'UGAH': 30
+      },
+      maxWait: 15
     },
-    bedroom_sale: {
-        'EKUX': 15,
-        '3W3U': 90,
-        '6GF4': 3,
-        '3RUM': 35,
+    first_of_spring: {
+      text: 'It’s the first day of spring! All lawn and garden items are on sale!',
+      weights: {
+        'EKUX': 99,
+        '3W3U': 30,
+        '6GF4': 8,
+        '3RUM': 40,
         'UZZA': 22,
         'YRFF': 12,
-        'UGAH': 85
+        'UGAH': 70
+      },
+      maxWait: 7
     },
-    living_room_sale: {
+    social_traffic: {
+      text: 'One of this year’s biggest social media stars just posted a story that mentions the website!',
+      weights: {
         'EKUX': 1,
         '3W3U': 34,
         '6GF4': 22,
@@ -60,8 +74,12 @@ const config = {
         'UZZA': 98,
         'YRFF': 17,
         'UGAH': 12
+      },
+      maxWait: 5
     },
-    media_sale: {
+    broken_cart: {
+      text: 'Oops…the support team is saying that the shopping cart is bugged. Some customers can’t complete their orders!',
+      weights: {
         'EKUX': 41,
         '3W3U': 4,
         '6GF4': 2,
@@ -69,29 +87,51 @@ const config = {
         'UZZA': 15,
         'YRFF': 87,
         'UGAH': 12
+      },
+      maxWait: 30
     },
+    good_weather: {
+      text: 'Put on your bathing suit and fire up the grill! Meteorologists unanimously predict that the upcoming summer will have “the best weather ever known” across the US!',
+      weights: {
+        'EKUX': 90,
+        '3W3U': 4,
+        '6GF4': 95,
+        '3RUM': 22,
+        'UZZA': 15,
+        'YRFF': 50,
+        'UGAH': 12
+      },
+      maxWait: 6
+    }
 
   },
   categories: {
     EKUX: {
+      name: "Lawn & Garden",
       weight: 60,
     },
     '3W3U': {
+      name: "Electronics",
       weight: 42,
     },
     '6GF4': {
+      name: "Apparel",
       weight: 12,
     },
     '3RUM': {
+      name: "Home Furnishing",
       weight: 30,
     },
     'UZZA': {
+      name: "Housewares",
       weight: 75
     },
     'YRFF': {
+      name: "Toys",
       weight: 93
     },
     'UGAH': {
+      name: "Books",
       weight: 7
     }
   },

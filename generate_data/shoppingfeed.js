@@ -114,10 +114,12 @@ class ShoppingFeed {
         this.volumeOverride = .99;
       }
       if (this.config.scenarios.hasOwnProperty(cmd.name)) {
-        for (const cat of Object.keys(this.config.scenarios[cmd.name])) {
-          console.log(cmd.name, cat);
-          this.config.categories[cat].weight = this.config.scenarios[cmd.name][cat];
+        this.config.maxWait = this.config.scenarios[cmd.name].maxWait;
+        for (const cat of Object.keys(this.config.scenarios[cmd.name].weights)) {
+          this.config.categories[cat].weight = this.config.scenarios[cmd.name].weights[cat];
+          console.log(cat, this.config.categories[cat].weight);
         }
+        console.log('maxWait', this.config.maxWait);
       }
       this.updateWeights();
     }

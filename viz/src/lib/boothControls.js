@@ -33,12 +33,11 @@ export default class BoothController {
       else return getRandomNotCurrent()
     }
     this.currentScenario = getRandomNotCurrent()
+    this.currentText = kafkaConfig.scenarios[this.currentScenario].text
   }
 
   setSaleHeader() {
-    document.querySelector(
-      '.current-sale'
-    ).textContent = this.currentScenario.split('_').join(' ')
+    document.querySelector('.current-sale').textContent = this.currentText
   }
 
   init(ws) {

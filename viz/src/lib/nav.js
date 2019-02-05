@@ -1,3 +1,5 @@
+const kafkaConfig = require('../../../generate_data/kafka')
+
 module.exports = class Nav {
   constructor(options) {
     this.legend = document.querySelector(options.legend)
@@ -67,7 +69,7 @@ module.exports = class Nav {
     this.formatData(data).forEach((topic, index) => {
       if (!this.legend.querySelector(`#topic-${topic}`)) {
         const li = document.createElement('li')
-        li.textContent = topic
+        li.textContent = kafkaConfig.categories[topic].name
         li.setAttribute('id', `topic-${topic}`)
         li.classList.add(`color-${index + 1}`)
         this.legend.appendChild(li)
