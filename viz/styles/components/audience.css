@@ -127,7 +127,7 @@
 
 .category-controls {
   progress {
-    border: 0;
+    border: 1px solid #dedede;
     height: 8px;
     border-radius: 50px;
     width: 100%;
@@ -136,13 +136,13 @@
     border: 0;
     height: 8px;
     border-radius: 50px;
-    background: #dedede;
+    background: #eeeeee;
   }
   progress::-moz-progress-bar {
     border: 0;
     height: 8px;
     border-radius: 50px;
-    background: #dedede;
+    background: #eeeeee;
   }
   progress::-webkit-progress-value {
     border: 0;
