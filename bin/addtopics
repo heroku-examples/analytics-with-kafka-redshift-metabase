@@ -1,0 +1,5 @@
+#!/bin/bash
+
+heroku kafka:topics:create $KAFKA_PREFIX$KAFKA_TOPIC
+heroku kafka:topics:create $KAFKA_PREFIX$KAFKA_CMD_TOPIC
+heroku kafka:topics:create $KAFKA_PREFIX$KAFKA_WEIGHT_TOPIC
