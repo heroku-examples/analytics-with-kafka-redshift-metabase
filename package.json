@@ -9,10 +9,11 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "install": "npm run install-redshift && npm run install-generate && npm run install-viz",
+    "install": "npm run install-redshift && npm run install-generate && npm run install-viz && npm run get-fixture",
     "install-redshift": "cd redshift_batch && npm install",
     "install-generate": "cd generate_data && npm install",
-    "install-viz": "cd viz && npm install --dev"
+    "install-viz": "cd viz && npm install --dev",
+    "get-fixture": "bin/getfixture"
   },
   "author": "",
   "license": "ISC",

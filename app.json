@@ -12,6 +12,10 @@
   "repository": "https://github.com/heroku-examples/analytics-with-kafka-redshift-metabase",
   "success_url": "/",
   "env": {
+    "USE_DB": {
+      "description": "Use AWS Redshift or Heroku Postres. Can be 'redshift' or 'heroku'.",
+      "value": "redshift"
+    },
     "AWS_ACCESS_KEY_ID": {
       "description": "AWS access key used by RedShift to access fixture data in S3"
     },

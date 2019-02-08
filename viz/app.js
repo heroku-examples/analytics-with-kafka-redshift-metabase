@@ -36,17 +36,27 @@ if (!NODB) {
     'postgresql://localhost:5432'}?ssl=true`
 
   db = Postgres(dbUrl)
-  query = Postgres.helpers.concat([
-    { query: new Postgres.QueryFile('./sql/truncate.sql', { minify: true }) },
-    {
-      query: new Postgres.QueryFile('./sql/load.sql', { minify: true }),
-      values: [
-        process.env.FIXTURE_DATA_S3,
-        process.env.AWS_ACCESS_KEY_ID,
-        process.env.AWS_SECRET_ACCESS_KEY
-      ]
-    }
-  ])
+  if (process.env.USE_DB === 'redshift') {
+    query = Postgres.helpers.concat([
+      { query: new Postgres.QueryFile('./sql/truncate.sql', { minify: true }) },
+      {
+        query: new Postgres.QueryFile('./sql/load.sql', { minify: true }),
+        values: [
+          process.env.FIXTURE_DATA_S3,
+          process.env.AWS_ACCESS_KEY_ID,
+          process.env.AWS_SECRET_ACCESS_KEY
+        ]
+      }
+    ])
+  } else {
+    query = Postgres.helpers.concat([
+      {
+        query: new Postgres.QueryFile('./sql/create_pg.sql', { minify: true })
+      },
+      { query: new Postgres.QueryFile('./sql/truncate.sql', { minify: true }) },
+      { query: new Postgres.QueryFile('./sql/load_pg.sql', { minify: true }) }
+    ])
+  }
   db.connect()
 }
 
