@@ -90,7 +90,7 @@ if (config.output.type === "csv") {
       partition: 0
     })
     .then((r) => {
-      console.log(config.output.topic, r)
+      //console.log(config.output.topic, r)
     })
     .catch((e) => {
       console.log(e);
