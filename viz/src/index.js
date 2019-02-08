@@ -34,6 +34,7 @@ BoothControls.init(ws)
 
 ws.onmessage = (e) => {
   const msg = JSON.parse(e.data)
+  console.log(msg)
   if (msg.type === 'weights') {
     AudienceControls.update(msg)
   } else if (msg.type === 'ecommerce') {
