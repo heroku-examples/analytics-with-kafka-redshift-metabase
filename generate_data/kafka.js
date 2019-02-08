@@ -453,8 +453,4 @@ const config = {
   ]
 }
 
-if (process.env.KAFKA_PREFIX) {
-    config.output.topic = process.env.KAFKA_PREFIX + config.output.topic;
-}
-
 module.exports = config;
