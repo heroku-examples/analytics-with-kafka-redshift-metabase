@@ -21,7 +21,7 @@
     "ADMIN_PASSWORD": {
       "description": "Password to use Demo Admin functionality. Default is 'supersecret'."
     },
-    "DATABASE_URL": {
+    "AWS_DATABASE_URL": {
       "description": "Connection string to RedShift database (e.g. postgres://username:password@my-redshift-cluster.abcdef123456.us-east-1.redshift.amazonaws.com:5439/db_name)"
     },
     "FIXTURE_DATA_S3": {
