@@ -31,7 +31,11 @@ if (!NODB) {
   Postgres = require('pg-promise')({
     capSQL: true
   })
-  db = Postgres(process.env.DATABASE_URL || process.env.AWS_DATABASE_URL || 'postgresql://localhost:5432')
+  const dbUrl = `${process.env.DATABASE_URL ||
+    process.env.AWS_DATABASE_URL ||
+    'postgresql://localhost:5432'}?ssl=true`
+
+  db = Postgres(dbUrl)
   query = Postgres.helpers.concat([
     { query: new Postgres.QueryFile('./sql/truncate.sql', { minify: true }) },
     {
