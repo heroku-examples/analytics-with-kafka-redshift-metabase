@@ -3,7 +3,7 @@ const error = (message) => { throw new Error(message) }
 const config = {
   "queueSize": 50,
   "timeout": 3000,
-  "database": process.env.AWS_DATABASE_URL || process.env.DATABASE_URL error('AWS_DATABASE_URL or DATABASE_URL env var must be defined.'),
+  "database": process.env.AWS_DATABASE_URL || process.env.DATABASE_URL || error('AWS_DATABASE_URL or DATABASE_URL env var must be defined.'),
   "kafka": {
     "topic": process.env.KAFKA_TOPIC || error('KAFKA_TOPIC env var must be defined. See `app.json` for default value.'),
     "group": process.env.KAFKA_CONSUMER_GROUP || error('KAFKA_CONSUMER_GROUP env var must be defined. See `app.json` for default value.'),
