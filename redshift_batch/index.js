@@ -51,6 +51,7 @@ const dataHandler = (messageSet, topic, partition) => {
 
 
 consumer.init().then(() => {
+  console.log(`Subscribing to topic ${Config.kafka.topic}`);
   consumer.subscribe(Config.kafka.topic, dataHandler);
 });
 
