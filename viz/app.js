@@ -249,8 +249,7 @@ if (!NOKAFKA) {
       })
       server.listen(PORT, () => {
         console.log(`http/ws server listening on http://localhost:${PORT}`)
-      }
-      )
+      })
     })
 } else {
   server.listen(PORT, () =>
