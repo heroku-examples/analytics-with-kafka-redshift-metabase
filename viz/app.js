@@ -129,7 +129,7 @@ if (PRODUCTION) {
   app.use(express.static(path.join(__dirname, 'dist')))
   app.get('/:route', (req, res) => {
     if (!req.params) res.sendFile(path.join(__dirname, 'dist/index.html'))
-    else res.sendFile(path.join(__dirname, `dist/${req.params}.html`))
+    else res.sendFile(path.join(__dirname, `dist/${req.params.route}.html`))
   })
 } else {
   app.use(
@@ -247,8 +247,9 @@ if (!NOKAFKA) {
           }
         })
       })
-      server.listen(PORT, () =>
+      server.listen(PORT, () => {
         console.log(`http/ws server listening on http://localhost:${PORT}`)
+      }
       )
     })
 } else {

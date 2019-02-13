@@ -76,7 +76,7 @@ typings/
 # FuseBox cache
 .fusebox/
 
-dist/
+#dist/
 client.crt
 client.key
 .DS_Store

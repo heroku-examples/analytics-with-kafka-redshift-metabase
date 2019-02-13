@@ -43,7 +43,7 @@ echo -n "$KAFKA_CLIENT_CERT_KEY" > client.key
 
 if [ "${NODE_ENV}" = "production" ]; then
   # Build dist files in production
-  npm run build
+  # npm run build
 fi
 
 # Start it up
