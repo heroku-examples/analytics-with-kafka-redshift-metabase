@@ -5,7 +5,7 @@ const Config = require('getconfig');
 const Kafka = require('no-kafka');
 const { performance } = require('perf_hooks');
 
-Config.database = `${config.database}?ssl=true`;
+Config.database = `${Config.database}?ssl=true`;
 const db = Postgres(Config.database);
 db.connect();
 const ecommTable = new Postgres.helpers.ColumnSet(['time', 'session', 'action', 'product', 'category', 'campaign'], {table: 'ecommercelogs'});
