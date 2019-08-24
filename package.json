@@ -9,11 +9,12 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "install": "npm run install-redshift && npm run install-generate && npm run install-viz && npm run install-mq && npm run get-fixture",
+    "install": "npm run install-redshift && npm run install-generate && npm run install-viz && npm run install-mq && npm run install-mq-worker && npm run get-fixture",
     "install-redshift": "cd redshift_batch && npm install",
     "install-generate": "cd generate_data && npm install",
     "install-viz": "cd viz && npm install --dev",
     "install-mq": "cd mq_broker && npm install",
+    "install-mq-worker": "cd mq_worker && npm install",
     "get-fixture": "bin/getfixture"
   },
   "author": "",
