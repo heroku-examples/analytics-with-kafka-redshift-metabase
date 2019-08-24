@@ -26,7 +26,7 @@ const consumer = new Kafka.SimpleConsumer({
   await consumer.init();
   await consumer.subscribe(constants.KAFKA_WEIGHT_TOPIC, messageSet => {
     messageSet.map(({ message }) => {
-      chan.sendToQueue(queue, message);
+      chan.sendToQueue(queue, message.value);
     });
     console.log(`Sent ${messageSet.length} messages to mq.`);
   });
