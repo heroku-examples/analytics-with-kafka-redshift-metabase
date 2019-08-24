@@ -1,4 +1,5 @@
 const Kafka = require("no-kafka");
+const mqClient = require("amqplib");
 
 const mqUrl = process.env.CLOUDAMQP_URL || "amqp://localhost";
 const queue = "tasks";
