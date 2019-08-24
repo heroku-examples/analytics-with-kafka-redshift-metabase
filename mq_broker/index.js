@@ -24,10 +24,10 @@ const consumer = new Kafka.SimpleConsumer({
   await chan.assertQueue(queue);
 
   await consumer.init();
-  await consumer.subscribe(constants.KAFKA_WEIGHT_TOPIC, messageSet => {
+  await consumer.subscribe(constants.KAFKA_TOPIC, messageSet => {
     messageSet.map(({ message }) => {
       const value = message.value.toString("utf8");
-      chan.sendToQueue(queue, new Buffer(value));
+      chan.sendToQueue(queue, new Buffer.from(value));
       console.log(`Sent message to mq: ${value}`);
     });
     console.log(`Sent ${messageSet.length} messages to mq.`);
