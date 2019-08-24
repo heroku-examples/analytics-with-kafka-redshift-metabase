@@ -38,11 +38,11 @@ const producer = new Kafka.Producer(kafkaConfig);
 
     chan.assertQueue(queue).then(info => {
       const value = JSON.stringify({ length: info.messageCount });
-      //   producer.send({
-      //     topic: constants.KAFKA_QUEUE_TOPIC,
-      //     message: { value },
-      //     partition: 0
-      //   });
+      producer.send({
+        topic: constants.KAFKA_QUEUE_TOPIC,
+        message: { value },
+        partition: 0
+      });
       console.log(`Message queue info: ${value}`);
     });
   });
