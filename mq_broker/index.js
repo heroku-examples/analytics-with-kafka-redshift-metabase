@@ -19,7 +19,7 @@ const consumer = new Kafka.SimpleConsumer({
 
 (async () => {
   const mqConn = await mqClient.connect(mqUrl);
-  const chan = mqConn.createChannel();
+  const chan = await mqConn.createChannel();
   await chan.assertQueue(queue);
 
   await consumer.init();
