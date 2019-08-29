@@ -190,6 +190,19 @@ if (!NOKAFKA) {
     }
   })
 
+  const consumer3 = new Kafka.SimpleConsumer({
+    idleTimeout: 1000,
+    connectionTimeout: 10 * 1000,
+    clientId: constants.KAFKA_QUEUE_TOPIC,
+    consumer: {
+      connectionString: process.env.KAFKA_URL.replace(/\+ssl/g, ''),
+      ssl: {
+        cert: './client.crt',
+        key: './client.key'
+      }
+    }
+  })
+
   const producer = new Kafka.Producer({
     connectionString: process.env.KAFKA_URL.replace(/\+ssl/g, ''),
     ssl: {
@@ -205,25 +218,46 @@ if (!NOKAFKA) {
       if (PRODUCTION) throw err
     })
     .then(() => {
-      return consumer2.init().catch((err) => {
-        console.error(`Consumer2 could not be initialized: ${err}`)
-        if (PRODUCTION) throw err
-      })
-    })
-    .then(() => {
-      return consumer2
-        .subscribe(constants.KAFKA_WEIGHT_TOPIC, (messageSet) => {
-          const items = messageSet.map((m) =>
-            JSON.parse(m.message.value.toString('utf8'))
-          )
-          for (const msg of items) {
-            wss.clients.forEach((client) => client.send(JSON.stringify(msg)))
-          }
-        })
-        .catch((err) => {
+      return Promise.all([
+        consumer2.init().catch((err) => {
           console.error(`Consumer2 could not be initialized: ${err}`)
           if (PRODUCTION) throw err
+        }),
+        consumer3.init().catch((err) => {
+          console.error(`Consumer3 could not be initialized: ${err}`)
+          if (PRODUCTION) throw err
         })
+      ])
+    })
+    .then(() => {
+      return Promise.all([
+        consumer2
+          .subscribe(constants.KAFKA_WEIGHT_TOPIC, (messageSet) => {
+            const items = messageSet.map((m) =>
+              JSON.parse(m.message.value.toString('utf8'))
+            )
+            for (const msg of items) {
+              wss.clients.forEach((client) => client.send(JSON.stringify(msg)))
+            }
+          })
+          .catch((err) => {
+            console.error(`Consumer2 could not be initialized: ${err}`)
+            if (PRODUCTION) throw err
+          }),
+        consumer3
+          .subscribe(constants.KAFKA_QUEUE_TOPIC, (messageSet) => {
+            const items = messageSet.map((m) =>
+              JSON.parse(m.message.value.toString('utf8'))
+            )
+            for (const msg of items) {
+              wss.clients.forEach((client) => client.send(JSON.stringify(msg)))
+            }
+          })
+          .catch((err) => {
+            console.error(`Consumer3 could not be initialized: ${err}`)
+            if (PRODUCTION) throw err
+          })
+      ])
     })
     .then(() => {
       return producer.init().catch((err) => {
