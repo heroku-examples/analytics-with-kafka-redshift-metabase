@@ -7,6 +7,8 @@ function wait(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+let waitTime = 1000
+
 (async () => {
   const mqConn = await mqClient.connect(mqUrl);
   const chan = await mqConn.createChannel();
@@ -14,7 +16,8 @@ function wait(ms) {
 
   await chan.consume(queue, async message => {
     console.log(`Consuming ${message.content.toString()}`)
-    await wait(20 * 1000)
+    waitTime *= 1.1
+    await wait(waitTime)
     chan.ack(message);
     console.log(`Acknowledged ${message.content.toString()}`)
   });
