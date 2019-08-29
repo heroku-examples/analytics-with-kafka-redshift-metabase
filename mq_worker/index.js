@@ -7,7 +7,7 @@ function wait(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-let waitTime = 1000
+let waitTime = 1000;
 
 (async () => {
   const mqConn = await mqClient.connect(mqUrl);
