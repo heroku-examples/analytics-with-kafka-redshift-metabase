@@ -31,6 +31,7 @@ const producer = new Kafka.Producer(kafkaConfig);
   await consumer.init();
   await consumer.subscribe(constants.KAFKA_TOPIC, messageSet => {
     if (messageSet.length > 0) {
+      console.log(`Messageset: ${JSON.stringify(messageSet)}`)
       const value = messageSet[0].message.value.toString("utf8");
       chan.sendToQueue(queue, new Buffer.from(value));
       console.log(`Sent message to mq: ${value}`);
