@@ -13,8 +13,9 @@ function wait(ms) {
   await chan.assertQueue(queue);
 
   await chan.consume(queue, async message => {
-    await wait(4000)
-    console.log(message.content.toString());
+    console.log(`Consuming ${message.content.toString()}`)
+    await wait(20 * 1000)
     chan.ack(message);
+    console.log(`Acknowledged ${message.content.toString()}`)
   });
 })();
