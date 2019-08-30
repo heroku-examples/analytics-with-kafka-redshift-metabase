@@ -48,7 +48,7 @@ const producer = new Kafka.Producer(kafkaConfig);
       const value = JSON.stringify({ length: info.messageCount });
       producer.send({
         topic: constants.KAFKA_QUEUE_TOPIC,
-        message: { value },
+        message: { type: 'queue', data: value },
         partition: 0
       });
       console.log(`Message queue info: ${value}`);
