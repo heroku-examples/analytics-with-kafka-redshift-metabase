@@ -190,19 +190,6 @@ if (!NOKAFKA) {
     }
   })
 
-  const consumer3 = new Kafka.SimpleConsumer({
-    idleTimeout: 1000,
-    connectionTimeout: 10 * 1000,
-    clientId: constants.KAFKA_QUEUE_TOPIC,
-    consumer: {
-      connectionString: process.env.KAFKA_URL.replace(/\+ssl/g, ''),
-      ssl: {
-        cert: './client.crt',
-        key: './client.key'
-      }
-    }
-  })
-
   const producer = new Kafka.Producer({
     connectionString: process.env.KAFKA_URL.replace(/\+ssl/g, ''),
     ssl: {
@@ -218,16 +205,10 @@ if (!NOKAFKA) {
       if (PRODUCTION) throw err
     })
     .then(() => {
-      return Promise.all([
-        consumer2.init().catch((err) => {
-          console.error(`Consumer2 could not be initialized: ${err}`)
-          if (PRODUCTION) throw err
-        }),
-        consumer3.init().catch((err) => {
-          console.error(`Consumer3 could not be initialized: ${err}`)
-          if (PRODUCTION) throw err
-        })
-      ])
+      return consumer2.init().catch((err) => {
+        console.error(`Consumer2 could not be initialized: ${err}`)
+        if (PRODUCTION) throw err
+      })
     })
     .then(() => {
       return Promise.all([
@@ -241,10 +222,10 @@ if (!NOKAFKA) {
             }
           })
           .catch((err) => {
-            console.error(`Consumer2 could not be initialized: ${err}`)
+            console.error(`Weight topic could not be subscribed: ${err}`)
             if (PRODUCTION) throw err
           }),
-        consumer3
+        consumer2
           .subscribe(constants.KAFKA_QUEUE_TOPIC, (messageSet) => {
             const items = messageSet.map((m) =>
               JSON.parse(m.message.value.toString('utf8'))
@@ -254,7 +235,7 @@ if (!NOKAFKA) {
             }
           })
           .catch((err) => {
-            console.error(`Consumer3 could not be initialized: ${err}`)
+            console.error(`Queue topic could not be subscribed: ${err}`)
             if (PRODUCTION) throw err
           })
       ])
