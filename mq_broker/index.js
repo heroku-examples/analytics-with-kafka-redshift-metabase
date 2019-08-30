@@ -25,6 +25,7 @@ const producer = new Kafka.Producer(kafkaConfig);
   const mqConn = await mqClient.connect(mqUrl);
   const chan = await mqConn.createChannel();
   await chan.assertQueue(queue);
+  chan.prefetch(1);
 
   await producer.init();
 
@@ -36,16 +37,8 @@ const producer = new Kafka.Producer(kafkaConfig);
       console.log(`Sent message to mq: ${value}`);
     }
 
-    // if (messageSet.length > 0) {
-    //   const values = messageSet.map((m) => m.message.value.toString("utf8"))
-    //   values.forEach((value, i) => {
-    //     chan.sendToQueue(queue, new Buffer.from(value));
-    //     console.log(`Sent message[${i}] to mq: ${value}`);
-    //   })
-    // }
-
     chan.assertQueue(queue).then(info => {
-      const value = JSON.stringify({ length: info.messageCount });
+      const value = JSON.stringify({ length: info.messageCount, time: new Date() });
       producer.send({
         topic: constants.KAFKA_QUEUE_TOPIC,
         message: { type: 'queue', data: value },
