@@ -16,7 +16,7 @@ let waitTime = 1000;
 
   await chan.consume(queue, async message => {
     console.log(`Consuming ${message.content.toString()}`)
-    waitTime = Math.min(Math.ceil(waitTime * 1.5), Number.MAX_SAFE_INTEGER)
+    waitTime = Math.min(Math.ceil(waitTime * 1.1), Number.MAX_SAFE_INTEGER - 1)
     console.log(`Waiting ${waitTime}`)
     await wait(waitTime)
     chan.ack(message);
