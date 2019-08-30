@@ -7,8 +7,8 @@ function wait(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-let waitTime = 1000;
-let maxWait = Math.pow(2, 31) - 1;
+// let waitTime = 1000;
+// let maxWait = Math.pow(2, 31) - 1;
 
 (async () => {
   const mqConn = await mqClient.connect(mqUrl);
@@ -17,7 +17,7 @@ let maxWait = Math.pow(2, 31) - 1;
 
   await chan.consume(queue, async message => {
     console.log(`Consuming ${message.content.toString()}`)
-    waitTime = Math.min(Math.ceil(waitTime * 1.1), maxWait)
+    // waitTime = Math.min(Math.ceil(waitTime * 1.1), maxWait)
     console.log(`Waiting ${waitTime}`)
     await wait(waitTime)
     chan.ack(message);

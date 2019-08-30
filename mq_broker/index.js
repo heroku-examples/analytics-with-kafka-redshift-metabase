@@ -24,6 +24,7 @@ const producer = new Kafka.Producer(kafkaConfig);
 (async () => {
   const mqConn = await mqClient.connect(mqUrl);
   const chan = await mqConn.createChannel();
+  chan.prefetch(1)
   await chan.assertQueue(queue);
 
   await producer.init();
