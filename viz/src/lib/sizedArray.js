@@ -5,6 +5,9 @@ module.exports = class SizedArray {
   }
 
   push(items) {
+    if (!Array.isArray(items)) {
+      items = [items]
+    }
     const current = this._items.length
     const add = items.length
     const max = this._size

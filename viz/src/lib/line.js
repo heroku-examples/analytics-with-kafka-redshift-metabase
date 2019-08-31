@@ -48,8 +48,12 @@ export default class StreamChart {
 
     this.line = d3
       .line()
-      .x((d, i) => this.xScale(i))
-      .y((d) => this.yScale(d.y))
+      .x((d) => {
+        return this.xScale(+d[this.xVariable])
+      })
+      .y((d) => {
+        return this.yScale(d[this.yVariable])
+      })
       .curve(d3.curveMonotoneX)
 
     this.area = d3
@@ -80,7 +84,7 @@ export default class StreamChart {
     date.setMilliseconds(0)
 
     return Object.assign({}, raw, {
-      [this.xVariable]: date
+      time: date
     })
   }
 
@@ -161,14 +165,16 @@ export default class StreamChart {
   updateLine(options = {}) {
     let data = this._lastData.items()
 
+    if (data.length == 0) return
+
     const updateSelection = this.chartArea
-      .selectAll('.chart-path')
+      .selectAll('.chart-line')
       .data(this.line(data))
 
     const enterSelection = updateSelection
       .enter()
       .append('path')
-      .attr('class', (__, index) => `chart-path chart-color-${index + 1}`)
+      .attr('class', (__, index) => `chart-line line-color-${index + 1}`)
 
     updateSelection.exit().remove()
 
