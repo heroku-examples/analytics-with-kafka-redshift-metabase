@@ -7,8 +7,8 @@ function wait(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-const PREFETCH = 5
-const WAIT_TIME = 1000
+const PREFETCH = 5;
+const WAIT_TIME = 1000;
 
 (async () => {
   const mqConn = await mqClient.connect(mqUrl);
