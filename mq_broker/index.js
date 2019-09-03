@@ -31,6 +31,8 @@ const producer = new Kafka.Producer(kafkaConfig);
 
   await consumer.init();
   await consumer.subscribe(constants.KAFKA_TOPIC, messageSet => {
+    console.log(`Message set length: ${messageSet.length}`)
+
     messageSet.forEach((m) => {
       const value = m.message.value.toString("utf8");
       chan.sendToQueue(queue, new Buffer.from(value));
