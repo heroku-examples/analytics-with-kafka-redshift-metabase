@@ -50,6 +50,38 @@ body.heroku {
     background: $hColor8;
     fill: $hColor8;
   }
+  .chart-line-color-1 {
+    fill: none;
+    stroke: $hColor1;
+  }
+  .chart-line-color-2 {
+    fill: none;
+    stroke: $hColor2;
+  }
+  .chart-line-color-3 {
+    fill: none;
+    stroke: $hColor3;
+  }
+  .chart-line-color-4 {
+    fill: none;
+    stroke: $hColor4;
+  }
+  .chart-line-color-5 {
+    fill: none;
+    stroke: $hColor5;
+  }
+  .chart-line-color-6 {
+    fill: none;
+    stroke: $hColor6;
+  }
+  .chart-line-color-7 {
+    fill: none;
+    stroke: $hColor7;
+  }
+  .chart-line-color-8 {
+    fill: none;
+    stroke: $hColor8;
+  }
   path.domain {
     stroke: $hChartText;
   }
@@ -89,6 +121,30 @@ body.salesforce {
   .chart-color-6 {
     background: $hColor6;
     fill: $hColor6;
+  }
+  .chart-line-color-1 {
+    fill: none;
+    stroke: $sfColor1;
+  }
+  .chart-line-color-2 {
+    fill: none;
+    stroke: $sfColor2;
+  }
+  .chart-line-color-3 {
+    fill: none;
+    stroke: $sfColor3;
+  }
+  .chart-line-color-4 {
+    fill: none;
+    stroke: $sfColor4;
+  }
+  .chart-line-color-5 {
+    fill: none;
+    stroke: $sfColor5;
+  }
+  .chart-line-color-6 {
+    fill: none;
+    stroke: $sfColor6;
   }
   path.domain {
     stroke: $sfChartText;

@@ -2,6 +2,12 @@ import * as d3 from 'd3'
 import _ from 'lodash'
 import SizedArray from './sizedArray'
 
+const startOfSecond = (d) => {
+  const date = new Date(d)
+  date.setMilliseconds(0)
+  return date
+}
+
 export default class StreamChart {
   constructor(options) {
     this.container = document.querySelector(options.selector)
@@ -48,26 +54,17 @@ export default class StreamChart {
 
     this.line = d3
       .line()
-      .x((d) => {
-        return this.xScale(+d[this.xVariable])
-      })
-      .y((d) => {
-        return this.yScale(d[this.yVariable])
-      })
-      .curve(d3.curveMonotoneX)
-
-    this.area = d3
-      .area()
       .x((d, index, items) => {
         const last = index === items.length - 1
         // Force the first data point to always line up with the right edge
         const secondsAgo = last
           ? 0
-          : Math.floor((new Date() - d.data[this.xVariable]) / 1000)
+          : Math.floor((new Date() - d[this.xVariable]) / 1000)
         return this.xScale(secondsAgo)
       })
-      .y0((d) => this.yScale(d[0]))
-      .y1((d) => this.yScale(d[1]))
+      .y((d) => {
+        return this.yScale(d[this.yVariable])
+      })
       .curve(d3.curveBasis)
   }
 
@@ -80,11 +77,8 @@ export default class StreamChart {
   }
 
   formatData(raw) {
-    const date = new Date(raw.time)
-    date.setMilliseconds(0)
-
     return Object.assign({}, raw, {
-      time: date
+      [this.xVariable]: startOfSecond(raw[this.xVariable])
     })
   }
 
@@ -128,11 +122,7 @@ export default class StreamChart {
   }
 
   updateScaleAndAxesData() {
-    // Using silhouette offset keeps the center at 0 so this sets the y scale
-    // so 0 is always in the middle
-    const max = d3.max(this._lastData.items(), (d) =>
-      _.reduce(_.omit(d, this.xVariable), _.add)
-    )
+    const max = d3.max(this._lastData.items(), (d) => d[this.yVariable])
     this.yScale.domain([0, max]).nice()
   }
 
@@ -163,18 +153,16 @@ export default class StreamChart {
   }
 
   updateLine(options = {}) {
-    let data = this._lastData.items()
+    const data = this._lastData.items()
 
-    if (data.length == 0) return
+    if (data.length === 0) return
 
-    const updateSelection = this.chartArea
-      .selectAll('.chart-line')
-      .data(this.line(data))
+    const updateSelection = this.chartArea.selectAll('.chart-path').data([data])
 
     const enterSelection = updateSelection
       .enter()
       .append('path')
-      .attr('class', (__, index) => `chart-line line-color-${index + 1}`)
+      .attr('class', (__, index) => `chart-path chart-line-color-${index + 1}`)
 
     updateSelection.exit().remove()
 
@@ -187,7 +175,7 @@ export default class StreamChart {
         const node = nodes[index]
 
         d3.select(node)
-          .attr('d', this.area)
+          .attr('d', this.line)
           .attr('transform', null)
 
         d3.active(node).attr(
