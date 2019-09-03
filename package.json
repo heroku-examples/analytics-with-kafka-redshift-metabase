@@ -15,9 +15,7 @@
     "install-viz": "cd viz && npm install --dev",
     "install-mq": "cd mq_broker && npm install",
     "install-mq-worker": "cd mq_worker && npm install",
-    "get-fixture": "bin/getfixture",
-    "scale:down": "heroku ps:scale mq_worker=0:standard-1x && heroku ps:scale mq_broker=0:standard-1x && heroku ps:scale dataworker=0:standard-1x",
-    "scale:up": "heroku ps:scale mq_worker=1:standard-1x && heroku ps:scale mq_broker=1:standard-1x && heroku ps:scale dataworker=1:standard-1x"
+    "get-fixture": "bin/getfixture"
   },
   "author": "",
   "license": "ISC",

@@ -65,7 +65,7 @@ export default class StreamChart {
       .y((d) => {
         return this.yScale(d[this.yVariable])
       })
-      .curve(d3.curveBasis)
+      .curve(d3.curveLinear)
   }
 
   getHeight() {
@@ -108,12 +108,7 @@ export default class StreamChart {
 
     if (!this._initialized) return
 
-    const fmtData = this.formatData(data)
-    if (fmtData === null) {
-      return
-    }
-
-    this._lastData.push(fmtData)
+    this._lastData.push(this.formatData(data))
 
     this.updateScaleAndAxesData({ transition: this.transition })
     this.updateScales({ transition: this.transition })
@@ -122,8 +117,8 @@ export default class StreamChart {
   }
 
   updateScaleAndAxesData() {
-    const max = d3.max(this._lastData.items(), (d) => d[this.yVariable])
-    this.yScale.domain([0, max]).nice()
+    const yValues = this._lastData.items().map((d) => d[this.yVariable])
+    this.yScale.domain([d3.min(yValues), d3.max(yValues)]).nice()
   }
 
   updateScales() {
