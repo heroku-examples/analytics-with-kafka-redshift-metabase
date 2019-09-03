@@ -14,7 +14,7 @@ function random(min, max) {
 (async () => {
   const mqConn = await mqClient.connect(mqUrl);
   const chan = await mqConn.createChannel();
-  chan.prefetch(100)
+  chan.prefetch(20)
   await chan.assertQueue(queue);
 
   await chan.consume(queue, async message => {

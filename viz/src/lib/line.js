@@ -2,12 +2,6 @@ import * as d3 from 'd3'
 import _ from 'lodash'
 import SizedArray from './sizedArray'
 
-const startOfSecond = (d) => {
-  const date = new Date(d)
-  date.setMilliseconds(0)
-  return date
-}
-
 export default class StreamChart {
   constructor(options) {
     this.container = document.querySelector(options.selector)
@@ -35,6 +29,7 @@ export default class StreamChart {
 
     this.chartArea = chartArea.append('g').attr('clip-path', 'url(#clip)')
     this.xAxisG = chartArea.append('g').attr('class', 'x-axis')
+    this.yAxisG = chartArea.append('g').attr('class', 'y-axis')
 
     // The first points need to be rendered outside the x axis
     const rightEdge = 3
@@ -52,6 +47,11 @@ export default class StreamChart {
       })
       .scale(this.xScale)
 
+    this.yAxis = d3
+      .axisRight()
+      .ticks(1)
+      .scale(this.yScale)
+
     this.line = d3
       .line()
       .x((d, index, items) => {
@@ -65,7 +65,7 @@ export default class StreamChart {
       .y((d) => {
         return this.yScale(d[this.yVariable])
       })
-      .curve(d3.curveLinear)
+      .curve(d3.curveMonotoneX)
   }
 
   getHeight() {
@@ -78,7 +78,7 @@ export default class StreamChart {
 
   formatData(raw) {
     return Object.assign({}, raw, {
-      [this.xVariable]: startOfSecond(raw[this.xVariable])
+      [this.xVariable]: new Date(raw[this.xVariable])
     })
   }
 
@@ -118,7 +118,7 @@ export default class StreamChart {
 
   updateScaleAndAxesData() {
     const yValues = this._lastData.items().map((d) => d[this.yVariable])
-    this.yScale.domain([d3.min(yValues), d3.max(yValues)]).nice()
+    this.yScale.domain([0, Math.max(d3.max(yValues), 1)]).nice()
   }
 
   updateScales() {
@@ -134,6 +134,8 @@ export default class StreamChart {
     this.xAxisG
       .attr('transform', `translate(0, ${this.getHeight() + 15})`)
       .call(this.xAxis)
+
+    this.yAxisG.attr('transform', `translate(0,0)`).call(this.yAxis)
 
     this.xAxisG
       .selectAll('text')

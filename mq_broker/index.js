@@ -31,11 +31,11 @@ const producer = new Kafka.Producer(kafkaConfig);
 
   await consumer.init();
   await consumer.subscribe(constants.KAFKA_TOPIC, messageSet => {
-    if (messageSet.length > 0) {
-      const value = messageSet[0].message.value.toString("utf8");
+    messageSet.forEach((m) => {
+      const value = m.message.value.toString("utf8");
       chan.sendToQueue(queue, new Buffer.from(value));
       console.log(`Sent message to mq: ${value}`);
-    }
+    })
 
     chan.assertQueue(queue).then(info => {
       const value = JSON.stringify({
