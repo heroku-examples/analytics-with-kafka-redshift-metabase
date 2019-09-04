@@ -24,10 +24,12 @@ export default class StreamChart {
     this.clipPath = chartArea
       .append('defs')
       .append('clipPath')
-      .attr('id', 'clip')
+      .attr('id', 'clip-stream')
       .append('rect')
 
-    this.chartArea = chartArea.append('g').attr('clip-path', 'url(#clip)')
+    this.chartArea = chartArea
+      .append('g')
+      .attr('clip-path', 'url(#clip-stream)')
     this.xAxisG = chartArea.append('g').attr('class', 'x-axis')
 
     // The first points need to be rendered outside the x axis

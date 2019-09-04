@@ -33,10 +33,10 @@ export default class QueueChart {
     this.clipPath = chartArea
       .append('defs')
       .append('clipPath')
-      .attr('id', 'clip')
+      .attr('id', 'clip-queue')
       .append('rect')
 
-    this.chartArea = chartArea.append('g').attr('clip-path', 'url(#clip)')
+    this.chartArea = chartArea.append('g').attr('clip-path', 'url(#clip-queue)')
     this.xAxisG = chartArea.append('g').attr('class', 'x-axis')
     this.yAxisG = chartArea.append('g').attr('class', 'y-axis')
 
@@ -170,7 +170,11 @@ export default class QueueChart {
     const enterSelection = updateSelection
       .enter()
       .append('path')
-      .attr('class', (__, index) => `chart-path chart-line-color-${index + 1}`)
+      .attr(
+        'class',
+        (__, index) =>
+          `chart-path chart-path-line chart-line-color-${index + 1}`
+      )
 
     updateSelection.exit().remove()
 

@@ -23,7 +23,6 @@ body,
 html {
   position: relative;
   font-family: 'BentonSans', 'Helvetica Neue', sans-serif;
-  /*overflow: hidden;*/
 }
 
 section.content-container {
@@ -131,6 +130,10 @@ main {
 
   text {
     cursor: default;
+  }
+
+  .chart-path-line {
+    stroke-width: 2;
   }
 
   .chart {
@@ -326,7 +329,6 @@ main.index {
   .chart-container {
     height: auto;
     margin-bottom: 40px;
-    height: calc(100vh - 250px);
   }
 
   .chart-stream {
