@@ -11,9 +11,9 @@ function random(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-function evenMinute() {
+function makeFast() {
   const d = new Date();
-  return d.getMinutes() % 2 === 0;
+  return d.getSeconds() < 30;
 }
 
 (async () => {
@@ -25,8 +25,8 @@ function evenMinute() {
   await chan.consume(queue, async message => {
     console.log(`CON ${message.content.toString()}`)
 
-    const isFast = evenMinute()
-    await wait(random(isFast ? 10 : 2000, isFast ? 100 : 5000))
+    const isFast = makeFast()
+    await wait(random(isFast ? 1 : 1000, isFast ? 50 : 5000))
     chan.ack(message);
 
     console.log(`ACK ${message.content.toString()}`)
