@@ -1,5 +1,6 @@
 import * as d3 from 'd3'
 import _ from 'lodash'
+import abbrev from 'number-abbreviate'
 import SizedArray from './sizedArray'
 
 export default class QueueChart {
@@ -41,17 +42,26 @@ export default class QueueChart {
     this.yAxisG = chartArea.append('g').attr('class', 'y-axis')
 
     // The first points need to be rendered outside the x axis
-    const rightEdge = 3
+    this.leadingDataPoints = 3
     this.xScale = d3
       .scaleLinear()
-      .domain([this.maxDisplaySize + rightEdge, rightEdge])
+      .domain([
+        this.maxDisplaySize + this.leadingDataPoints,
+        this.leadingDataPoints
+      ])
     this.yScale = d3.scaleLinear()
 
     this.xAxis = d3
       .axisBottom()
-      .tickValues(_.range(rightEdge, this.maxDisplaySize + rightEdge + 1, 15))
+      .tickValues(
+        _.range(
+          this.leadingDataPoints,
+          this.maxDisplaySize + this.leadingDataPoints + 1,
+          15
+        )
+      )
       .tickFormat((d) => {
-        const seconds = d - rightEdge
+        const seconds = d - this.leadingDataPoints
         return `${seconds}s`
       })
       .scale(this.xScale)
@@ -199,11 +209,11 @@ export default class QueueChart {
 
   updateQueue() {
     const data = this._lastData.items()
-    if (data.length === 0) return
+    if (data.length < this.leadingDataPoints) return
 
-    const count = data[data.length - 1][this.yVariable]
+    const count = data[data.length - this.leadingDataPoints][this.yVariable]
 
-    this.queueCount.textContent = count
+    this.queueCount.textContent = abbrev(count)
 
     let countIndicator = ''
     if (countIndicator <= 100) {
