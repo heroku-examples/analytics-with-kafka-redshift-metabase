@@ -105,7 +105,8 @@ main {
   min-height: 30vw;
   display: flex;
   flex-direction: column;
-  margin-bottom: 120px;
+  margin-bottom: 40px;
+  height: calc(100vh - 250px);
 
   svg,
   svg > g {
@@ -173,7 +174,8 @@ main {
 }
 
 .chart-stream {
-  width: 75%;
+  width: calc(75% - 10px);
+  margin-right: 10px;
 }
 
 .chart-line {
@@ -183,10 +185,32 @@ main {
   .x-axis {
     display: none;
   }
+}
+
+.queue-count {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 3px;
+  background: #ffffff;
+  position: relative;
+  margin-bottom: 10px;
+  height: 80px;
+
+  body.heroku & {
+    border-color: $hBorder;
+  }
+
+  body.salesforce & {
+    border-color: $sfBorder;
+  }
 
   .queue-color {
-    width: 100px;
-    height: 100px;
+    width: 30px;
+    height: 100%;
+    border-radius: 3px 0 0 3px;
 
     &[data-color='low'] {
       background-color: $hColor4;
@@ -200,10 +224,25 @@ main {
       background-color: $hColor6;
     }
   }
+
+  .queue-title {
+    font-size: 14px;
+    font-weight: bold;
+    color: $hChartText;
+    padding: 0 10px;
+    flex: 1;
+  }
+
+  .queue-text {
+    font-size: 36px;
+    font-weight: bold;
+    color: $hChartText;
+    padding: 0 10px;
+  }
 }
 
 .footer-legend {
-  margin: 20px auto;
+  width: calc(75% - 10px);
 
   ul {
     margin: 0;

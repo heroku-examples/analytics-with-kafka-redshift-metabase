@@ -71,7 +71,7 @@ export default class QueueChart {
       .y((d) => {
         return this.yScale(d[this.yVariable])
       })
-      .curve(d3.curveLinear)
+      .curve(d3.curveMonotoneX)
   }
 
   getHeight() {
@@ -83,8 +83,11 @@ export default class QueueChart {
   }
 
   formatData(raw) {
+    const date = new Date(raw[this.xVariable])
+    date.setMilliseconds(0)
+
     return Object.assign({}, raw, {
-      [this.xVariable]: new Date(raw[this.xVariable])
+      [this.xVariable]: date
     })
   }
 
