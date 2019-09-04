@@ -1,11 +1,11 @@
-$hColor1: #482d8c;
-$hColor2: #3ca1da;
-$hColor3: #51854a;
-$hColor4: #79c36d;
-$hColor5: #f9a151;
-$hColor6: #d64242;
-$hColor7: #bc5fb2;
-$hColor8: #000000;
+$hColor1: #482d8c; /* purple */
+$hColor2: #3ca1da; /* blue */
+$hColor3: #51854a; /* green */
+$hColor4: #79c36d; /* light green */
+$hColor5: #f9a151; /* orange */
+$hColor6: #d64242; /* red */
+$hColor7: #bc5fb2; /* pink */
+$hColor8: #000000; /* black */
 $hChartText: #757a7d;
 
 $sfColor1: #18afe5;

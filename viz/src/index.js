@@ -1,7 +1,7 @@
 import '../styles/style.css'
 
 import Stream from './lib/stream'
-import Line from './lib/line'
+import Queue from './lib/queue'
 import Nav from './lib/nav'
 import { MAX_SIZE, MAX_BUFFER_SIZE, INTERVAL } from '../consumer/constants'
 import AudienceControl from './lib/audienceControls'
@@ -22,8 +22,9 @@ const aggregate = [
   })
 ]
 
-const QueueGraph = new Line({
+const QueueGraph = new Queue({
   selector: '.chart-line .chart',
+  countSelector: '.chart-line .queue-count',
   transition: INTERVAL,
   x: 'time',
   y: 'length',

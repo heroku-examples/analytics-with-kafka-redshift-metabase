@@ -2,10 +2,19 @@ import * as d3 from 'd3'
 import _ from 'lodash'
 import SizedArray from './sizedArray'
 
-export default class StreamChart {
+export default class QueueChart {
   constructor(options) {
     this.container = document.querySelector(options.selector)
     if (!this.container) return
+
+    this.queueContainer = document.querySelector(options.countSelector)
+
+    this.queueColor = this.queueContainer.querySelector(
+      '[data-container=queue-color]'
+    )
+    this.queueCount = this.queueContainer.querySelector(
+      '[data-container=queue-text]'
+    )
 
     this.xVariable = options.x
     this.yVariable = options.y
@@ -32,7 +41,7 @@ export default class StreamChart {
     this.yAxisG = chartArea.append('g').attr('class', 'y-axis')
 
     // The first points need to be rendered outside the x axis
-    const rightEdge = 0
+    const rightEdge = 3
     this.xScale = d3
       .scaleLinear()
       .domain([this.maxDisplaySize + rightEdge, rightEdge])
@@ -87,6 +96,7 @@ export default class StreamChart {
     this.updateScales({ first: true })
     this.updateAxes({ first: true })
     this.updateLine({ first: true })
+    this.updateQueue({ first: true })
     d3.select(this.container).classed('loading', false)
 
     window.addEventListener('resize', () => this.resize())
@@ -111,6 +121,7 @@ export default class StreamChart {
     this.updateScales({ transition: this.transition })
     this.updateAxes({ transition: this.transition })
     this.updateLine({ transition: this.transition })
+    this.updateQueue({ transition: this.transition })
   }
 
   updateScaleAndAxesData() {
@@ -177,5 +188,25 @@ export default class StreamChart {
           `translate(${this.xScale(this.xScale.domain()[0] + 1)},0)`
         )
       })
+  }
+
+  updateQueue() {
+    const data = this._lastData.items()
+    if (data.length === 0) return
+
+    const count = data[data.length - 1][this.yVariable]
+
+    this.queueCount.textContent = count
+
+    let countIndicator = ''
+    if (countIndicator <= 100) {
+      countIndicator = 'low'
+    } else if (countIndicator <= 500) {
+      countIndicator = 'medium'
+    } else {
+      countIndicator = 'high'
+    }
+
+    this.queueColor.setAttribute('data-color', countIndicator)
   }
 }
