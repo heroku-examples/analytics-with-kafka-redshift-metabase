@@ -58,9 +58,7 @@ main {
   height: calc(100vh - $headerHeight);
   padding: 30px 20px;
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  /* justify-content: space-around; */
+  flex-direction: column;
   position: relative;
   z-index: 1;
   background: linear-gradient(to bottom, #f2f2f4, #fff);
@@ -68,6 +66,11 @@ main {
 
   &.open {
     transform: translate(0px, $diagramHeight);
+  }
+
+  &.index {
+    flex-direction: row;
+    flex-wrap: wrap;
   }
 
   body.salesforce & {
@@ -102,10 +105,11 @@ main {
 /* --- Chart containers --*/
 .chart-container {
   width: 100%;
+  height: 100%;
   min-height: 30vw;
   display: flex;
   flex-direction: column;
-  margin-bottom: 40px;
+  margin-bottom: 120px;
   height: calc(100vh - 250px);
 
   svg,
@@ -173,14 +177,7 @@ main {
   }
 }
 
-.chart-stream {
-  width: calc(75% - 10px);
-  margin-right: 10px;
-}
-
 .chart-line {
-  width: 25%;
-
   .y-axis,
   .x-axis {
     display: none;
@@ -242,7 +239,7 @@ main {
 }
 
 .footer-legend {
-  width: calc(75% - 10px);
+  margin: 20px auto;
 
   ul {
     margin: 0;
@@ -322,5 +319,27 @@ main {
         }
       }
     }
+  }
+}
+
+main.index {
+  .chart-container {
+    height: auto;
+    margin-bottom: 40px;
+    height: calc(100vh - 250px);
+  }
+
+  .chart-stream {
+    width: calc(75% - 10px);
+    margin-right: 10px;
+  }
+
+  .chart-line {
+    width: 25%;
+  }
+
+  .footer-legend {
+    margin: 0;
+    width: calc(75% - 10px);
   }
 }

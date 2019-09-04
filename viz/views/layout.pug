@@ -10,6 +10,7 @@ html
     for css in htmlWebpackPlugin.files.css
       link(rel='stylesheet' type='text/css' href=css)
     title #{htmlWebpackPlugin.options.title}
+  block vars
   body(class=htmlWebpackPlugin.options.bodyClass)
     header
       nav
@@ -23,7 +24,7 @@ html
         block nav
     block architecture
     
-    main
+    main(class=mainClass)
       block content
 
     for js in htmlWebpackPlugin.files.js
