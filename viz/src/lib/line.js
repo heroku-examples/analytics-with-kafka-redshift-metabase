@@ -32,7 +32,7 @@ export default class StreamChart {
     this.yAxisG = chartArea.append('g').attr('class', 'y-axis')
 
     // The first points need to be rendered outside the x axis
-    const rightEdge = 3
+    const rightEdge = 0
     this.xScale = d3
       .scaleLinear()
       .domain([this.maxDisplaySize + rightEdge, rightEdge])
@@ -47,10 +47,7 @@ export default class StreamChart {
       })
       .scale(this.xScale)
 
-    this.yAxis = d3
-      .axisRight()
-      .ticks(1)
-      .scale(this.yScale)
+    this.yAxis = d3.axisRight().scale(this.yScale)
 
     this.line = d3
       .line()
@@ -65,7 +62,7 @@ export default class StreamChart {
       .y((d) => {
         return this.yScale(d[this.yVariable])
       })
-      .curve(d3.curveMonotoneX)
+      .curve(d3.curveLinear)
   }
 
   getHeight() {
@@ -118,7 +115,7 @@ export default class StreamChart {
 
   updateScaleAndAxesData() {
     const yValues = this._lastData.items().map((d) => d[this.yVariable])
-    this.yScale.domain([0, Math.max(d3.max(yValues), 1)]).nice()
+    this.yScale.domain([0, d3.max(yValues)]).nice()
   }
 
   updateScales() {

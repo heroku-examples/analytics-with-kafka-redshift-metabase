@@ -14,12 +14,12 @@ function random(min, max) {
 (async () => {
   const mqConn = await mqClient.connect(mqUrl);
   const chan = await mqConn.createChannel();
-  chan.prefetch(20)
+  chan.prefetch(5)
   await chan.assertQueue(queue);
 
   await chan.consume(queue, async message => {
     console.log(`CON ${message.content.toString()}`)
-    await wait(random(100, 1000))
+    await wait(random(1, 1000))
     chan.ack(message);
     console.log(`ACK ${message.content.toString()}`)
   });
