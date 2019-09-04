@@ -26,7 +26,7 @@ function evenMinute() {
     console.log(`CON ${message.content.toString()}`)
 
     const isFast = evenMinute()
-    await wait(random(isFast ? 100 : 2000, isFast ? 500 : 5000))
+    await wait(random(isFast ? 10 : 2000, isFast ? 100 : 5000))
     chan.ack(message);
 
     console.log(`ACK ${message.content.toString()}`)
