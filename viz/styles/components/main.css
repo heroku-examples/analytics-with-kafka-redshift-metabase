@@ -110,6 +110,7 @@ main {
   flex-direction: column;
   margin-bottom: 120px;
   height: calc(100vh - 250px);
+  position: relative;
 
   svg,
   svg > g {
@@ -263,6 +264,10 @@ main {
       margin-left: 8px;
       font-weight: bold;
 
+      &:last-child {
+        margin-right: 0;
+      }
+
       &:before {
         width: 25px;
         height: 25px;
@@ -341,7 +346,25 @@ main.index {
   }
 
   .footer-legend {
-    margin: 0;
-    width: calc(75% - 10px);
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin: 20px auto 0;
+
+    ul li {
+      margin-right: 20px;
+      padding: 9px 0;
+      padding-left: 20px;
+      font-size: 12px;
+      line-height: 14px;
+
+      &:before {
+        width: 20px;
+        height: 20px;
+        left: -6px;
+        top: 6px;
+      }
+    }
   }
 }

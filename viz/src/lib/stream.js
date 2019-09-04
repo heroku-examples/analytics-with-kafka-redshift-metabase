@@ -162,7 +162,7 @@ export default class StreamChart {
       .attr('height', this.getHeight())
 
     this.xAxisG
-      .attr('transform', `translate(0, ${this.getHeight()})`)
+      .attr('transform', `translate(0, ${this.getHeight() - 3})`)
       .call(this.xAxis)
 
     this.xAxisG
