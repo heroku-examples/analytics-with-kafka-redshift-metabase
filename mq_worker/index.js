@@ -19,14 +19,14 @@ function evenMinute() {
 (async () => {
   const mqConn = await mqClient.connect(mqUrl);
   const chan = await mqConn.createChannel();
-  chan.prefetch(5)
+  chan.prefetch(1)
   await chan.assertQueue(queue);
 
   await chan.consume(queue, async message => {
     console.log(`CON ${message.content.toString()}`)
 
     const isFast = evenMinute()
-    await wait(random(isFast ? 1 : 1000, isFast ? 1 : 10000))
+    await wait(random(isFast ? 1 : 1000, isFast ? 1 : 5000))
     chan.ack(message);
 
     console.log(`ACK ${message.content.toString()}`)
