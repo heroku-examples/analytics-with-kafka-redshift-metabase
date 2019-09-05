@@ -1,15 +1,10 @@
 const mqClient = require("amqplib");
 
+const processFast = require('./process.fast')
+const processSlow = require('./process.slow')
+
 const mqUrl = process.env.CLOUDAMQP_URL || "amqp://localhost";
 const queue = "tasks";
-
-function wait(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-function random(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
 
 function isFast() {
   const d = new Date();
@@ -23,11 +18,16 @@ function isFast() {
   await chan.assertQueue(queue);
 
   await chan.consume(queue, async message => {
-    console.log(`CON ${message.content.toString()}`)
+    const content = message.content
+    console.log(content)
+    console.log(`T ${content}`)
+    console.log(`CON ${content.toString()}`)
 
-    await wait(isFast() ? random(1, 50) : random(1000, 5000))
+    const start = new Date()
+    const processed = await (isFast() ? processFast(content) : processSlow(content))
+    console.log(`PROCESSED ${processed} in ${new Date() - start}`)
     chan.ack(message);
 
-    console.log(`ACK ${message.content.toString()}`)
+    console.log(`ACK ${content.toString()}`)
   });
 })();
