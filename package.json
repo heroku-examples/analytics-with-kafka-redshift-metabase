@@ -1,27 +1,59 @@
 {
   "name": "analytics-with-kafka-redshift-metabase",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^6.3.0",
+    "eslint-config-prettier": "^6.2.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "git-validate": "^2.2.4",
+    "prettier": "^1.18.2"
+  },
   "engines": {
     "node": "~10.13.0",
     "npm": "~6.4.1"
   },
+  "eslintConfig": {
+    "extends": [
+      "eslint:recommended",
+      "plugin:prettier/recommended"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 10,
+      "sourceType": "module"
+    },
+    "env": {
+      "browser": true,
+      "node": true,
+      "es6": true
+    }
+  },
+  "eslintIgnore": [
+    "dist/*",
+    "public/*"
+  ],
+  "license": "ISC",
+  "main": "index.js",
+  "pre-commit": [
+    "lint"
+  ],
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "arrowParens": "always"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "eslint": "eslint -c .eslintrc.json --no-eslintrc --fix .",
+    "get-fixture": "bin/getfixture",
     "install": "npm run install-redshift && npm run install-generate && npm run install-viz && npm run install-mq && npm run install-mq-worker && npm run get-fixture",
-    "install-redshift": "cd redshift_batch && npm install",
     "install-generate": "cd generate_data && npm install",
-    "install-viz": "cd viz && npm install --dev",
     "install-mq": "cd mq_broker && npm install",
     "install-mq-worker": "cd mq_worker && npm install",
-    "get-fixture": "bin/getfixture"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {},
-  "devDependencies": {
-    "eslint": "^5.9.0",
-    "prettier": "^1.18.2"
+    "install-redshift": "cd redshift_batch && npm install",
+    "install-viz": "cd viz && npm install --dev",
+    "lint": "npm run eslint && npm run prettier:list",
+    "prettier": "prettier --write '**/*.{js,md,css,json}'",
+    "prettier:list": "prettier --list-different '**/*.{js,md,css,json}'",
+    "test": "echo \"Error: no test specified\" && exit 1"
   }
 }

@@ -36,7 +36,9 @@ module.exports = class Consumer {
     for (const item of items) {
       const time = Moment(item.time)
 
-      if (!this.categories.hasOwnProperty(item.category)) {
+      if (
+        !Object.prototype.hasOwnProperty.call(this.categories, item.category)
+      ) {
         if (this.startTime === null) {
           this.startTime = time
         }

@@ -26,7 +26,7 @@ You can optionally deploy Metabase to Heroku to query Redshift. Check out [Metab
 
 ### Prerequisites
 
-- An AWS Redshift cluster. Check out [this Terraform script](https://github.com/heroku-examples/terraform-heroku-peered-redshift) for an easy way to create a Redshift cluster along with a Heroku Private Space and a private peering connection between the Heroku Private Space and the Redshift's AWS VPC. *Not free! This will incur cost on AWS and Heroku.*
+- An AWS Redshift cluster. Check out [this Terraform script](https://github.com/heroku-examples/terraform-heroku-peered-redshift) for an easy way to create a Redshift cluster along with a Heroku Private Space and a private peering connection between the Heroku Private Space and the Redshift's AWS VPC. _Not free! This will incur cost on AWS and Heroku._
 - Node.js
 
 ### Deploy to Heroku

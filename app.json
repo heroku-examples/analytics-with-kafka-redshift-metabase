@@ -65,7 +65,5 @@
       "quantity": 1
     }
   },
-  "addons": [
-    "heroku-kafka:basic-0"
-  ]
+  "addons": ["heroku-kafka:basic-0"]
 }

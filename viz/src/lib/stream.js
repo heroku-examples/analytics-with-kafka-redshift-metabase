@@ -181,7 +181,7 @@ export default class StreamChart {
     let found = false
     for (const row of data) {
       for (const topic of topics) {
-        if (!row.hasOwnProperty(topic)) {
+        if (!Object.prototype.hasOwnProperty.call(row, topic)) {
           found = true
           row[topic] = [0]
         }

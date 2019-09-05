@@ -1,11 +1,11 @@
-const process = require('./process')
+const processMessage = require('./process')
 
 module.exports = async (message) => {
   const [user, product, category, campaign] = await Promise.all([
-    getUserInfo(message),
-    getProductInfo(message),
-    getCategoryInfo(message),
-    getCampaignInfo(message)
-  ]);
-  return sendEmail({ user, product, category, campaign });
-};
+    processMessage.getUserInfo(message),
+    processMessage.getProductInfo(message),
+    processMessage.getCategoryInfo(message),
+    processMessage.getCampaignInfo(message)
+  ])
+  return processMessage.sendEmail({ user, product, category, campaign })
+}
