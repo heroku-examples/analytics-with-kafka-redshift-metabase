@@ -3,27 +3,27 @@ function wait(ms) {
 }
 
 async function getUserInfo(message) {
-  await wait(1000)
+  await wait(500)
   return message.session
 }
 
 async function getProductInfo(message) {
-  await wait(1000)
+  await wait(500)
   return message.product
 }
 
 async function getCategoryInfo(message) {
-  await wait(1000)
+  await wait(500)
   return message.category
 }
 
 async function getCampaignInfo(message) {
-  await wait(1000)
+  await wait(500)
   return message.campaign
 }
 
 async function sendEmail(options) {
-  await wait(1000)
+  await wait(500)
   return options
 }
 
