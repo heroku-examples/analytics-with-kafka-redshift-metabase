@@ -19,13 +19,15 @@ function isFast() {
 
   await chan.consume(queue, async (message) => {
     const data = JSON.parse(message.content.toString())
-    console.log(`CON ${data}`)
+    console.log(`CON ${JSON.stringify(data)}`)
 
     const start = new Date()
     const processed = await (isFast() ? processFast(data) : processSlow(data))
-    console.log(`PROCESSED ${processed} in ${new Date() - start}`)
+    console.log(
+      `PROCESSED ${JSON.stringify(processed)} in ${new Date() - start}`
+    )
     chan.ack(message)
 
-    console.log(`ACK ${data}`)
+    console.log(`ACK ${JSON.stringify(data)}`)
   })
 })()
