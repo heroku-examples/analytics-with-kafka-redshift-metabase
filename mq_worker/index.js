@@ -24,6 +24,7 @@ const processSlow = async (message) => {
 }
 
 // TODO: figure out how to switch between this in demo
+// TODO: can demo deploy only the worker
 function isFast() {
   const d = new Date()
   return d.getSeconds() < 30
@@ -32,7 +33,7 @@ function isFast() {
 ;(async () => {
   const mqConn = await mqClient.connect(mqUrl)
   const chan = await mqConn.createChannel()
-  chan.prefetch(10)
+  chan.prefetch(200)
   await chan.assertQueue(queue)
 
   await chan.consume(queue, async (message) => {
