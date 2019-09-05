@@ -33,7 +33,7 @@ function isFast() {
 ;(async () => {
   const mqConn = await mqClient.connect(mqUrl)
   const chan = await mqConn.createChannel()
-  chan.prefetch(200)
+  chan.prefetch(10)
   await chan.assertQueue(queue)
 
   await chan.consume(queue, async (message) => {
