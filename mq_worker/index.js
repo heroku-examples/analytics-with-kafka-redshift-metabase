@@ -3,32 +3,7 @@ const mqClient = require('amqplib')
 const mqUrl = process.env.CLOUDAMQP_URL || 'amqp://localhost'
 const queue = 'tasks'
 
-const processMessage = require('./process')
-
-const processFast = async (message) => {
-  const [user, product, category, campaign] = await Promise.all([
-    processMessage.getUserInfo(message),
-    processMessage.getProductInfo(message),
-    processMessage.getCategoryInfo(message),
-    processMessage.getCampaignInfo(message)
-  ])
-  return processMessage.sendEmail({ user, product, category, campaign })
-}
-
-const processSlow = async (message) => {
-  const user = await processMessage.getUserInfo(message)
-  const product = await processMessage.getProductInfo(message)
-  const category = await processMessage.getCategoryInfo(message)
-  const campaign = await processMessage.getCampaignInfo(message)
-  return processMessage.sendEmail({ user, product, category, campaign })
-}
-
-// TODO: figure out how to switch between this in demo
-// TODO: can demo deploy only the worker
-function isFast() {
-  const d = new Date()
-  return d.getSeconds() < 30
-}
+const processMessage = require('./processMessage')
 
 ;(async () => {
   const mqConn = await mqClient.connect(mqUrl)
@@ -41,7 +16,7 @@ function isFast() {
     console.log(`CON ${JSON.stringify(data)}`)
 
     const start = new Date()
-    const processed = await (isFast() ? processFast(data) : processSlow(data))
+    const processed = await processMessage(data)
     console.log(
       `PROCESSED ${JSON.stringify(processed)} in ${new Date() - start}`
     )
