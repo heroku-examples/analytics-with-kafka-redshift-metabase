@@ -43,6 +43,7 @@
     "arrowParens": "always"
   },
   "scripts": {
+    "build": "cd viz && npm run build",
     "eslint": "eslint -c .eslintrc.json --no-eslintrc --fix .",
     "get-fixture": "bin/getfixture",
     "install": "npm run install-redshift && npm run install-generate && npm run install-viz && npm run install-mq && npm run install-mq-worker && npm run get-fixture",
