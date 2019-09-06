@@ -6,6 +6,7 @@ import Nav from './lib/nav'
 import { MAX_SIZE, MAX_BUFFER_SIZE, INTERVAL } from '../consumer/constants'
 import AudienceControl from './lib/audienceControls'
 import BoothController from './lib/boothControls'
+import ReconnectingWebSocket from 'reconnecting-websocket'
 
 const aggregate = [
   new Nav({
@@ -35,7 +36,8 @@ const AudienceControls = new AudienceControl({})
 const BoothControls = new BoothController({ selector: '.big-button' })
 
 const url = `ws${window.location.href.match(/^http(s?:\/\/.*)\/.*$/)[1]}`
-const ws = new window.WebSocket(url)
+const ws = new ReconnectingWebSocket(url)
+
 window.ws = ws
 
 aggregate.forEach((a) => a.init())
