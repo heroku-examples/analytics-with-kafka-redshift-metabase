@@ -20,4 +20,4 @@ const processSync = async (message) => {
   return api.sendEmail({ user, product, category, campaign })
 }
 
-module.exports = processSync
+module.exports = processAsync
