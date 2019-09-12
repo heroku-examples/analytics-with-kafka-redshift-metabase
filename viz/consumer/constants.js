@@ -17,7 +17,7 @@ module.exports.KAFKA_WEIGHT_TOPIC = `${
 }${process.env.KAFKA_WEIGHT_TOPIC}`
 module.exports.KAFKA_QUEUE_TOPIC = `${
   process.env.KAFKA_PREFIX ? process.env.KAFKA_PREFIX : ''
-}queue-length`
+}${process.env.KAFKA_QUEUE_TOPIC}`
 console.log(`Kafka topic: ${module.exports.KAFKA_TOPIC}`) // eslint-disable-line no-console
 console.log(`Kafka cmd topic: ${module.exports.KAFKA_CMD_TOPIC}`) // eslint-disable-line no-console
 console.log(`Kafka weight topic: ${module.exports.KAFKA_WEIGHT_TOPIC}`) // eslint-disable-line no-console
