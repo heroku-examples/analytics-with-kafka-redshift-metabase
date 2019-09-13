@@ -17,7 +17,7 @@ $sfText: #054d61;
 $sfBorder: #d8dde6;
 $sfHeaderHeight: 77px;
 
-$diagramHeight: 500px;
+$diagramHeight: 100vh;
 
 body,
 html {
@@ -32,13 +32,18 @@ section.content-container {
 
 .architecture {
   width: 100%;
-  height: $diagramHeight;
+  height: calc($diagramHeight - $headerHeight);
   padding: 0 5px;
   position: absolute;
   top: $headerHeight;
   z-index: 0;
   background: white;
   text-align: center;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 
   img {
     max-width: 100%;
@@ -65,6 +70,7 @@ main {
 
   &.open {
     transform: translate(0px, $diagramHeight);
+    overflow: hidden;
   }
 
   &.index {
