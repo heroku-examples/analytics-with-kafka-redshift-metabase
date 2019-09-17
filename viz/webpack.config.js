@@ -93,6 +93,10 @@ module.exports = {
     ]
   },
   plugins: [
+    new webpack.NormalModuleReplacementPlugin(
+      /\/logger\.js/,
+      './clientLogger.js'
+    ),
     htmlPlugin({
       bodyClass: THEME
     }),

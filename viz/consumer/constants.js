@@ -1,4 +1,4 @@
-const logger = require('../logger')('viz')
+const logger = require('../../logger')('viz')
 
 // Millisecond interval to expect new data
 const interval = (module.exports.INTERVAL = 1000)
