@@ -6,8 +6,14 @@ const Kafka = require('no-kafka')
 const fs = require('fs')
 const path = require('path')
 const argv = require('minimist')(process.argv)
-const bunyan = require('bunyan')
-const log = bunyan.createLogger({ name: 'generate_data' })
+const winston = require('winston')
+
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.json(),
+  defaultMeta: { service: 'generate_data' },
+  transports: [new winston.transports.Console()]
+})
 
 const configFilePath = path.resolve(argv.c)
 const config = require(configFilePath)
@@ -119,7 +125,7 @@ if (config.output.type === 'csv') {
     const amount = time.diff(last, 'ms')
     bar.tick(amount / 1000)
     if (ended > 0) {
-      log.info({ total: sf.counts.TOTAL })
+      logger.info({ total: sf.counts.TOTAL })
     }
     last = time.clone()
   }
