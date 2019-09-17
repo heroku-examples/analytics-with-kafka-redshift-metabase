@@ -1,7 +1,9 @@
 {
   "name": "analytics-with-kafka-redshift-metabase",
   "version": "1.0.1",
-  "dependencies": {},
+  "dependencies": {
+    "winston": "^3.2.1"
+  },
   "devDependencies": {
     "eslint": "^6.3.0",
     "eslint-config-prettier": "^6.2.0",

@@ -6,14 +6,7 @@ const Kafka = require('no-kafka')
 const fs = require('fs')
 const path = require('path')
 const argv = require('minimist')(process.argv)
-const winston = require('winston')
-
-const logger = winston.createLogger({
-  level: 'info',
-  format: winston.format.json(),
-  defaultMeta: { service: 'generate_data' },
-  transports: [new winston.transports.Console()]
-})
+const logger = require('../logger')('generate_data')
 
 const configFilePath = path.resolve(argv.c)
 const config = require(configFilePath)
