@@ -40,10 +40,10 @@
     "pug-loader": "^2.3.0",
     "style-loader": "^0.23.1",
     "uglifyjs-webpack-plugin": "^2.0.1",
-    "webpack": "^4.25.1",
-    "webpack-cli": "^3.1.2",
-    "webpack-dev-middleware": "^3.4.0",
-    "webpack-livereload-plugin": "^2.1.1"
+    "webpack": "^4.40.2",
+    "webpack-cli": "^3.3.9",
+    "webpack-dev-middleware": "^3.7.1",
+    "webpack-livereload-plugin": "^2.2.0"
   },
   "license": "MIT",
   "main": "bin/start",
