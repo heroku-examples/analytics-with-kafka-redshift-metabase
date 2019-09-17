@@ -10,12 +10,12 @@
   "license": "ISC",
   "dependencies": {
     "bunyan": "^1.8.12",
-    "csv-stringify": "^4.3.1",
+    "csv-stringify": "^5.3.3",
     "minimist": "^1.2.0",
-    "moment": "^2.22.2",
-    "no-kafka": "^3.3.5",
-    "progress": "^2.0.1",
-    "uuid": "^3.3.2",
+    "moment": "^2.24.0",
+    "no-kafka": "^3.4.3",
+    "progress": "^2.0.3",
+    "uuid": "^3.3.3",
     "winston": "^3.2.1"
   }
 }
