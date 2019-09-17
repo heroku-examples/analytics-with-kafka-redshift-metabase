@@ -4,7 +4,7 @@ const HtmlPlugin = require('html-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
-const CleanPlugin = require('clean-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const LiveReloadPlugin = require('webpack-livereload-plugin')
 
 const PRODUCTION = process.env.NODE_ENV === 'production'
@@ -119,7 +119,7 @@ module.exports = {
       template: path.join(__dirname, 'views', 'booth.pug'),
       bodyClass: `${THEME} booth`
     }),
-    new CleanPlugin(['dist'], { root: __dirname, verbose: false }),
+    new CleanWebpackPlugin(),
     new webpack.DefinePlugin({
       'process.env.KAFKA_TOPIC': JSON.stringify(
         process.env.KAFKA_PREFIX + process.env.KAFKA_TOPIC
