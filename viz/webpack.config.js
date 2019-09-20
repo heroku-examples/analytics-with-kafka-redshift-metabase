@@ -120,11 +120,18 @@ module.exports = {
       bodyClass: `${THEME} booth`
     }),
     new CleanWebpackPlugin(),
-    new webpack.DefinePlugin({
-      'process.env.KAFKA_TOPIC': JSON.stringify(
-        process.env.KAFKA_PREFIX + process.env.KAFKA_TOPIC
-      )
-    }),
+    new webpack.DefinePlugin(
+      [
+        'KAFKA_PREFIX',
+        'KAFKA_TOPIC',
+        'KAFKA_CMD_TOPIC',
+        'KAFKA_WEIGHT_TOPIC',
+        'KAFKA_QUEUE_TOPIC'
+      ].reduce((acc, key) => {
+        acc[`process.env.${key}`] = JSON.stringify(process.env[key])
+        return acc
+      }, {})
+    ),
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash].css'
     }),

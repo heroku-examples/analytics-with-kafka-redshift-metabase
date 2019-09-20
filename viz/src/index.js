@@ -8,6 +8,8 @@ import AudienceControl from './lib/audienceControls'
 import BoothController from './lib/boothControls'
 import ReconnectingWebSocket from 'reconnecting-websocket'
 
+console.log(MAX_SIZE, MAX_BUFFER_SIZE, INTERVAL)
+
 const aggregate = [
   new Nav({
     legend: '.footer-legend ul',

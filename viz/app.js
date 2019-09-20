@@ -30,7 +30,6 @@ let dataGeneratorProcess = null
 
 let Postgres, db, query
 if (!NODB) {
-  console.log('here')
   Postgres = require('pg-promise')({
     capSQL: true
   })
