@@ -2,11 +2,11 @@ const Moment = require('moment')
 const ShoppingFeed = require('./shoppingfeed')
 const ProgressBar = require('progress')
 const CsvStringify = require('csv-stringify')
-//const Kafka = require('kafka-node');
 const Kafka = require('no-kafka')
 const fs = require('fs')
 const path = require('path')
 const argv = require('minimist')(process.argv)
+const logger = require('../logger')('generate_data')
 
 const configFilePath = path.resolve(argv.c)
 const config = require(configFilePath)
@@ -34,15 +34,13 @@ if (config.output.type === 'csv') {
 
   csvStream.pipe(writeStream)
 
-  const csvOutput = async (event) => {
-    //console.log(event);
+  const csvOutput = (event) => {
     csvStream.write(event)
   }
 
   const updateProgress = (time) => {
     const amount = time.diff(last, 'ms')
     bar.tick(amount / 1000)
-    //console.log(amount);
     last = time.clone()
   }
 
@@ -95,11 +93,7 @@ if (config.output.type === 'csv') {
         message: { value: JSON.stringify(event) },
         partition: 0
       })
-      .then(() => {
-        //console.log(config.output.topic, r)
-      })
       .catch((e) => {
-        console.log(e)
         throw e
       })
   }
@@ -115,11 +109,7 @@ if (config.output.type === 'csv') {
         message: { value: JSON.stringify(output) },
         partition: 0
       })
-      .then(() => {
-        //console.log('sent', output);
-      })
       .catch((e) => {
-        console.log(e)
         throw e
       })
   }
@@ -127,9 +117,8 @@ if (config.output.type === 'csv') {
   const handleProgress = (time) => {
     const amount = time.diff(last, 'ms')
     bar.tick(amount / 1000)
-    //console.log(amount);
     if (ended > 0) {
-      console.log(sf.now.format(), sf.counts.TOTAL)
+      logger.info({ total: sf.counts.TOTAL })
     }
     last = time.clone()
   }

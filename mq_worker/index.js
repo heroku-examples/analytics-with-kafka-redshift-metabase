@@ -1,4 +1,5 @@
 const mqClient = require('amqplib')
+const logger = require('../logger')('mq_worker')
 
 const mqUrl = process.env.CLOUDAMQP_URL || 'amqp://localhost'
 const queue = 'tasks'
@@ -13,15 +14,15 @@ const processMessage = require('./processMessage')
 
   await chan.consume(queue, async (message) => {
     const data = JSON.parse(message.content.toString())
-    console.log(`CON ${JSON.stringify(data)}`)
+    logger.info(`CON ${JSON.stringify(data)}`)
 
     const start = new Date()
     const processed = await processMessage(data)
-    console.log(
+    logger.info(
       `PROCESSED ${JSON.stringify(processed)} in ${new Date() - start}`
     )
     chan.ack(message)
 
-    console.log(`ACK ${JSON.stringify(data)}`)
+    logger.info(`ACK ${JSON.stringify(data)}`)
   })
 })()

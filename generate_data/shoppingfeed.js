@@ -124,9 +124,7 @@ class ShoppingFeed {
           this.config.categories[cat].weight = this.config.scenarios[
             cmd.name
           ].weights[cat]
-          console.log(cat, this.config.categories[cat].weight)
         }
-        console.log('maxWait', this.config.maxWait)
       }
       this.updateWeights()
     }
@@ -268,7 +266,6 @@ class ShoppingFeed {
         this.updateBatch(until)
       })
     } else {
-      console.log(this.counts)
       this.handleEnding()
     }
   }
@@ -306,7 +303,6 @@ class ShoppingFeed {
         })
       }
     } else {
-      console.log(this.counts)
       this.handleEnding()
     }
   }

@@ -1,6 +1,7 @@
 const Kafka = require('no-kafka')
 const mqClient = require('amqplib')
 const constants = require('./constants')
+const logger = require('../logger')('mq_broker')
 
 const mqUrl = process.env.CLOUDAMQP_URL || 'amqp://localhost'
 const queue = 'tasks'
@@ -31,12 +32,12 @@ const producer = new Kafka.Producer(kafkaConfig)
 
   await consumer.init()
   await consumer.subscribe(constants.KAFKA_TOPIC, (messageSet) => {
-    console.log(`Message set length: ${messageSet.length}`)
+    logger.info(`Message set length: ${messageSet.length}`)
 
     messageSet.forEach((m) => {
       const value = m.message.value.toString('utf8')
       chan.sendToQueue(queue, new Buffer.from(value))
-      console.log(`Sent message to mq: ${value}`)
+      logger.info(`Sent message to mq: ${value}`)
     })
 
     chan.assertQueue(queue).then((info) => {
@@ -52,7 +53,7 @@ const producer = new Kafka.Producer(kafkaConfig)
         message: { value },
         partition: 0
       })
-      console.log(`Message queue info: ${value}`)
+      logger.info(`Message queue info: ${value}`)
     })
   })
 })()

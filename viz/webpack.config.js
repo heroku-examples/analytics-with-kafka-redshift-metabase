@@ -4,7 +4,7 @@ const HtmlPlugin = require('html-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
-const CleanPlugin = require('clean-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const LiveReloadPlugin = require('webpack-livereload-plugin')
 
 const PRODUCTION = process.env.NODE_ENV === 'production'
@@ -93,6 +93,10 @@ module.exports = {
     ]
   },
   plugins: [
+    new webpack.NormalModuleReplacementPlugin(
+      /\/logger\.js/,
+      './clientLogger.js'
+    ),
     htmlPlugin({
       bodyClass: THEME
     }),
@@ -115,12 +119,19 @@ module.exports = {
       template: path.join(__dirname, 'views', 'booth.pug'),
       bodyClass: `${THEME} booth`
     }),
-    new CleanPlugin(['dist'], { root: __dirname, verbose: false }),
-    new webpack.DefinePlugin({
-      'process.env.KAFKA_TOPIC': JSON.stringify(
-        process.env.KAFKA_PREFIX + process.env.KAFKA_TOPIC
-      )
-    }),
+    new CleanWebpackPlugin(),
+    new webpack.DefinePlugin(
+      [
+        'KAFKA_PREFIX',
+        'KAFKA_TOPIC',
+        'KAFKA_CMD_TOPIC',
+        'KAFKA_WEIGHT_TOPIC',
+        'KAFKA_QUEUE_TOPIC'
+      ].reduce((acc, key) => {
+        acc[`process.env.${key}`] = JSON.stringify(process.env[key])
+        return acc
+      }, {})
+    ),
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash].css'
     }),
