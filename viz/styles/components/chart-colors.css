@@ -1,11 +1,11 @@
-$hColor1: #482d8c;
-$hColor2: #3ca1da;
-$hColor3: #51854a;
-$hColor4: #79c36d;
-$hColor5: #f9a151;
-$hColor6: #d64242;
-$hColor7: #bc5fb2;
-$hColor8: #000000;
+$hColor1: #482d8c; /* purple */
+$hColor2: #3ca1da; /* blue */
+$hColor3: #51854a; /* green */
+$hColor4: #79c36d; /* light green */
+$hColor5: #f9a151; /* orange */
+$hColor6: #d64242; /* red */
+$hColor7: #bc5fb2; /* pink */
+$hColor8: #000000; /* black */
 $hChartText: #757a7d;
 
 $sfColor1: #18afe5;
@@ -50,6 +50,38 @@ body.heroku {
     background: $hColor8;
     fill: $hColor8;
   }
+  .chart-line-color-1 {
+    fill: none;
+    stroke: $hColor1;
+  }
+  .chart-line-color-2 {
+    fill: none;
+    stroke: $hColor2;
+  }
+  .chart-line-color-3 {
+    fill: none;
+    stroke: $hColor3;
+  }
+  .chart-line-color-4 {
+    fill: none;
+    stroke: $hColor4;
+  }
+  .chart-line-color-5 {
+    fill: none;
+    stroke: $hColor5;
+  }
+  .chart-line-color-6 {
+    fill: none;
+    stroke: $hColor6;
+  }
+  .chart-line-color-7 {
+    fill: none;
+    stroke: $hColor7;
+  }
+  .chart-line-color-8 {
+    fill: none;
+    stroke: $hColor8;
+  }
   path.domain {
     stroke: $hChartText;
   }
@@ -89,6 +121,30 @@ body.salesforce {
   .chart-color-6 {
     background: $hColor6;
     fill: $hColor6;
+  }
+  .chart-line-color-1 {
+    fill: none;
+    stroke: $sfColor1;
+  }
+  .chart-line-color-2 {
+    fill: none;
+    stroke: $sfColor2;
+  }
+  .chart-line-color-3 {
+    fill: none;
+    stroke: $sfColor3;
+  }
+  .chart-line-color-4 {
+    fill: none;
+    stroke: $sfColor4;
+  }
+  .chart-line-color-5 {
+    fill: none;
+    stroke: $sfColor5;
+  }
+  .chart-line-color-6 {
+    fill: none;
+    stroke: $sfColor6;
   }
   path.domain {
     stroke: $sfChartText;

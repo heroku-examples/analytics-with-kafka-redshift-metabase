@@ -70,17 +70,6 @@ header {
 
     &.has-dropdown {
       position: relative;
-      /*       padding-right: 30px;
-
-     &:after {
-        content: '\02c6';
-        font-size: 150%;
-        display: inline-block;
-        position: absolute;
-        top: 7px;
-        right: 15px;
-        transform: rotate(180deg);
-      }*/
     }
   }
 
@@ -111,7 +100,7 @@ header {
     display: none;
     position: absolute;
     z-index: 10;
-    right: -3px;
+    right: 10px;
     top: 45px;
     background: #fff;
     border-radius: 4px;

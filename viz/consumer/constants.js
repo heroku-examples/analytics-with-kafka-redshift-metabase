@@ -1,3 +1,5 @@
+const logger = require('../../logger')('viz')
+
 // Millisecond interval to expect new data
 const interval = (module.exports.INTERVAL = 1000)
 
@@ -15,6 +17,11 @@ module.exports.KAFKA_CMD_TOPIC = `${
 module.exports.KAFKA_WEIGHT_TOPIC = `${
   process.env.KAFKA_PREFIX ? process.env.KAFKA_PREFIX : ''
 }${process.env.KAFKA_WEIGHT_TOPIC}`
-console.log(`Kafka topic: ${module.exports.KAFKA_TOPIC}`) // eslint-disable-line no-console
-console.log(`Kafka cmd topic: ${module.exports.KAFKA_CMD_TOPIC}`) // eslint-disable-line no-console
-console.log(`Kafka weight topic: ${module.exports.KAFKA_WEIGHT_TOPIC}`) // eslint-disable-line no-console
+module.exports.KAFKA_QUEUE_TOPIC = `${
+  process.env.KAFKA_PREFIX ? process.env.KAFKA_PREFIX : ''
+}${process.env.KAFKA_QUEUE_TOPIC}`
+
+logger.info(`Kafka topic: ${module.exports.KAFKA_TOPIC}`)
+logger.info(`Kafka cmd topic: ${module.exports.KAFKA_CMD_TOPIC}`)
+logger.info(`Kafka weight topic: ${module.exports.KAFKA_WEIGHT_TOPIC}`)
+logger.info(`Kafka queue length topic: ${module.exports.KAFKA_QUEUE_TOPIC}`)

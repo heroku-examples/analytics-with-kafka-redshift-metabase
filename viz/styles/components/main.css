@@ -17,13 +17,12 @@ $sfText: #054d61;
 $sfBorder: #d8dde6;
 $sfHeaderHeight: 77px;
 
-$diagramHeight: 500px;
+$diagramHeight: 100vh;
 
 body,
 html {
   position: relative;
   font-family: 'BentonSans', 'Helvetica Neue', sans-serif;
-  /*overflow: hidden;*/
 }
 
 section.content-container {
@@ -33,13 +32,18 @@ section.content-container {
 
 .architecture {
   width: 100%;
-  height: $diagramHeight;
+  height: calc($diagramHeight - $headerHeight);
   padding: 0 5px;
   position: absolute;
   top: $headerHeight;
   z-index: 0;
   background: white;
   text-align: center;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 
   img {
     max-width: 100%;
@@ -59,7 +63,6 @@ main {
   padding: 30px 20px;
   display: flex;
   flex-direction: column;
-  /* justify-content: space-around; */
   position: relative;
   z-index: 1;
   background: linear-gradient(to bottom, #f2f2f4, #fff);
@@ -67,6 +70,12 @@ main {
 
   &.open {
     transform: translate(0px, $diagramHeight);
+    overflow: hidden;
+  }
+
+  &.index {
+    flex-direction: row;
+    flex-wrap: wrap;
   }
 
   body.salesforce & {
@@ -106,6 +115,8 @@ main {
   display: flex;
   flex-direction: column;
   margin-bottom: 120px;
+  height: calc(100vh - 250px);
+  position: relative;
 
   svg,
   svg > g {
@@ -126,6 +137,10 @@ main {
 
   text {
     cursor: default;
+  }
+
+  .chart-path-line {
+    stroke-width: 2;
   }
 
   .chart {
@@ -172,6 +187,67 @@ main {
   }
 }
 
+.chart-line {
+  .y-axis,
+  .x-axis {
+    display: none;
+  }
+}
+
+.queue-count {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 3px;
+  background: #ffffff;
+  position: relative;
+  margin-bottom: 10px;
+  height: 80px;
+
+  body.heroku & {
+    border-color: $hBorder;
+  }
+
+  body.salesforce & {
+    border-color: $sfBorder;
+  }
+
+  .queue-color {
+    width: 30px;
+    height: 100%;
+    border-radius: 3px 0 0 3px;
+
+    &[data-color='low'] {
+      background-color: $hColor4;
+    }
+
+    &[data-color='medium'] {
+      background-color: $hColor5;
+    }
+
+    &[data-color='high'] {
+      background-color: $hColor6;
+    }
+  }
+
+  .queue-title {
+    font-size: 14px;
+    font-weight: bold;
+    color: $hChartText;
+    padding: 0 10px;
+    flex: 1;
+  }
+
+  .queue-text {
+    font-size: 36px;
+    font-weight: bold;
+    color: $hChartText;
+    padding: 0 10px;
+  }
+}
+
 .footer-legend {
   margin: 20px auto;
 
@@ -193,6 +269,10 @@ main {
       text-transform: capitalize;
       margin-left: 8px;
       font-weight: bold;
+
+      &:last-child {
+        margin-right: 0;
+      }
 
       &:before {
         width: 25px;
@@ -251,6 +331,49 @@ main {
         &.color-7:before {
           background: $sfColor7;
         }
+      }
+    }
+  }
+}
+
+main.index {
+  .chart-container {
+    height: auto;
+    margin-bottom: 40px;
+  }
+
+  .chart-stream {
+    width: calc(75% - 10px);
+    margin-right: 10px;
+  }
+
+  .chart-line {
+    width: 25%;
+  }
+
+  .footer-legend {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin: 20px auto 0;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    ul li {
+      margin-right: 20px;
+      padding: 9px 0;
+      padding-left: 20px;
+      font-size: 12px;
+      line-height: 14px;
+
+      &:before {
+        width: 20px;
+        height: 20px;
+        left: -6px;
+        top: 6px;
       }
     }
   }

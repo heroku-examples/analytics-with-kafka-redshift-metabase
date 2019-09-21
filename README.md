@@ -26,7 +26,7 @@ You can optionally deploy Metabase to Heroku to query Redshift. Check out [Metab
 
 ### Prerequisites
 
-- An AWS Redshift cluster. Check out [this Terraform script](https://github.com/heroku-examples/terraform-heroku-peered-redshift) for an easy way to create a Redshift cluster along with a Heroku Private Space and a private peering connection between the Heroku Private Space and the Redshift's AWS VPC. *Not free! This will incur cost on AWS and Heroku.*
+- An AWS Redshift cluster. Check out [this Terraform script](https://github.com/heroku-examples/terraform-heroku-peered-redshift) for an easy way to create a Redshift cluster along with a Heroku Private Space and a private peering connection between the Heroku Private Space and the Redshift's AWS VPC. _Not free! This will incur cost on AWS and Heroku._
 - Node.js
 
 ### Deploy to Heroku
@@ -41,6 +41,7 @@ heroku kafka:consumer-groups:create redshift-batch
 heroku config:set KAFKA_TOPIC=ecommerce-logs
 heroku config:set KAFKA_CMD_TOPIC=audience-cmds
 heroku config:set KAFKA_WEIGHT_TOPIC=weight-updates
+heroku config:set KAFKA_QUEUE_TOPIC=queue-length
 heroku config:set KAFKA_CONSUMER_GROUP=redshift-batch
 heroku config:set FIXTURE_DATA_S3='s3://aws-heroku-integration-demo/fixture.csv'
 git push heroku master
@@ -56,6 +57,7 @@ And then create the necessary Kafka topic and consumer group:
 heroku kafka:topics:create ecommerce-logs #this can also be created at https://data.heroku.com/
 heroku kafka:topics:create audience-cmds #this can also be created at https://data.heroku.com/
 heroku kafka:topics:create weight-updates #this can also be created at https://data.heroku.com/
+heroku kafka:topics:create queue-length #this can also be created at https://data.heroku.com/
 heroku kafka:consumer-groups:create redshift-batch
 ```
 
@@ -80,6 +82,7 @@ The following environment variables must be defined. If you used the Heroku depl
 - `KAFKA_TOPIC`: Kafka topic the system will produce to and consume from
 - `KAFKA_CMD_TOPIC`: Kafka topic the system will read audience cmds from
 - `KAFKA_WEIGHT_TOPIC`: Kafka topic the system will produce category weight updates to
+- `KAFKA_QUEUE_TOPIC`: Kafka topic the system will produce queue length updates to
 - `KAFKA_CONSUMER_GROUP`: Kafka consumer group name that is used by `redshift_batch` process type to write to Redshift.
 - `KAFKA_PREFIX`: (optional) This is only used by [Heroku's multi-tenant Apache Kafka plans](https://devcenter.heroku.com/articles/multi-tenant-kafka-on-heroku) (i.e. `basic` plans)
 

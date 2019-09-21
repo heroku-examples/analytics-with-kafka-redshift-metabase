@@ -24,10 +24,12 @@ export default class StreamChart {
     this.clipPath = chartArea
       .append('defs')
       .append('clipPath')
-      .attr('id', 'clip')
+      .attr('id', 'clip-stream')
       .append('rect')
 
-    this.chartArea = chartArea.append('g').attr('clip-path', 'url(#clip)')
+    this.chartArea = chartArea
+      .append('g')
+      .attr('clip-path', 'url(#clip-stream)')
     this.xAxisG = chartArea.append('g').attr('class', 'x-axis')
 
     // The first points need to be rendered outside the x axis
@@ -160,7 +162,7 @@ export default class StreamChart {
       .attr('height', this.getHeight())
 
     this.xAxisG
-      .attr('transform', `translate(0, ${this.getHeight() + 15})`)
+      .attr('transform', `translate(0, ${this.getHeight() - 3})`)
       .call(this.xAxis)
 
     this.xAxisG
@@ -179,7 +181,7 @@ export default class StreamChart {
     let found = false
     for (const row of data) {
       for (const topic of topics) {
-        if (!row.hasOwnProperty(topic)) {
+        if (!Object.prototype.hasOwnProperty.call(row, topic)) {
           found = true
           row[topic] = [0]
         }

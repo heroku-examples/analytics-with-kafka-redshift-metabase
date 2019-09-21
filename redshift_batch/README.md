@@ -1,4 +1,4 @@
-# redshift\_batch
+# redshift_batch
 
 Batches kafka messages into redshift.
 
@@ -13,7 +13,7 @@ Copy config/default.json to config/local.json then edit the production.json
   "queueSize": 50, // number of msgs to queue up before inserting
   "timeout": 3000, // max time to queue before inserting
   "database": "postgres://fritzy@localhost:5432/fritzy", // pg connection string
-  "kafka": {  
+  "kafka": {
     "topic": "ecommerce-logs", // kafka topic
     "group": "redshift-batch", // consumer group id
     "config": { // no-kafka configuration object

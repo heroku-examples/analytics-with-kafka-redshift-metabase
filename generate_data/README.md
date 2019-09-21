@@ -52,4 +52,3 @@ Create or using an existing config.
   ]
 }
 ```
-

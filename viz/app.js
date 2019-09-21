@@ -10,13 +10,15 @@ const webpack = require('webpack')
 const history = require('connect-history-api-fallback')
 const webpackDev = require('webpack-dev-middleware')
 const argv = require('optimist').argv
+const logger = require('../logger')('viz')
+
 const NODB = !!argv.nodb
 const NOKAFKA = !!argv.nokafka
 if (NODB) {
-  console.log('DATABASE DISABLED')
+  logger.info('DATABASE DISABLED')
 }
 if (NODB) {
-  console.log('KAFKA DISABLED')
+  logger.info('KAFKA DISABLED')
 }
 
 const webpackConfig = require('./webpack.config')
@@ -98,18 +100,18 @@ app.get('/admin/start', auth, (req, res) => {
     })
 
     dataGeneratorProcess.on('error', (err) => {
-      console.log(`Failed to start data generator: ${err}`)
+      logger.info(`Failed to start data generator: ${err}`)
       dataGeneratorProcess = null
     })
     dataGeneratorProcess.on('close', (code) => {
-      console.log(`Data generator process stopped with code ${code}.`)
+      logger.info(`Data generator process stopped with code ${code}.`)
       dataGeneratorProcess = null
     })
     dataGeneratorProcess.stdout.on('data', (data) =>
-      console.log(`data generator stdout: ${data}`)
+      logger.info(`data generator stdout: ${data}`)
     )
     dataGeneratorProcess.stderr.on('data', (data) =>
-      console.log(`data generator stderr: ${data}`)
+      logger.info(`data generator stderr: ${data}`)
     )
     res.send('Data generator started.')
   }
@@ -197,7 +199,6 @@ if (!NOKAFKA) {
       key: './client.key'
     }
   })
-
   consumer
     .init()
     .catch((err) => {
@@ -211,19 +212,34 @@ if (!NOKAFKA) {
       })
     })
     .then(() => {
-      return consumer2
-        .subscribe(constants.KAFKA_WEIGHT_TOPIC, (messageSet) => {
-          const items = messageSet.map((m) =>
-            JSON.parse(m.message.value.toString('utf8'))
-          )
-          for (const msg of items) {
-            wss.clients.forEach((client) => client.send(JSON.stringify(msg)))
-          }
-        })
-        .catch((err) => {
-          console.error(`Consumer2 could not be initialized: ${err}`)
-          if (PRODUCTION) throw err
-        })
+      return Promise.all([
+        consumer2
+          .subscribe(constants.KAFKA_WEIGHT_TOPIC, (messageSet) => {
+            const items = messageSet.map((m) =>
+              JSON.parse(m.message.value.toString('utf8'))
+            )
+            for (const msg of items) {
+              wss.clients.forEach((client) => client.send(JSON.stringify(msg)))
+            }
+          })
+          .catch((err) => {
+            console.error(`Weight topic could not be subscribed: ${err}`)
+            if (PRODUCTION) throw err
+          }),
+        consumer2
+          .subscribe(constants.KAFKA_QUEUE_TOPIC, (messageSet) => {
+            const items = messageSet.map((m) =>
+              JSON.parse(m.message.value.toString('utf8'))
+            )
+            for (const msg of items) {
+              wss.clients.forEach((client) => client.send(JSON.stringify(msg)))
+            }
+          })
+          .catch((err) => {
+            console.error(`Queue topic could not be subscribed: ${err}`)
+            if (PRODUCTION) throw err
+          })
+      ])
     })
     .then(() => {
       return producer.init().catch((err) => {
@@ -248,11 +264,11 @@ if (!NOKAFKA) {
         })
       })
       server.listen(PORT, () => {
-        console.log(`http/ws server listening on http://localhost:${PORT}`)
+        logger.info(`http/ws server listening on http://localhost:${PORT}`)
       })
     })
 } else {
   server.listen(PORT, () =>
-    console.log(`http/ws server listening on http://localhost:${PORT}`)
+    logger.info(`http/ws server listening on http://localhost:${PORT}`)
   )
 }

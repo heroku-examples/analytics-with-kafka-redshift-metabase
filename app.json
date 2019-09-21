@@ -51,6 +51,11 @@
       "value": "weight-updates",
       "required": true
     },
+    "KAFKA_QUEUE_TOPIC": {
+      "description": "Kafka topic name for queue length updates. Leave the default unless you have a reason to change it.",
+      "value": "queue-length",
+      "required": true
+    },
     "KAFKA_CONSUMER_GROUP": {
       "description": "Kafka consumer group name that is used by `redshift_batch` process type. Leave the default unless you have a reason to change it.",
       "value": "redshift-batch",
@@ -65,7 +70,5 @@
       "quantity": 1
     }
   },
-  "addons": [
-    "heroku-kafka:basic-0"
-  ]
+  "addons": ["heroku-kafka:basic-0"]
 }

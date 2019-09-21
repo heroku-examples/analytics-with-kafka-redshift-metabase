@@ -1,19 +1,30 @@
 extends layout
 
+block vars
+  - var mainClass = 'index';
+
 block nav
   include nav-home
 
 block architecture
-  .architecture
-    iframe.architecture-iframe(width='100%', height='500px', scrolling='no', seamless)
+  include includes/architecture.pug
 
 block content
-  div.text-wrapper
-    p.title Wishlist Additions By Product Category
-    
   .chart-container.chart-stream
+    .text-wrapper
+      p.title Wishlist Additions By Product Category
+    .chart.loading
+    footer.footer-legend
+      ul
+
+  .chart-container.chart-line
+    .text-wrapper
+      p.title Backlog
+    .queue-count
+      .queue-color(data-container='queue-color')
+      span.queue-title Jobs in Queue
+      span.queue-text(data-container='queue-text')
     .chart.loading
 
-  footer.footer-legend
-    ul
+
   
