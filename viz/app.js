@@ -199,7 +199,6 @@ if (!NOKAFKA) {
       key: './client.key'
     }
   })
-
   consumer
     .init()
     .catch((err) => {
