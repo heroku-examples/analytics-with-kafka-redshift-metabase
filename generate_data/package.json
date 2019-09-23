@@ -1,5 +1,5 @@
 {
-  "name": "heroku-kafka-metabase",
+  "name": "generate_data",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
