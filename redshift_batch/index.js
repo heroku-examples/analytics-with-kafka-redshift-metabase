@@ -4,6 +4,7 @@ const Postgres = require('pg-promise')({
 const Config = require('getconfig')
 const Kafka = require('no-kafka')
 const { performance } = require('perf_hooks')
+const logger = require('../logger')('redshift_batch')
 
 Config.database = `${Config.database}?ssl=true`
 const db = Postgres(Config.database)
@@ -29,12 +30,12 @@ const dataHandler = (messageSet, topic, partition) => {
     const value = JSON.parse(msg.message.value)
     const offset = msg.offset
     const length = queue.push(value)
-    //console.log(length);
+
     if (
       lock === false &&
       (length >= Config.queueSize || sinceLast > Config.timeout)
     ) {
-      console.log(queue.length)
+      logger.log(queue.length)
       lock = true
       lastUpdate = now
       const query = Postgres.helpers.insert(queue, ecommTable)
@@ -44,11 +45,11 @@ const dataHandler = (messageSet, topic, partition) => {
         })
         .then(() => {
           lock = false
-          console.log('unlock')
+          logger.log('unlock')
         })
         .catch((err) => {
           lock = false
-          console.log(err)
+          logger.log(err)
         })
       queue = []
     }
@@ -56,6 +57,6 @@ const dataHandler = (messageSet, topic, partition) => {
 }
 
 consumer.init().then(() => {
-  console.log(`Subscribing to topic ${Config.kafka.topic}`)
+  logger.log(`Subscribing to topic ${Config.kafka.topic}`)
   consumer.subscribe(Config.kafka.topic, dataHandler)
 })
