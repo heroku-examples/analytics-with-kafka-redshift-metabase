@@ -126,7 +126,8 @@ module.exports = {
         'KAFKA_TOPIC',
         'KAFKA_CMD_TOPIC',
         'KAFKA_WEIGHT_TOPIC',
-        'KAFKA_QUEUE_TOPIC'
+        'KAFKA_QUEUE_TOPIC',
+        'KAFKA_QUEUE_WORKER'
       ].reduce((acc, key) => {
         acc[`process.env.${key}`] = JSON.stringify(process.env[key])
         return acc

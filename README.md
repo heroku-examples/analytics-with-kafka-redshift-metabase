@@ -42,6 +42,7 @@ heroku config:set KAFKA_TOPIC=ecommerce-logs
 heroku config:set KAFKA_CMD_TOPIC=audience-cmds
 heroku config:set KAFKA_WEIGHT_TOPIC=weight-updates
 heroku config:set KAFKA_QUEUE_TOPIC=queue-length
+heroku config:set KAFKA_QUEUE_WORKER=queue-worker
 heroku config:set KAFKA_CONSUMER_GROUP=redshift-batch
 heroku config:set FIXTURE_DATA_S3='s3://aws-heroku-integration-demo/fixture.csv'
 git push heroku master
@@ -83,6 +84,7 @@ The following environment variables must be defined. If you used the Heroku depl
 - `KAFKA_CMD_TOPIC`: Kafka topic the system will read audience cmds from
 - `KAFKA_WEIGHT_TOPIC`: Kafka topic the system will produce category weight updates to
 - `KAFKA_QUEUE_TOPIC`: Kafka topic the system will produce queue length updates to
+- `KAFKA_QUEUE_WORKER`: Kafka topic the system will produce queue worker processing updates to
 - `KAFKA_CONSUMER_GROUP`: Kafka consumer group name that is used by `redshift_batch` process type to write to Redshift.
 - `KAFKA_PREFIX`: (optional) This is only used by [Heroku's multi-tenant Apache Kafka plans](https://devcenter.heroku.com/articles/multi-tenant-kafka-on-heroku) (i.e. `basic` plans)
 

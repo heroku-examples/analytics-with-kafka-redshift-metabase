@@ -28,7 +28,7 @@ const QueueGraph = new Queue({
   countSelector: '.chart-line .queue-count',
   transition: INTERVAL,
   x: 'time',
-  y: 'length',
+  y: 'elapsed',
   maxSize: MAX_BUFFER_SIZE,
   maxDisplaySize: MAX_SIZE
 })
