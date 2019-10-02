@@ -1,5 +1,3 @@
-/* eslint no-console:0 */
-
 const path = require('path')
 const server = require('http').createServer()
 const { spawn } = require('child_process')
@@ -9,6 +7,7 @@ const basicAuth = require('express-basic-auth')
 const webpack = require('webpack')
 const history = require('connect-history-api-fallback')
 const webpackDev = require('webpack-dev-middleware')
+const MovingAverage = require('moving-average')
 const argv = require('optimist').argv
 const logger = require('../logger')('viz')
 
@@ -27,6 +26,8 @@ const Kafka = require('no-kafka')
 const app = express()
 const constants = require('./consumer/constants')
 let dataGeneratorProcess = null
+
+const ma = MovingAverage(constants.INTERVAL)
 
 let Postgres, db, query
 if (!NODB) {
@@ -202,16 +203,24 @@ if (!NOKAFKA) {
   consumer
     .init()
     .catch((err) => {
-      console.error(`Consumer could not be initialized: ${err}`)
+      logger.error(`Consumer could not be initialized: ${err}`)
       if (PRODUCTION) throw err
     })
     .then(() => {
       return consumer2.init().catch((err) => {
-        console.error(`Consumer2 could not be initialized: ${err}`)
+        logger.error(`Consumer2 could not be initialized: ${err}`)
         if (PRODUCTION) throw err
       })
     })
     .then(() => {
+      setInterval(() => {
+        const data = {
+          type: 'queue',
+          data: { processingTime: ma.movingAverage(), time: new Date() }
+        }
+        wss.clients.forEach((client) => client.send(JSON.stringify(data)))
+      }, constants.INTERVAL)
+
       return Promise.all([
         consumer2
           .subscribe(constants.KAFKA_WEIGHT_TOPIC, (messageSet) => {
@@ -223,7 +232,7 @@ if (!NOKAFKA) {
             }
           })
           .catch((err) => {
-            console.error(`Weight topic could not be subscribed: ${err}`)
+            logger.error(`Weight topic could not be subscribed: ${err}`)
             if (PRODUCTION) throw err
           }),
         consumer2
@@ -232,18 +241,18 @@ if (!NOKAFKA) {
               JSON.parse(m.message.value.toString('utf8'))
             )
             for (const msg of items) {
-              wss.clients.forEach((client) => client.send(JSON.stringify(msg)))
+              ma.push(new Date(msg.data.time), msg.data.processingTime)
             }
           })
           .catch((err) => {
-            console.error(`Queue topic could not be subscribed: ${err}`)
+            logger.error(`Queue topic could not be subscribed: ${err}`)
             if (PRODUCTION) throw err
           })
       ])
     })
     .then(() => {
       return producer.init().catch((err) => {
-        console.error(`Producer could not be initialized: ${err}`)
+        logger.error(`Producer could not be initialized: ${err}`)
         if (PRODUCTION) throw err
       })
     })
@@ -259,7 +268,7 @@ if (!NOKAFKA) {
               partition: 0
             })
           } catch (e) {
-            console.error(e)
+            logger.error(e)
           }
         })
       })

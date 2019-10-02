@@ -56,6 +56,11 @@
       "value": "queue-length",
       "required": true
     },
+    "KAFKA_QUEUE_WORKER": {
+      "description": "Kafka topic name for queue worker updates. Leave the default unless you have a reason to change it.",
+      "value": "queue-worker",
+      "required": true
+    },
     "KAFKA_CONSUMER_GROUP": {
       "description": "Kafka consumer group name that is used by `redshift_batch` process type. Leave the default unless you have a reason to change it.",
       "value": "redshift-batch",
