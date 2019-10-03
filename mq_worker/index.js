@@ -5,14 +5,8 @@ const constants = require('./constants')
 
 const convertTime = (hrtime) => {
   const nanoseconds = hrtime[0] * 1e9 + hrtime[1]
-  const milliseconds = nanoseconds / 1e6
   const seconds = nanoseconds / 1e9
-
-  return {
-    seconds,
-    milliseconds,
-    nanoseconds
-  }
+  return seconds
 }
 
 const kafkaConfig = {
@@ -46,7 +40,7 @@ const producer = new Kafka.Producer(kafkaConfig)
       const start = process.hrtime()
       const data = JSON.parse(data)
       const processed = await processMessage(data)
-      const { seconds: elapsed } = convertTime(process.hrtime(start))
+      const elapsed = convertTime(process.hrtime(start))
 
       logger.info(`Processed ${elapsed} - ${JSON.stringify(processed)}`)
 
