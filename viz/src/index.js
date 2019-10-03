@@ -38,8 +38,7 @@ const BoothControls = new BoothController({ selector: '.big-button' })
 const url = `ws${window.location.href.match(/^http(s?:\/\/.*)\/.*$/)[1]}`
 const ws = new ReconnectingWebSocket(url, null, {
   reconnectInterval: 1000,
-  reconnectDecay: 1,
-  debug: true
+  reconnectDecay: 1
 })
 
 window.ws = ws
