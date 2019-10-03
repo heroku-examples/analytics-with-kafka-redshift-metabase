@@ -32,25 +32,25 @@ const producer = new Kafka.Producer(kafkaConfig)
   await consumer.subscribe(constants.KAFKA_QUEUE_WORKER, (messageSet) => {
     logger.info(`Message set length: ${messageSet.length}`)
 
-    let times = []
+    const times = Promise.all(
+      messageSet.map(async (m) => {
+        const value = m.message.value.toString('utf8')
 
-    messageSet.forEach(async (m) => {
-      const value = m.message.value.toString('utf8')
+        logger.info(`Starting processing: ${value}`)
 
-      logger.info(`Starting processing: ${value}`)
+        const start = process.hrtime()
+        const data = JSON.parse(value)
+        const processed = await processMessage(data)
+        const elapsed = convertTime(process.hrtime(start))
 
-      const start = process.hrtime()
-      const data = JSON.parse(value)
-      const processed = await processMessage(data)
-      const elapsed = convertTime(process.hrtime(start))
-      times.push(elapsed)
+        logger.info(`Processed ${elapsed} - ${JSON.stringify(processed)}`)
 
-      logger.info(`Processed ${elapsed} - ${JSON.stringify(processed)}`)
-    })
+        return elapsed
+      })
+    )
 
     const avgTime = times.reduce((a, b) => a + b, 0) / times.length
     logger.info(`Avg time for ${times.length} items ${avgTime}`)
-    times = []
 
     producer.send({
       topic: constants.KAFKA_QUEUE_TOPIC,

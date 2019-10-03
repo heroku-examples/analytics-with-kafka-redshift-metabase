@@ -213,12 +213,12 @@ export default class QueueChart {
 
     const count = data[data.length - this.leadingDataPoints][this.yVariable]
 
-    this.queueCount.textContent = abbrev(count)
+    this.queueCount.textContent = count.toFixed(3)
 
     let countIndicator = ''
-    if (countIndicator <= 100) {
+    if (countIndicator <= 3) {
       countIndicator = 'low'
-    } else if (countIndicator <= 500) {
+    } else if (countIndicator <= 7) {
       countIndicator = 'medium'
     } else {
       countIndicator = 'high'
