@@ -1,6 +1,5 @@
 import * as d3 from 'd3'
 import _ from 'lodash'
-import abbrev from 'number-abbreviate'
 import SizedArray from './sizedArray'
 
 export default class QueueChart {

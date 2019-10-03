@@ -15,7 +15,6 @@
     "moving-average": "^1.0.0",
     "no-kafka": "^3.4.3",
     "normalize.css": "^8.0.1",
-    "number-abbreviate": "^2.0.0",
     "optimist": "^0.6.1",
     "pg-promise": "^9.1.4",
     "pug": "^2.0.4",
