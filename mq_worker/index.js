@@ -38,7 +38,7 @@ const producer = new Kafka.Producer(kafkaConfig)
       logger.info(`Starting processing: ${value}`)
 
       const start = process.hrtime()
-      const data = JSON.parse(data)
+      const data = JSON.parse(value)
       const processed = await processMessage(data)
       const elapsed = convertTime(process.hrtime(start))
 
