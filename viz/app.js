@@ -218,7 +218,6 @@ if (!NOKAFKA) {
           type: 'queue',
           data: { processingTime: ma.movingAverage(), time: new Date() }
         }
-        logger.info(`Current moving average: ${JSON.stringify(data)}`)
         wss.clients.forEach((client) => client.send(JSON.stringify(data)))
       }, constants.INTERVAL)
 
