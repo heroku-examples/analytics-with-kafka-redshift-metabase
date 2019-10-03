@@ -29,10 +29,10 @@ const producer = new Kafka.Producer(kafkaConfig)
   await producer.init()
   await consumer.init()
 
-  await consumer.subscribe(constants.KAFKA_QUEUE_WORKER, (messageSet) => {
+  await consumer.subscribe(constants.KAFKA_QUEUE_WORKER, async (messageSet) => {
     logger.info(`Message set length: ${messageSet.length}`)
 
-    const times = Promise.all(
+    const times = await Promise.all(
       messageSet.map(async (m) => {
         const value = m.message.value.toString('utf8')
 
