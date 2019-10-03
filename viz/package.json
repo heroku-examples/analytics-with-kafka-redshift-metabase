@@ -12,6 +12,7 @@
     "express-basic-auth": "^1.2.0",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
+    "moving-average": "^1.0.0",
     "no-kafka": "^3.4.3",
     "normalize.css": "^8.0.1",
     "number-abbreviate": "^2.0.0",

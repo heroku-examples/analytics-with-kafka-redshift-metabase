@@ -29,7 +29,7 @@ const producer = new Kafka.Producer(kafkaConfig)
   await producer.init()
   await consumer.init()
 
-  await consumer.subscribe(constants.KAFKA_QUEUE_WORKER, async (messageSet) => {
+  await consumer.subscribe(constants.KAFKA_QUEUE_WORKER, (messageSet) => {
     logger.info(`Message set length: ${messageSet.length}`)
 
     messageSet.forEach(async (m) => {
