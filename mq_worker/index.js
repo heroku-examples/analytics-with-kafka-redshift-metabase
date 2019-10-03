@@ -32,6 +32,8 @@ const producer = new Kafka.Producer(kafkaConfig)
   await consumer.subscribe(constants.KAFKA_QUEUE_WORKER, (messageSet) => {
     logger.info(`Message set length: ${messageSet.length}`)
 
+    let processingTimes = []
+
     messageSet.forEach(async (m) => {
       const value = m.message.value.toString('utf8')
 
@@ -41,22 +43,26 @@ const producer = new Kafka.Producer(kafkaConfig)
       const data = JSON.parse(value)
       const processed = await processMessage(data)
       const elapsed = convertTime(process.hrtime(start))
+      processingTimes.push(elapsed)
 
       logger.info(`Processed ${elapsed} - ${JSON.stringify(processed)}`)
+    })
 
-      producer.send({
-        topic: constants.KAFKA_QUEUE_TOPIC,
-        partition: 0,
-        message: {
-          value: JSON.stringify({
-            type: 'queue',
-            data: {
-              elapsed,
-              time: new Date()
-            }
-          })
-        }
-      })
+    const avgTime = processingTimes.reduce((memo, i) => memo + i, 0)
+    processingTimes = []
+
+    producer.send({
+      topic: constants.KAFKA_QUEUE_TOPIC,
+      partition: 0,
+      message: {
+        value: JSON.stringify({
+          type: 'queue',
+          data: {
+            avgTime,
+            time: new Date()
+          }
+        })
+      }
     })
   })
 })()
