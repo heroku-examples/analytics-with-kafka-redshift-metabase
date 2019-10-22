@@ -1,0 +1,26 @@
+extends layout
+
+block nav
+  ul.nav-items
+    li.nav-link.icon.architecture-link
+      a(href="#")
+        img(src='/public/images/metrics-28.svg')
+    li.nav-link.icon
+      a(href='#' name='chart').toggle
+        img(src='/public/images/usage-28.svg')
+
+block architecture
+  include includes/architecture.pug
+
+block content
+
+  .chart-container.chart-stream.toggleable(name='chart')
+    .chart.loading
+    footer.footer-legend
+      ul
+
+  h1.title connect
+  p Press (-) or (+) on a product in order to make it less or more popular.
+
+  //- Category Name
+  div.category-controls-wrapper

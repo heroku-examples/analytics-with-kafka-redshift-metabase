@@ -107,6 +107,12 @@ module.exports = {
       bodyClass: `${THEME} audience`
     }),
     htmlPlugin({
+      filename: 'connect.html',
+      title: 'Heroku Connect',
+      template: path.join(__dirname, 'views', 'connect.pug'),
+      bodyClass: `${THEME} connect`
+    }),
+    htmlPlugin({
       filename: 'presentation.html',
       title: 'Presentation',
       header: 'Kafka AWS',
