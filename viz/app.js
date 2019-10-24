@@ -19,7 +19,7 @@ if (NODB) {
 if (NODB) {
   logger.info('KAFKA DISABLED')
 }
-
+const supplyDemandController = require('./supply-demand')
 const webpackConfig = require('./webpack.config')
 const Consumer = require('./consumer')
 const Kafka = require('no-kafka')
@@ -37,7 +37,7 @@ if (!NODB) {
   const dbUrl = `${process.env.DATABASE_URL ||
     process.env.AWS_DATABASE_URL ||
     'postgresql://localhost:5432'}?ssl=true`
-
+  console.log(dbUrl)
   db = Postgres(dbUrl)
   if (process.env.USE_DB === 'redshift') {
     query = Postgres.helpers.concat([
@@ -128,6 +128,8 @@ app.get('/admin/kill', auth, (req, res) => {
   }
 })
 
+supplyDemandController.initRoutes(app, NODB, db)
+
 if (PRODUCTION) {
   app.use(express.static(path.join(__dirname, 'dist')))
   app.get('/:route', (req, res) => {
@@ -158,6 +160,8 @@ server.on('request', app)
  *
  */
 const wss = new WebSocketServer({ server })
+
+supplyDemandController.initConnection(wss, db, NODB)
 
 /*
  * Configure Kafka consumer

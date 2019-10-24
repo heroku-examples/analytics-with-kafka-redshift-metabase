@@ -6,6 +6,7 @@ import Nav from './lib/nav'
 import { MAX_SIZE, MAX_BUFFER_SIZE, INTERVAL } from '../consumer/constants'
 import AudienceControl from './lib/audienceControls'
 import BoothController from './lib/boothControls'
+import SupplyDemandControls from './lib/supplyDemandControls'
 import ReconnectingWebSocket from 'reconnecting-websocket'
 
 const aggregate = [
@@ -34,6 +35,7 @@ const QueueGraph = new Queue({
 })
 const AudienceControls = new AudienceControl({})
 const BoothControls = new BoothController({ selector: '.big-button' })
+const supplyDemandControls = new SupplyDemandControls({})
 
 const url = `ws${window.location.href.match(/^http(s?:\/\/.*)\/.*$/)[1]}`
 const ws = new ReconnectingWebSocket(url, null, {
@@ -56,5 +58,7 @@ ws.onmessage = (e) => {
     aggregate.forEach((a) => a.update(msg.data))
   } else if (msg.type === 'queue') {
     QueueGraph.update(msg.data)
+  } else if (msg.type === 'orders') {
+    supplyDemandControls.update(msg.data)
   }
 }
