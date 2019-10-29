@@ -49,7 +49,6 @@ let pendingOrders = {}
 const starOrderStatusCheckInterval = (db) => {
   setInterval(() => {
     if (_.keys(pendingOrders).length === 0) {
-      console.log('no pending orders')
       return
     }
     /*
@@ -57,7 +56,6 @@ const starOrderStatusCheckInterval = (db) => {
      */
     let query = knex.select('sfid', 'id').from('salesforce.order')
     _.forEach(pendingOrders, (orderItemData, orderId) => {
-      console.log('data', orderItemData, orderId)
       query.where('id', orderId)
     })
 
@@ -83,7 +81,6 @@ const starOrderStatusCheckInterval = (db) => {
               db,
               orderItemData.categoryName
             ).then((pricebookentries) => {
-              console.log('pricebookentries', pricebookentries)
               const entry = pricebookentries[0]
               return createOrderItem(db, orderItemData.count, order.sfid, entry)
             })
@@ -93,9 +90,9 @@ const starOrderStatusCheckInterval = (db) => {
         })
         return Promise.all(promises)
       })
-      .then((orderItems) => {
-        console.log('Order items were created:', orderItems)
-      })
+      // .then((orderItems) => {
+      //   console.log('Order items were created:', orderItems)
+      // })
       .catch((e) => {
         console.log(e)
       })
@@ -142,8 +139,8 @@ const createOrder = (db) => {
     .insert(order)
     .returning('*')
     .toString()
-  console.log('order', createOrderQuery)
-  return db.any(createOrderQuery)
+
+    return db.any(createOrderQuery)
 }
 
 const getPricebookentry = (db, categoryName) => {
@@ -162,8 +159,8 @@ const getPricebookentry = (db, categoryName) => {
       process.env.HEROKU_CONNECT_PRICEBOOK_ID
     )
     .toString()
-  console.log('runnig', getPricebookentryQuery)
-  return db.any(getPricebookentryQuery)
+
+    return db.any(getPricebookentryQuery)
 }
 
 const createOrderItem = (db, count, orderid, entry) => {
@@ -179,7 +176,7 @@ const createOrderItem = (db, count, orderid, entry) => {
     .insert(orderItemData)
     .returning('*')
     .toString()
-  console.log('orderItem', query)
+
   return db.any(query)
 }
 
@@ -222,7 +219,6 @@ const initRoutes = (app, NODB, db) => {
     if (NODB) {
       return res.send('App running without a progres database.')
     }
-    console.log(req.body)
 
     let orderData
 
@@ -240,7 +236,6 @@ const initRoutes = (app, NODB, db) => {
         return createOrder(db)
       })
       .then((order) => {
-        console.log('order', order)
         /*
           An order has been created but ithasn't been syned with salesforce at this point.
           orderitem requires "sfid" of the order to be associated with in the database.
