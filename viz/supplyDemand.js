@@ -8,7 +8,9 @@ const FULLFILLMENT_ORDER_TYPE = 'Fulfillment Order'
 const PURCHASE_ORDER_TYPE = 'Purchase Order'
 
 const getQuery = (ago, isPrior = false) => {
-  let timeCondition = `where salesforce.order.createddate ${isPrior ? '<' : '>'} now() - interval '${ago}'`
+  let timeCondition = `and salesforce.order.createddate ${
+    isPrior ? '<' : '>'
+  } now() - interval '${ago}'`
 
   return `
       select
@@ -27,6 +29,7 @@ const getQuery = (ago, isPrior = false) => {
       inner join
         salesforce.recordType
             ON salesforce.order.recordtypeid=salesforce.recordType.sfid
+      where salesforce.order.status='Activated'
       ${timeCondition}
       group by
         salesforce.recordType.name,
@@ -178,10 +181,8 @@ const createOrderItem = (db, count, orderid, entry) => {
   return db.any(query)
 }
 
-
 const initRoutes = (app, NODB, db) => {
   app.get('/demand/data', (req, res) => {
-    
     if (NODB) {
       return res.send('App running without a progres database.')
     }
@@ -214,9 +215,7 @@ const initRoutes = (app, NODB, db) => {
       .catch((e) => {
         res.send(e)
       })
-
   })
-
 
   app.post('/demand/orders', (req, res) => {
     if (NODB) {
@@ -265,7 +264,6 @@ const initRoutes = (app, NODB, db) => {
       })
   })
 
-
   db.any('select pricebook2id, sfid from salesforce.contract')
     .then((_contarcts) => {
       contracts = _contarcts
@@ -274,7 +272,6 @@ const initRoutes = (app, NODB, db) => {
       console.log(e)
     })
 }
-
 
 const init = (wss, db, NODB) => {
   if (NODB) {

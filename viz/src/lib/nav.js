@@ -26,10 +26,7 @@ module.exports = class Nav {
         this.architectureFrame.removeAttribute('src')
         this.main.classList.remove('open')
       } else {
-        this.architectureFrame.setAttribute(
-          'src',
-          this.iframeUrl
-        )
+        this.architectureFrame.setAttribute('src', this.iframeUrl)
         this.main.classList.add('open')
       }
       toggleables.forEach((toggleable) => {

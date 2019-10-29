@@ -129,8 +129,8 @@ export default class DemandFullfillmentForm {
 
   closeAndClean(after = 2000) {
     setTimeout(() => {
-      //  this.container.classList.remove(this.cfg.modalActiveClass)
-      //   this.initElements()
+      this.container.classList.remove(this.cfg.modalActiveClass)
+      this.initElements()
     }, after)
   }
 

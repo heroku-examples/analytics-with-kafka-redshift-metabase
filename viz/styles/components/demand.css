@@ -110,7 +110,7 @@
     }
   }
 
-  &__succes,
+  &__success,
   &__error {
     .demand-form,
     .demand-modal--title {
