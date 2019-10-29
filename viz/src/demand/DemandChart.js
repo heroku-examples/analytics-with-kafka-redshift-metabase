@@ -8,7 +8,6 @@ import demandConstants from './demandConstants'
 export default class DemandChart {
   constructor(options) {
     this.categories = options.categories
-    console.log(options.originalData)
     this.render(this.generateDatasets(options.originalData || {}))
   }
 
@@ -37,19 +36,18 @@ export default class DemandChart {
 
     return this.categories.map((categoryName, index) => {
       let currentData = originalData[categoryName].map((value, i) => {
+
         return {
           x: moment()
-            .subtract(i, 'minute')
+            .subtract(originalData[categoryName].length - i, 'minute')
             .valueOf(),
           y: value
         }
       })
       //adding one more data value to the end so it looks continuous
-      currentData.unshift({
-        x: moment()
-          .subtract(currentData.length, 'minute')
-          .valueOf(),
-        y: currentData[0].y
+      currentData.push({
+        x: moment().valueOf(),
+        y: currentData[currentData.length - 1].y
       })
 
       return {
@@ -61,7 +59,7 @@ export default class DemandChart {
         borderWidth: 10,
         fill: false,
         lineTension: 0,
-        data: _.reverse(_.sortBy(currentData, 'x'))
+        data: currentData
       }
     })
   }
@@ -95,8 +93,8 @@ export default class DemandChart {
               display: false,
               realtime: {
                 duration: 300000,
-                refresh: 20000,
-                delay: 30000,
+                refresh: 10000,
+                delay: 10000,
                 onRefresh: this.onRefresh.bind(this)
               }
             }
@@ -142,7 +140,7 @@ export default class DemandChart {
     if (!this.chart) {
       return
     }
-    console.log(newData)
+    //console.log(newData)
     this.newData = newData
   }
 }

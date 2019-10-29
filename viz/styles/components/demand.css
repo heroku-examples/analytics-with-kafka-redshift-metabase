@@ -244,5 +244,6 @@
     background-color: #42a1d7;
     color: #ffffff;
     border-radius: 4px;
+    cursor: pointer;
   }
 }
