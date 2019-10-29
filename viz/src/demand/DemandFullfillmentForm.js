@@ -15,7 +15,7 @@ export default class DemandFullfillmentForm {
         containerSuccessClass: 'demand-modal__success',
         containerErrorClass: 'demand-modal__error',
         fieldListContainerClass: 'demand-form--fields-list-container',
-        addButtonClass: 'demand-form--add-button-container',
+        addButtonClass: 'demand-form--add-button',
         openButtonSelector: '',
         submitButtonClass: 'demand-form--submit-button',
         modalActiveClass: 'demand-modal__active',

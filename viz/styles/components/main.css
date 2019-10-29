@@ -60,7 +60,7 @@ section.content-container {
 
 main {
   height: calc(100vh - $headerHeight);
-  padding: 30px 20px;
+  padding: 70px 20px;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -82,7 +82,7 @@ main {
     height: calc(100vh - $sfHeaderHeight);
   }
 
-  @media screen and (min-width: 600px) {
+  @media screen and (min-width: 730px) {
     padding: 50px 20px;
   }
 }
