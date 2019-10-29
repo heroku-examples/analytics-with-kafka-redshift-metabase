@@ -1,0 +1,380 @@
+$button-color: #79599f;
+
+* {
+  box-sizing: border-box;
+}
+
+$headerHeight: 50px;
+$hHeader: linear-gradient(to right, #3d3f74, #6757a0);
+$hHeaderText: #fff;
+$hText: #73629e;
+$hBorder: #d8dde6;
+$hLinkBorder: rgba(0, 0, 0, 0.15);
+
+$sfHeader: #dae0e4;
+$sfHeaderText: #29347c;
+$sfText: #054d61;
+$sfBorder: #d8dde6;
+$sfHeaderHeight: 77px;
+
+$diagramHeight: 100vh;
+
+body,
+html {
+  position: relative;
+  font-family: 'BentonSans', 'Helvetica Neue', sans-serif;
+}
+
+section.content-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.architecture {
+  width: 100%;
+  height: calc($diagramHeight - $headerHeight);
+  padding: 0 5px;
+  position: absolute;
+  top: $headerHeight;
+  z-index: 0;
+  background: white;
+  text-align: center;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  img {
+    max-width: 100%;
+  }
+
+  iframe {
+    border: none;
+  }
+
+  body.salesforce & {
+    top: $sfHeaderHeight;
+  }
+}
+
+main {
+  height: calc(100vh - $headerHeight);
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(to bottom, #f2f2f4, #fff);
+  transition: transform 0.5s;
+
+  &.open {
+    transform: translate(0px, $diagramHeight);
+    overflow: hidden;
+  }
+
+  &.index {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  body.salesforce & {
+    height: calc(100vh - $sfHeaderHeight);
+  }
+
+  @media screen and (min-width: 600px) {
+    padding: 50px 20px;
+  }
+}
+
+.title {
+  text-transform: uppercase;
+  text-align: center;
+  margin: 0 0 25px 0;
+  font-size: 0.8em;
+  line-height: 1.3;
+  letter-spacing: 1px;
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 10px;
+
+  body.heroku & {
+    color: $hText;
+  }
+
+  body.salesforce & {
+    color: $sfText;
+  }
+}
+
+/* --- Chart containers --*/
+.chart-container {
+  width: 100%;
+  height: 100%;
+  min-height: 30vw;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 120px;
+  height: calc(100vh - 250px);
+  position: relative;
+
+  svg,
+  svg > g {
+    overflow: visible;
+  }
+
+  .x-axis {
+    text {
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .tick line,
+    > path {
+      display: none;
+    }
+  }
+
+  text {
+    cursor: default;
+  }
+
+  .chart-path-line {
+    stroke-width: 2;
+  }
+
+  .chart {
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 3px;
+    height: 100%;
+    background: #ffffff;
+    position: relative;
+
+    body.heroku & {
+      border-color: $hBorder;
+    }
+
+    body.salesforce & {
+      border-color: $sfBorder;
+    }
+  }
+
+  .chart.loading:after {
+    position: absolute;
+    top: calc(50% - 9px);
+    left: calc(50% - 30px);
+    color: #ccc;
+    height: 18px;
+    width: 60px;
+    text-align: center;
+    content: '...';
+  }
+
+  &.toggleable {
+    height: 0;
+    overflow: hidden;
+    transition: height 0s ease; /* make it faster when it goes away */
+    padding: 0;
+    margin: 0;
+
+    &.show {
+      height: auto; /* this won't animate */
+      flex-shrink: 0;
+      overflow: visible;
+      transition: height 1s ease;
+    }
+  }
+}
+
+.chart-line {
+  .y-axis,
+  .x-axis {
+    display: none;
+  }
+}
+
+.queue-count {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 3px;
+  background: #ffffff;
+  position: relative;
+  margin-bottom: 10px;
+  height: 80px;
+
+  body.heroku & {
+    border-color: $hBorder;
+  }
+
+  body.salesforce & {
+    border-color: $sfBorder;
+  }
+
+  .queue-color {
+    width: 30px;
+    height: 100%;
+    border-radius: 3px 0 0 3px;
+
+    &[data-color='low'] {
+      background-color: $hColor4;
+    }
+
+    &[data-color='medium'] {
+      background-color: $hColor5;
+    }
+
+    &[data-color='high'] {
+      background-color: $hColor6;
+    }
+  }
+
+  .queue-title {
+    font-size: 14px;
+    font-weight: bold;
+    color: $hChartText;
+    padding: 0 10px;
+    flex: 1;
+  }
+
+  .queue-text {
+    font-size: 36px;
+    font-weight: bold;
+    color: $hChartText;
+    padding: 0 10px;
+  }
+}
+
+.footer-legend {
+  margin: 20px auto;
+
+  ul {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+
+    li {
+      position: relative;
+      display: inline-block;
+      text-align: center;
+      margin-right: 25px;
+      padding: 11px 0;
+      padding-left: 25px;
+      font-size: 14px;
+      line-height: 18px;
+      color: $hChartText;
+      text-transform: capitalize;
+      margin-left: 8px;
+      font-weight: bold;
+
+      &:last-child {
+        margin-right: 0;
+      }
+
+      &:before {
+        width: 25px;
+        height: 25px;
+        border-radius: 3px;
+        content: '';
+        display: block;
+        position: absolute;
+        left: -8px;
+        top: 8px;
+      }
+
+      body.heroku & {
+        &.color-1:before {
+          background: $hColor1;
+        }
+        &.color-2:before {
+          background: $hColor2;
+        }
+        &.color-3:before {
+          background: $hColor3;
+        }
+        &.color-4:before {
+          background: $hColor4;
+        }
+        &.color-5:before {
+          background: $hColor5;
+        }
+        &.color-6:before {
+          background: $hColor6;
+        }
+        &.color-7:before {
+          background: $hColor7;
+        }
+      }
+
+      body.salesforce & {
+        &.color-1:before {
+          background: $sfColor1;
+        }
+        &.color-2:before {
+          background: $sfColor2;
+        }
+        &.color-3:before {
+          background: $sfColor3;
+        }
+        &.color-4:before {
+          background: $sfColor4;
+        }
+        &.color-5:before {
+          background: $sfColor5;
+        }
+        &.color-6:before {
+          background: $sfColor6;
+        }
+        &.color-7:before {
+          background: $sfColor7;
+        }
+      }
+    }
+  }
+}
+
+main.index {
+  .chart-container {
+    height: auto;
+    margin-bottom: 40px;
+  }
+
+  .chart-stream {
+    width: calc(75% - 10px);
+    margin-right: 10px;
+  }
+
+  .chart-line {
+    width: 25%;
+  }
+
+  .footer-legend {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin: 20px auto 0;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    ul li {
+      margin-right: 20px;
+      padding: 9px 0;
+      padding-left: 20px;
+      font-size: 12px;
+      line-height: 14px;
+
+      &:before {
+        width: 20px;
+        height: 20px;
+        left: -6px;
+        top: 6px;
+      }
+    }
+  }
+}
