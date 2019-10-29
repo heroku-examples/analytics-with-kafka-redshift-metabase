@@ -25,7 +25,7 @@ export default class DemandChart {
         x: Date.now(),
         y: this.newData[dataset.label] || dataset.data[dataset.data.length - 1]
       })
-      clone[0].y += _.sample([-1, 1]) * Math.floor(Math.random() * 3)
+      //clone[0].y += _.sample([-1, 1]) * Math.floor(Math.random() * 3)
       dataset.data = _.reverse(_.sortBy(clone, 'x'))
     })
   }
@@ -71,7 +71,6 @@ export default class DemandChart {
       data: {
         datasets: datasets
       },
-
       options: {
         responsive: true,
         elements: {
@@ -83,8 +82,7 @@ export default class DemandChart {
           display: false
         },
         title: {
-          display: false,
-          text: 'No title'
+          display: false
         },
         scales: {
           xAxes: [
@@ -139,7 +137,7 @@ export default class DemandChart {
    * new data is coming from the server
    */
   update(newData) {
-    console.log(newData)
+    // console.log(newData)
     if (!this.chart) {
       return
     }
