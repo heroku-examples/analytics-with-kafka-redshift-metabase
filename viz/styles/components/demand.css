@@ -73,17 +73,22 @@
   }
 }
 
-
 .demand--fullfillment-button {
   background-color: #42a1d7;
   border-radius: 3px;
   color: #ffffff;
-  padding: 15px 55px;
+  padding: 10px 15px;
   margin-right: 21px;
   display: inline-block;
   position: absolute;
   right: 0;
+  top: 15px;
   cursor: pointer;
+
+  @media screen and (min-width: 730px) {
+    padding: 15px 55px;
+    top: 35px;
+  }
 }
 
 .demand-modal {
@@ -183,7 +188,20 @@
   }
 
   &--add-button {
+    display: inline-block;
     color: #42a1d7;
+
+    &:hover {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    &:before {
+      content: '⊕';
+      margin-right: 4px;
+      display: inline-block;
+      font-size: 130%;
+    }
   }
 
   &--submit-button-container {
