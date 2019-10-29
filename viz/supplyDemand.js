@@ -8,9 +8,7 @@ const FULLFILLMENT_ORDER_TYPE = 'Fulfillment Order'
 const PURCHASE_ORDER_TYPE = 'Purchase Order'
 
 const getQuery = (ago, isPrior = false) => {
-  let timeCondition = `where salesforce.order.createddate ${
-    isPrior ? '<' : '>'
-  } now() - interval '${ago}'`
+  let timeCondition = `where salesforce.order.createddate ${isPrior ? '<' : '>'} now() - interval '${ago}'`
 
   return `
       select
@@ -140,7 +138,7 @@ const createOrder = (db) => {
     .returning('*')
     .toString()
 
-    return db.any(createOrderQuery)
+  return db.any(createOrderQuery)
 }
 
 const getPricebookentry = (db, categoryName) => {
@@ -160,7 +158,7 @@ const getPricebookentry = (db, categoryName) => {
     )
     .toString()
 
-    return db.any(getPricebookentryQuery)
+  return db.any(getPricebookentryQuery)
 }
 
 const createOrderItem = (db, count, orderid, entry) => {
@@ -180,11 +178,14 @@ const createOrderItem = (db, count, orderid, entry) => {
   return db.any(query)
 }
 
+
 const initRoutes = (app, NODB, db) => {
   app.get('/demand/data', (req, res) => {
+    
     if (NODB) {
       return res.send('App running without a progres database.')
     }
+
     let i = 0
     let promises = []
     while (i <= CHART_VISIBLE_PAST_MINUTES) {
@@ -213,7 +214,9 @@ const initRoutes = (app, NODB, db) => {
       .catch((e) => {
         res.send(e)
       })
+
   })
+
 
   app.post('/demand/orders', (req, res) => {
     if (NODB) {
@@ -262,6 +265,7 @@ const initRoutes = (app, NODB, db) => {
       })
   })
 
+
   db.any('select pricebook2id, sfid from salesforce.contract')
     .then((_contarcts) => {
       contracts = _contarcts
@@ -270,6 +274,7 @@ const initRoutes = (app, NODB, db) => {
       console.log(e)
     })
 }
+
 
 const init = (wss, db, NODB) => {
   if (NODB) {

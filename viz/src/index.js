@@ -9,11 +9,19 @@ import BoothController from './lib/boothControls'
 import DemandControls from './demand/DemandControls'
 import ReconnectingWebSocket from 'reconnecting-websocket'
 
+let navConfig = {
+  legend: '.footer-legend ul',
+  architecture: '.architecture-link',
+  iframeUrl: '/public/kafka-diagram/kafka-diagram-v2.html'
+}
+
+if (document.querySelector('#demand-chart')) {
+  navConfig.iframeUrl = '/public/diagram/heroku-connect-diagram.html'
+  navConfig.type = 'herokuConnect'
+}
+
 const aggregate = [
-  new Nav({
-    legend: '.footer-legend ul',
-    architecture: '.architecture-link'
-  }),
+  new Nav(navConfig),
   new Stream({
     selector: '.chart-stream .chart',
     transition: INTERVAL,

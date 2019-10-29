@@ -6,7 +6,8 @@ module.exports = class Nav {
     this.architectureLink = document.querySelector(options.architecture)
     this.main = document.querySelector('main')
     this.architectureFrame = document.querySelector('.architecture-iframe')
-
+    this.type = options.type
+    this.iframeUrl = options.iframeUrl
     if (this.architectureLink) {
       this.architecture()
     }
@@ -27,7 +28,7 @@ module.exports = class Nav {
       } else {
         this.architectureFrame.setAttribute(
           'src',
-          '/public/kafka-diagram/kafka-diagram-v2.html'
+          this.iframeUrl
         )
         this.main.classList.add('open')
       }
@@ -65,7 +66,7 @@ module.exports = class Nav {
   init() {}
 
   update(data) {
-    if (!this.architectureLink) return
+    if (!this.architectureLink || this.type === 'herokuConnect') return
     this.formatData(data).forEach((topic, index) => {
       if (!this.legend.querySelector(`#topic-${topic}`)) {
         const li = document.createElement('li')
