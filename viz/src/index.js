@@ -6,7 +6,7 @@ import Nav from './lib/nav'
 import { MAX_SIZE, MAX_BUFFER_SIZE, INTERVAL } from '../consumer/constants'
 import AudienceControl from './lib/audienceControls'
 import BoothController from './lib/boothControls'
-import SupplyDemandControls from './lib/supplyDemandControls'
+import DemandControls from './demand/DemandControls'
 import ReconnectingWebSocket from 'reconnecting-websocket'
 
 const aggregate = [
@@ -33,9 +33,14 @@ const QueueGraph = new Queue({
   maxSize: MAX_BUFFER_SIZE,
   maxDisplaySize: MAX_SIZE
 })
+
 const AudienceControls = new AudienceControl({})
 const BoothControls = new BoothController({ selector: '.big-button' })
-const supplyDemandControls = new SupplyDemandControls({})
+
+const demandControls = new DemandControls({
+  chartSelector: '#demand-chart',
+  formOpenSelector: '.demand--fullfillment-button'
+})
 
 const url = `ws${window.location.href.match(/^http(s?:\/\/.*)\/.*$/)[1]}`
 const ws = new ReconnectingWebSocket(url, null, {
@@ -49,6 +54,7 @@ aggregate.forEach((a) => a.init())
 AudienceControls.init(ws)
 BoothControls.init(ws)
 QueueGraph.init()
+demandControls.init(ws)
 
 ws.onmessage = (e) => {
   const msg = JSON.parse(e.data)
@@ -58,7 +64,5 @@ ws.onmessage = (e) => {
     aggregate.forEach((a) => a.update(msg.data))
   } else if (msg.type === 'queue') {
     QueueGraph.update(msg.data)
-  } else if (msg.type === 'orders') {
-    supplyDemandControls.update(msg.data)
   }
 }

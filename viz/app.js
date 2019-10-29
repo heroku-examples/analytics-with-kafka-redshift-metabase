@@ -3,6 +3,7 @@ const server = require('http').createServer()
 const { spawn } = require('child_process')
 const WebSocketServer = require('ws').Server
 const express = require('express')
+const bodyParser = require('body-parser')
 const basicAuth = require('express-basic-auth')
 const webpack = require('webpack')
 const history = require('connect-history-api-fallback')
@@ -19,11 +20,12 @@ if (NODB) {
 if (NODB) {
   logger.info('KAFKA DISABLED')
 }
-const supplyDemandController = require('./supply-demand')
+const supplyDemandController = require('./supplyDemand')
 const webpackConfig = require('./webpack.config')
 const Consumer = require('./consumer')
 const Kafka = require('no-kafka')
 const app = express()
+app.use(bodyParser.json())
 const constants = require('./consumer/constants')
 let dataGeneratorProcess = null
 
@@ -161,7 +163,7 @@ server.on('request', app)
  */
 const wss = new WebSocketServer({ server })
 
-supplyDemandController.initConnection(wss, db, NODB)
+supplyDemandController.init(wss, db, NODB)
 
 /*
  * Configure Kafka consumer

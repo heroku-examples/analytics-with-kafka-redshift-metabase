@@ -1,4 +1,5 @@
 @import '../node_modules/normalize.css/normalize.css';
+@import '../node_modules/c3/c3.css';
 
 @import './components/chart-colors.css';
 @import './components/main.css';
@@ -7,3 +8,4 @@
 
 @import './components/audience.css';
 @import './components/booth.css';
+@import './components/demand.css';

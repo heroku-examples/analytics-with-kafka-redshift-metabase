@@ -14,13 +14,17 @@ block architecture
 
 block content
 
-  .chart-container.chart-stream.toggleable(name='chart')
-    .chart.loading
-    footer.footer-legend
-      ul
+  h1.title Orders by category
+  a.demand--fullfillment-button New Fullfillment
 
-  h1.title connect
-  p Press (-) or (+) on a product in order to make it less or more popular.
-
-  //- Category Name
-  div.category-controls-wrapper
+  div.demand-chart
+    div.demand-chart-main
+      div.demand-chart-y-ticks
+        span.demand-chart-y-ticks--y100 100
+        span.demand-chart-y-ticks--y0 0
+      canvas#demand-chart
+    div.demand-chart--x-ticks
+        each val in ['5mins', '4mins', '3mins', '2mins', '1min', 'Now']
+          span(class='demand-chart--x-tick')= val
+            
+  div.demand-category-container
