@@ -55,7 +55,7 @@
     "install-redshift": "cd redshift_batch && npm install",
     "install-viz": "cd viz && npm install --dev",
     "lint": "npm run eslint && npm run prettier:list",
-    "prettier": "prettier '**/*.{js,md,css,json}'",
+    "prettier": "prettier --write '**/*.{js,md,css,json}'",
     "prettier:list": "prettier --list-different '**/*.{js,md,css,json}'",
     "test": "echo \"Error: no test specified\" && exit 1"
   }
