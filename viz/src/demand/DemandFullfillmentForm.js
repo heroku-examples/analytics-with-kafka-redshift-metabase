@@ -14,6 +14,7 @@ export default class DemandFullfillmentForm {
         containerClass: 'demand-modal',
         containerSuccessClass: 'demand-modal__success',
         containerErrorClass: 'demand-modal__error',
+        containerSendingClass: 'demand-modal__sending',
         fieldListContainerClass: 'demand-form--fields-list-container',
         addButtonClass: 'demand-form--add-button-container',
         openButtonSelector: '',
@@ -112,6 +113,8 @@ export default class DemandFullfillmentForm {
       alert('Please add at least one order')
       return
     }
+
+    this.container.classList.add()
 
     return axios
       .post('/demand/orders', { orders: JSON.stringify(orderObj) })
