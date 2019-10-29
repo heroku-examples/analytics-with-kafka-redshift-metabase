@@ -8,6 +8,7 @@ import demandConstants from './demandConstants'
 export default class DemandChart {
   constructor(options) {
     this.categories = options.categories
+    console.log(options.originalData)
     this.render(this.generateDatasets(options.originalData || {}))
   }
 
@@ -141,6 +142,7 @@ export default class DemandChart {
     if (!this.chart) {
       return
     }
+    console.log(newData)
     this.newData = newData
   }
 }

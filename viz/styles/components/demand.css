@@ -17,7 +17,7 @@
 
   &--x-ticks {
     display: flex;
-    margin: 20px 0px 20px 30px;
+    margin: 20px 0px 20px 38px;
     justify-content: space-between;
     position: relative;
   }
@@ -27,8 +27,9 @@
   }
 
   &-y-ticks {
-    width: 30px;
+    width: 38px;
     position: relative;
+    font-size: 18px;
   }
 
   &-y-ticks--y100,
@@ -38,11 +39,13 @@
 
   &-y-ticks--y0 {
     bottom: 0;
+    left: 12px;
   }
 }
 
 #demand-chart {
   max-height: 60vh;
+  width: 100%;
   border: solid 1px #ccc;
 }
 
@@ -65,8 +68,8 @@
 
   &--color-box {
     display: inline-block;
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
     border-radius: 4px;
     top: 5px;
     position: relative;
@@ -105,9 +108,14 @@
     display: block;
   }
 
+  &__submitting {
+    .demand-modal--overlay {
+      display: block;
+    }
+  }
+
   &--title {
     text-align: center;
-    margin-top: 0;
 
     &__success,
     &__error {
@@ -132,6 +140,27 @@
   &__error {
     .demand-modal--title__error {
       display: block;
+    }
+  }
+
+  &--overlay {
+    display: none;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-color: rgba(256,256,256,0.7);
+    top: 0;
+    left: 0;
+    border-radius: 5px;
+
+    img {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 50px;
+      height: 50px;
+      margin-left: -25px;
+      margin-top: -25px;
     }
   }
 }

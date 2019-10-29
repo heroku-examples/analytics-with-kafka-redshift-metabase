@@ -3,7 +3,7 @@ const moment = require('moment')
 const knex = require('knex')({ client: 'pg' })
 
 const CHART_VISIBLE_PAST_MINUTES = 5
-const DATA_PERIOD = '1 week'
+const DATA_PERIOD = '1 month'
 const FULLFILLMENT_ORDER_TYPE = 'Fulfillment Order'
 const PURCHASE_ORDER_TYPE = 'Purchase Order'
 
@@ -209,7 +209,6 @@ const initRoutes = (app, NODB, db) => {
           },
           data
         )
-
         res.send(data)
       })
       .catch((e) => {

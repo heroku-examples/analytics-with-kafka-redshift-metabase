@@ -14,7 +14,7 @@ export default class DemandFullfillmentForm {
         containerClass: 'demand-modal',
         containerSuccessClass: 'demand-modal__success',
         containerErrorClass: 'demand-modal__error',
-        containerSendingClass: 'demand-modal__sending',
+        containerSubmittingClass: 'demand-modal__submitting',
         fieldListContainerClass: 'demand-form--fields-list-container',
         addButtonClass: 'demand-form--add-button',
         openButtonSelector: '',
@@ -49,6 +49,9 @@ export default class DemandFullfillmentForm {
             <a class="demand-form--submit-button">Submit</a>
           </div>
         </form>
+        <div class="demand-modal--overlay">
+          <img src="public/images/loading.gif" />
+        </div>
       </div>
     `)
 
@@ -114,16 +117,18 @@ export default class DemandFullfillmentForm {
       return
     }
 
-    this.container.classList.add()
+    this.container.classList.add(this.cfg.containerSubmittingClass)
 
     return axios
       .post('/demand/orders', { orders: JSON.stringify(orderObj) })
       .then((res) => {
+        this.container.classList.remove(this.cfg.containerSubmittingClass)
         this.container.classList.add(this.cfg.containerSuccessClass)
         this.closeAndClean()
         console.log(res)
       })
       .catch((e) => {
+        this.container.classList.remove(this.cfg.containerSubmittingClass)
         this.container.classList.add(this.cfg.containerErrorClass)
         this.closeAndClean()
         console.error(e)
