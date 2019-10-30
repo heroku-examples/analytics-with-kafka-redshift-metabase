@@ -31,12 +31,12 @@ export default class DemandChart {
   }
 
   generateDatasets(originalData) {
+    console.log(originalData)
     const chartColors = demandConstants.COLOR_LIST
     const color = Chart.helpers.color
 
     return this.categories.map((categoryName, index) => {
       let currentData = originalData[categoryName].map((value, i) => {
-
         return {
           x: moment()
             .subtract(originalData[categoryName].length - i, 'minute')
@@ -136,7 +136,6 @@ export default class DemandChart {
    * new data is coming from the server
    */
   update(newData) {
-    // console.log(newData)
     if (!this.chart) {
       return
     }

@@ -8,36 +8,44 @@ const FULLFILLMENT_ORDER_TYPE = 'Fulfillment Order'
 const PURCHASE_ORDER_TYPE = 'Purchase Order'
 
 const getQuery = (ago, isPrior = false) => {
-  let timeCondition = `and salesforce.order.createddate ${
-    isPrior ? '<' : '>'
-  } now() - interval '${ago}'`
+  let agoChunks = ago? ago.match(/[A-Za-z0-9 ]+/gi) : null
+  ago = agoChunks ? agoChunks[0] : DATA_PERIOD
 
-  return `
-      select
-        family as category,
-        sum(quantity) as count,
-        salesforce.recordType.name as type,
-        salesforce.order.createddate as date
-      from
-        salesforce.orderItem
-      inner join
-        salesforce.product2
-        ON salesforce.orderItem.product2id=product2.sfid
-      inner join
-        salesforce.order
-            ON salesforce.orderItem.orderid=salesforce.order.sfid
-      inner join
-        salesforce.recordType
-            ON salesforce.order.recordtypeid=salesforce.recordType.sfid
-      where salesforce.order.status='Activated'
-      ${timeCondition}
-      group by
-        salesforce.recordType.name,
-        product2.family,
-        salesforce.order.createddate,
-        salesforce.order.sfid
-      order by salesforce.order.createddate DESC
-  `
+  return knex
+    .select(
+      { category: 'family' },
+      { count: knex.raw('sum(quantity)') },
+      { type: 'recordtype.name' },
+      { date: 'order.createddate' }
+    )
+    .from('salesforce.orderitem')
+    .innerJoin(
+      'salesforce.product2',
+      'orderitem.product2id',
+      '=',
+      'product2.sfid'
+    )
+    .innerJoin('salesforce.order', 'orderitem.orderid', '=', 'order.sfid')
+    .innerJoin(
+      'salesforce.recordtype',
+      'order.recordtypeid',
+      '=',
+      'recordtype.sfid'
+    )
+    .where('order.status', 'Activated')
+    .where(
+      'order.createddate',
+      isPrior ? '<' : '>',
+      knex.raw(`now() - interval '${ago}'`)
+    )
+    .groupBy(
+      'recordtype.name',
+      'product2.family',
+      'order.createddate',
+      'order.sfid'
+    )
+    .orderBy('order.createddate', 'desc')
+    .toString()
 }
 
 let pendingOrders = {}
