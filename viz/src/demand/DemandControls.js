@@ -18,6 +18,7 @@ export default class DemandControls {
         categories: this.categories
       })
       this.renderCategories()
+      this.renderXticks()
       this.fullfillmentForm = new DemandFullfillmentForm({
         openButtonSelector: options.formOpenSelector,
         categories: this.categories
@@ -43,6 +44,26 @@ export default class DemandControls {
     })
   }
 
+  renderXticks() {
+    let tickLabels = _.reverse(
+      _.times(demandConstants.CHART_VISIBLE_MINS + 1, (x) => {
+        return x === 0 ? 'Now' : x + 'mins'
+      })
+    )
+
+    let template = _.template(`
+      <% tickLabels.forEach( label => { %>
+        <span class='demand-chart--x-tick'><%- label %></span>
+      <% }); %>
+    `)
+
+    let html = template({
+      tickLabels
+    })
+
+    document.querySelectorAll('.demand-chart--x-ticks')[0].innerHTML = html
+  }
+
   renderCategories() {
     let template = _.template(`
       <ul class='demand-category'>
@@ -64,7 +85,11 @@ export default class DemandControls {
   }
 
   getCurrentChartData() {
-    return axios.get('/demand/data')
+    return axios.get('/demand/data', {
+      params: {
+        period: demandConstants.CHART_VISIBLE_MINS
+      }
+    })
   }
 
   initCategorySelectList() {
@@ -76,54 +101,6 @@ export default class DemandControls {
       let option = document.createElement('option')
       option.innerHTML = categoryName
       categorySelection.appendChild(option)
-    })
-  }
-
-  initForm() {
-    // const findEl = (selector) => {
-    //   return document.querySelectorAll(selector)
-    // }
-    // const toggleModal = () => {
-    //   modal.classList.toggle('co--modal__active')
-    // }
-    // let openModalBtn = findEl('.co--fullfillment-button')[0]
-    // let modal = findEl('.co--modal')[0]
-    // let form = findEl('.co--form')[0]
-    // let addBtn = findEl('.co--add-button')[0]
-    // let listContainer = findEl('.co--fields-list-container')[0]
-    // let listItemStr
-    // let submitBtn = findEl('.co--submit-button')[0]
-    // let categorySelection = findEl('select.co--field-input')[0]
-    // openModalBtn.addEventListener('click', toggleModal)
-    // form.addEventListener('submit',e => e.preventDefault())
-    // submitBtn.addEventListener('click', () => {
-    //   this.submitFullfillment()
-    //     .then( (res) => {
-    //       modal.classList.add('co-modal__success')
-    //     }).catch(e => {
-    //       console.log(e)
-    //       modal.classList.add('co-modal__error')
-    //     })
-    // })
-    // modal.addEventListener('click', e => {
-    //   if (e.target === modal) {
-    //     toggleModal()
-    //   }
-    // })
-    // addBtn.addEventListener('click', e => {
-    //   e.preventDefault()
-    //   listItemStr = listItemStr || listContainer.innerHTML
-    //   let div = document.createElement('div')
-    //   div.innerHTML = listItemStr
-    //   listContainer.appendChild(div.children[0])
-    // })
-  }
-
-  submitFullfillment() {
-    return axios.post('/supplydemand/orders', {
-      test: 'test'
-      // firstName: 'Fred',
-      // lastName: 'Flintstone'
     })
   }
 }

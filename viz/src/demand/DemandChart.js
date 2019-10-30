@@ -1,4 +1,3 @@
-import axios from 'axios'
 import _ from 'lodash'
 import moment from 'moment'
 import Chart from 'chart.js'
@@ -11,10 +10,6 @@ export default class DemandChart {
     this.render(this.generateDatasets(options.originalData || {}))
   }
 
-  getAllOrders() {
-    return axios.get('/supplydemand/orders')
-  }
-
   onRefresh() {
     if (!this.newData) {
       return
@@ -25,16 +20,14 @@ export default class DemandChart {
         x: Date.now(),
         y: this.newData[dataset.label] || dataset.data[dataset.data.length - 1]
       })
-      //clone[0].y += _.sample([-1, 1]) * Math.floor(Math.random() * 3)
+      // clone[0].y += _.sample([-1, 1]) * Math.floor(Math.random() * 3)
       dataset.data = _.reverse(_.sortBy(clone, 'x'))
     })
   }
 
   generateDatasets(originalData) {
-    console.log(originalData)
-    const chartColors = demandConstants.COLOR_LIST
-    const color = Chart.helpers.color
-
+    let chartColors = demandConstants.COLOR_LIST
+    // chartColors = _.shuffle(chartColors)
     return this.categories.map((categoryName, index) => {
       let currentData = originalData[categoryName].map((value, i) => {
         return {
@@ -52,11 +45,9 @@ export default class DemandChart {
 
       return {
         label: categoryName,
-        backgroundColor: color(chartColors[index])
-          .alpha(0.5)
-          .rgbString(),
+        backgroundColor: chartColors[index],
         borderColor: chartColors[index],
-        borderWidth: 10,
+        borderWidth: demandConstants.CHART_LINE_THICKNESS,
         fill: false,
         lineTension: 0,
         data: currentData
@@ -92,9 +83,9 @@ export default class DemandChart {
               type: 'realtime',
               display: false,
               realtime: {
-                duration: 300000,
-                refresh: 10000,
-                delay: 10000,
+                duration: demandConstants.CHART_DURATION,
+                refresh: demandConstants.CHART_REFRESH_DURATION,
+                delay: demandConstants.CHART_DELAY,
                 onRefresh: this.onRefresh.bind(this)
               }
             }
@@ -125,10 +116,6 @@ export default class DemandChart {
     this.chart.load({
       columns: this.chartData.data
     })
-  }
-
-  getChartData() {
-    return axios.get('/demand/data')
   }
 
   /**

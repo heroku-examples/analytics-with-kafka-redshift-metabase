@@ -2,13 +2,15 @@ const _ = require('lodash')
 const moment = require('moment')
 const knex = require('knex')({ client: 'pg' })
 
-const CHART_VISIBLE_PAST_MINUTES = 5
+const CHART_VISIBLE_PAST_MINUTES_DEFAULT = 5
+const CHART_VISIBLE_PAST_MINUTES_MAX = 30
 const DATA_PERIOD = '1 month'
 const FULLFILLMENT_ORDER_TYPE = 'Fulfillment Order'
 const PURCHASE_ORDER_TYPE = 'Purchase Order'
 
 const getQuery = (ago, isPrior = false) => {
-  let agoChunks = ago? ago.match(/[A-Za-z0-9 ]+/gi) : null
+  //sanitizing
+  let agoChunks = ago ? ago.match(/[A-Za-z0-9 ]+/gi) : null
   ago = agoChunks ? agoChunks[0] : DATA_PERIOD
 
   return knex
@@ -74,30 +76,7 @@ const starOrderStatusCheckInterval = (db) => {
         if (!orders || orders.length === 0) {
           return
         }
-
-        let promises = []
-        _.forEach(orders, (order) => {
-          if (!order.sfid) {
-            return
-          }
-
-          const orderItemDataList = pendingOrders[order.id]
-          //Once synced then the information isn't needed
-          delete pendingOrders[order.id]
-
-          _.forEach(orderItemDataList, (orderItemData) => {
-            let promise = getPricebookentry(
-              db,
-              orderItemData.categoryName
-            ).then((pricebookentries) => {
-              const entry = pricebookentries[0]
-              return createOrderItem(db, orderItemData.count, order.sfid, entry)
-            })
-
-            promises.push(promise)
-          })
-        })
-        return Promise.all(promises)
+        return createAllPendingOrderItems(orders, db)
       })
       // .then((orderItems) => {
       //   console.log('Order items were created:', orderItems)
@@ -108,6 +87,33 @@ const starOrderStatusCheckInterval = (db) => {
   }, 5000)
 }
 
+/*
+This method will create all orderitems for given orders
+ */
+
+const createAllPendingOrderItems = (orders, db) => {
+  let promises = []
+  _.forEach(orders, (order) => {
+    if (!order.sfid) {
+      return
+    }
+    const orderItemDataList = pendingOrders[order.id]
+    //Once synced then the information isn't needed
+    delete pendingOrders[order.id]
+
+    _.forEach(orderItemDataList, (orderItemData) => {
+      let promise = getPricebookentry(db, orderItemData.categoryName).then(
+        (pricebookentries) => {
+          const entry = pricebookentries[0]
+          return createOrderItem(db, orderItemData.count, order.sfid, entry)
+        }
+      )
+      promises.push(promise)
+    })
+  })
+  return Promise.all(promises)
+}
+
 const normalizeData = (rawData) => {
   let data = _.groupBy(rawData, 'category')
 
@@ -115,7 +121,9 @@ const normalizeData = (rawData) => {
     let orderTypes = _.groupBy(orders, 'type')
     const fCounts = _.sumBy(orderTypes[FULLFILLMENT_ORDER_TYPE], 'count')
     const pCounts = _.sumBy(orderTypes[PURCHASE_ORDER_TYPE], 'count')
+    //if fullfillment order is 0 then the demand is 0
     const demand = fCounts === 0 ? 0 : (pCounts / fCounts) * 100
+    //if demand is higher than 100 then it's set to 100
     data[categoryName] = demand >= 100 ? 100 : demand
   })
   return data
@@ -190,19 +198,28 @@ const createOrderItem = (db, count, orderid, entry) => {
 }
 
 const initRoutes = (app, NODB, db) => {
+  /*
+    This route returns a list of snapshop of demand in past 5 mins
+  */
   app.get('/demand/data', (req, res) => {
     if (NODB) {
       return res.send('App running without a progres database.')
     }
+    let period = parseInt(req.query.period)
+
+    if (!period || !_.isNumber(period) || period < 0) {
+      period = CHART_VISIBLE_PAST_MINUTES_DEFAULT
+    } else if (period > CHART_VISIBLE_PAST_MINUTES_MAX) {
+      period = CHART_VISIBLE_PAST_MINUTES_MAX
+    }
 
     let i = 0
     let promises = []
-    while (i <= CHART_VISIBLE_PAST_MINUTES) {
-      promises.push(
-        getData(db, getQuery(CHART_VISIBLE_PAST_MINUTES - i + ' minutes', true))
-      )
+    while (i <= period) {
+      promises.push(getData(db, getQuery(period - i + ' minutes', true)))
       i++
     }
+
     Promise.all(promises)
       .then((list) => {
         let data = {}
@@ -271,7 +288,12 @@ const initRoutes = (app, NODB, db) => {
       })
   })
 
-  db.any('select pricebook2id, sfid from salesforce.contract')
+  db.any(
+    knex
+      .select('pricebook2id', 'sfid')
+      .from('salesforce.contract')
+      .toString()
+  )
     .then((_contarcts) => {
       contracts = _contarcts
     })
