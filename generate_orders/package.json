@@ -1,0 +1,17 @@
+{
+  "name": "generate_orders",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "knex": "^0.20.1",
+    "lodash": "^4.17.15",
+    "moment": "^2.24.0",
+    "pg": "^7.12.1"
+  }
+}

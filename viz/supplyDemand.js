@@ -66,9 +66,11 @@ const starOrderStatusCheckInterval = (db) => {
     Creating a query to get all orders with pending id
      */
     let query = knex.select('sfid', 'id').from('salesforce.order')
+    let ids = []
     _.forEach(pendingOrders, (orderItemData, orderId) => {
-      query.where('id', orderId)
+      ids.push(orderId)
     })
+    query.whereIn('id', ids).whereNotNull('sfid')
 
     query = query.toString()
     db.any(query)
@@ -122,9 +124,9 @@ const normalizeData = (rawData) => {
     const fCounts = _.sumBy(orderTypes[FULLFILLMENT_ORDER_TYPE], 'count')
     const pCounts = _.sumBy(orderTypes[PURCHASE_ORDER_TYPE], 'count')
     //if fullfillment order is 0 then the demand is 0
-    const demand = fCounts === 0 ? 0 : (pCounts / fCounts) * 100
+    const demand = fCounts - pCounts //fCounts === 0 ? 0 : (pCounts / fCounts) * 100
     //if demand is higher than 100 then it's set to 100
-    data[categoryName] = demand >= 100 ? 100 : demand
+    data[categoryName] = demand
   })
   return data
 }

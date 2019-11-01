@@ -20,7 +20,6 @@ export default class DemandChart {
         x: Date.now(),
         y: this.newData[dataset.label] || dataset.data[dataset.data.length - 1]
       })
-      // clone[0].y += _.sample([-1, 1]) * Math.floor(Math.random() * 3)
       dataset.data = _.reverse(_.sortBy(clone, 'x'))
     })
   }
@@ -94,10 +93,10 @@ export default class DemandChart {
             {
               display: false,
               ticks: {
-                display: false,
-                stepSize: 100,
-                beginAtZero: true,
-                max: 100
+                // display: false,
+                // stepSize: 100,
+                // beginAtZero: true,
+                // max: 100
               }
             }
           ]
@@ -126,7 +125,6 @@ export default class DemandChart {
     if (!this.chart) {
       return
     }
-    //console.log(newData)
     this.newData = newData
   }
 }
