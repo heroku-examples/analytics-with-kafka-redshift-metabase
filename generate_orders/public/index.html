@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <title>Order controls</title>
+    <style>
+      .worker-running [start-button], [stop-button] {
+        display: none
+      }
+
+      .worker-running [stop-button] {
+        display: inline-block
+      }
+    </style>
+  </head>
+  <body>
+
+    <div class="container">
+      <div class="section">
+        <h4>Status: <span status></span></h4>
+        <a class="waves-effect waves-light btn" start-button><i class="material-icons right">cloud</i>Start</a>
+        <a class="waves-effect waves-light btn" stop-button><i class="material-icons right">cloud</i>Stop</a>
+        <a class="waves-effect waves-light btn" refresh-button><i class="material-icons right">refresh</i>Check status</a>
+        <a class="waves-effect waves-light btn" reset-button><i class="material-icons right">refresh</i>Reset</a>
+
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>
