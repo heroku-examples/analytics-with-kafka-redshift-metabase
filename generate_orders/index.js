@@ -11,31 +11,36 @@ const knex = require('knex')({
 
 const ORDER_INTERVAL = 60000
 const PURCHASE_ORDER_RATIO = 0.55 //55% of orders will be purchase orders but it will be some what random
-const ORDER_QUANTITY = 500
-const ORDER_QUANTITY_RANDOMNESS = 100 // +-
+const ORDER_QUANTITY = 250
+const ORDER_QUANTITY_RANDOMNESS = 50 // +-
 
 let products = null
 let contractId = null
 let pendingOrders = {}
-
+let orderInterval = null
+let orderSyncCheckInterval = null
+let totallOrdersCreated = 0
+let deleteProcess = null
+let statusMessage = 'Stopped'
 console.log(process.env.DATABASE_URL)
 
 // This is for the next update.
 const deleteAll = () => {
-  console.log('Updating the all orders to be draft')
-
+  stopOrderInterval()
+  statusMessage = 'Updating the all orders to be draft'
+  console.log(statusMessage)
   return knex('salesforce.order')
     .where('status', 'Activated')
     .returning('id')
     .update('status', 'Draft')
     .then((ids) => {
-      console.log(ids)
       if (ids.length === 0) {
         return Promise.resolve()
       }
       return new Promise((resolve) => {
         const check = () => {
-          //checking if these orders are synced with salesforce
+          //checking if these orders are synced with salesforce.
+          //Deleing orders when they are still Activated on salesforce, they don't get deleted there
           setTimeout(() => {
             console.log('Checking if orders are synced')
             knex('salesforce.order')
@@ -76,7 +81,7 @@ const deleteAll = () => {
 
 const getPurchaseOrderCount = () => {
   return (
-    ORDER_QUANTITY * PURCHASE_ORDER_RATIO +
+    Math.round(ORDER_QUANTITY * PURCHASE_ORDER_RATIO) +
     _.sample([1, -1]) * Math.floor(Math.random() * ORDER_QUANTITY_RANDOMNESS)
   )
 }
@@ -140,7 +145,7 @@ const activateOrders = (orders) => {
   It's stored in "pendingOrders"
 */
 const starOrderStatusCheckInterval = () => {
-  setInterval(() => {
+  return setInterval(() => {
     if (_.keys(pendingOrders).length === 0) {
       return
     }
@@ -166,6 +171,7 @@ const starOrderStatusCheckInterval = () => {
             return activateOrders(orders)
           })
           .then(() => {
+            totallOrdersCreated += orders.length
             console.log('Successfully created new orders')
           })
       })
@@ -249,26 +255,104 @@ const init = () => {
     .then((contractIds) => {
       contractId = contractIds[0].contractId
     })
-    .then(() => {
-      console.log('order generator ready')
-      setInterval(makeOrders, ORDER_INTERVAL)
-    })
-    .then(() => {
-      starOrderStatusCheckInterval()
-    })
+}
+
+const startOrderInterval = () => {
+  stopOrderInterval()
+  console.log('Order creation interval started')
+  orderInterval = setInterval(makeOrders, ORDER_INTERVAL)
+  orderSyncCheckInterval = starOrderStatusCheckInterval()
+}
+
+const stopOrderInterval = () => {
+  if (orderInterval) {
+    clearInterval(orderInterval)
+    orderInterval = null
+  }
+  if (orderSyncCheckInterval) {
+    clearInterval(orderSyncCheckInterval)
+    orderSyncCheckInterval = null
+  }
+  console.log('Order creation interval stopped')
+}
+
+const getStatus = () => {
+  return {
+    running: !!orderInterval,
+    state: orderInterval ? 'Running' : 'Stopped',
+    interval: ORDER_INTERVAL,
+    quantity: ORDER_QUANTITY,
+    randomness: ORDER_QUANTITY_RANDOMNESS,
+    purchaseRatio: PURCHASE_ORDER_RATIO,
+    totallOrdersCreated,
+    totalPendingOrders: _.keys(pendingOrders).length,
+    isReady: !!contractId
+  }
 }
 
 init()
 
-app.get('/connect/delete-orders', (req, res) => {
+app.use(express.static('public'))
+
+app.post('/delete-orders', (req, res) => {
+  if (deleteProcess) {
+    return res.json({
+      status: getStatus(),
+      success: false,
+      msg: 'Already in the process of deleting'
+    })
+  }
+
   deleteAll()
     .then(() => {
-      res.send('All orders were deleted')
+      res.json({
+        status: getStatus(),
+        success: true,
+        msg: 'All orders have been deleted'
+      })
     })
     .catch((e) => {
       console.log(e)
       res.status(500).send('Something went wrong')
     })
+})
+
+app.post('/start-orders', (req, res) => {
+  if (orderInterval) {
+    return res.json({
+      status: getStatus(),
+      success: false,
+      msg: 'Already running'
+    })
+  }
+
+  startOrderInterval()
+  res.json({
+    status: getStatus(),
+    success: true,
+    msg: `Now ${ORDER_QUANTITY} orders are automatically created every ${ORDER_INTERVAL} milliseconds`
+  })
+})
+
+app.post('/stop-orders', (req, res) => {
+  if (!orderInterval) {
+    return res.json({
+      status: getStatus(),
+      success: false,
+      msg: 'Already stopped'
+    })
+  }
+
+  stopOrderInterval()
+  res.json({
+    status: getStatus(),
+    success: true,
+    msg: 'Stopped'
+  })
+})
+
+app.get('/status', (req, res) => {
+  res.json(getStatus())
 })
 
 app.listen(port, () =>

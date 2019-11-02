@@ -200,6 +200,17 @@ const createOrderItem = (db, count, orderid, entry) => {
 }
 
 const initRoutes = (app, NODB, db) => {
+  app.get('/demand/categories', (req, res) => {
+    let query = knex
+      .select('family as category')
+      .from('salesforce.product2')
+      .whereNotNull('family')
+      .toString()
+    db.any(query).then((categories) => {
+      res.json(_.map(categories, (c) => c.category))
+    })
+  })
+
   /*
     This route returns a list of snapshop of demand in past 5 mins
   */

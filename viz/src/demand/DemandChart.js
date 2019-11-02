@@ -26,8 +26,10 @@ export default class DemandChart {
 
   generateDatasets(originalData) {
     let chartColors = demandConstants.COLOR_LIST
+
     // chartColors = _.shuffle(chartColors)
     return this.categories.map((categoryName, index) => {
+      originalData[categoryName] = originalData[categoryName] || [0]
       let currentData = originalData[categoryName].map((value, i) => {
         return {
           x: moment()
@@ -61,6 +63,14 @@ export default class DemandChart {
         datasets: datasets
       },
       options: {
+        layout: {
+          padding: {
+            left: 0,
+            right: 0,
+            top: 20,
+            bottom: 20
+          }
+        },
         responsive: true,
         elements: {
           point: {
@@ -91,6 +101,9 @@ export default class DemandChart {
           ],
           yAxes: [
             {
+              gridLines: {
+                display: false
+              },
               display: false,
               ticks: {
                 // display: false,
@@ -122,6 +135,7 @@ export default class DemandChart {
    * new data is coming from the server
    */
   update(newData) {
+    console.log(newData)
     if (!this.chart) {
       return
     }

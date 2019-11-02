@@ -11,19 +11,24 @@ export default class DemandControls {
     if (this.isDisabled) {
       return
     }
-    this.isAllReady = this.getCurrentChartData().then((res) => {
-      this.categories = _.keys(res.data)
-      this.chart = new DemandChart({
-        originalData: res.data,
-        categories: this.categories
+    this.isAllReady = this.getCurrentChartData()
+      .then((res) => {
+        return this.initCategories().then(() => {
+          return res
+        })
       })
-      this.renderCategories()
-      this.renderXticks()
-      this.fullfillmentForm = new DemandFullfillmentForm({
-        openButtonSelector: options.formOpenSelector,
-        categories: this.categories
+      .then((res) => {
+        this.chart = new DemandChart({
+          originalData: res.data,
+          categories: this.categories
+        })
+        this.renderCategories()
+        this.renderXticks()
+        this.fullfillmentForm = new DemandFullfillmentForm({
+          openButtonSelector: options.formOpenSelector,
+          categories: this.categories
+        })
       })
-    })
   }
 
   init(ws) {
@@ -41,6 +46,12 @@ export default class DemandControls {
       if (msg.type === 'orders') {
         this.chart.update(msg.data)
       }
+    })
+  }
+
+  initCategories() {
+    return axios.get('/demand/categories').then((res) => {
+      this.categories = res.data
     })
   }
 
