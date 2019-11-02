@@ -2,7 +2,7 @@ const express = require('express')
 const _ = require('lodash')
 const moment = require('moment')
 const app = express()
-const port = 4000
+const PORT = process.env.PORT || 4000
 
 const knex = require('knex')({
   client: 'pg',
@@ -355,6 +355,6 @@ app.get('/status', (req, res) => {
   res.json(getStatus())
 })
 
-app.listen(port, () =>
-  console.log(`Order generator listening on port ${port}!`)
+app.listen(PORT, () =>
+  console.log(`Order generator listening on port ${PORT}!`)
 )
