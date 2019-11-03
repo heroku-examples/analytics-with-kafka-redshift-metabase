@@ -6,7 +6,6 @@ import demandConstants from './demandConstants'
 
 export default class DemandControls {
   constructor(options) {
-
     if (document.querySelectorAll('.order-control-buttons').length > 0) {
       require('./order-control')()
     }
