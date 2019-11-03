@@ -1,5 +1,5 @@
 const _ = require('lodash')
-const moment = require ('moment')
+const moment = require('moment')
 
 const ORDER_INTERVAL = 60000
 const PURCHASE_ORDER_RATIO = 0.55 //55% of orders will be purchase orders but it will be some what random
@@ -14,7 +14,6 @@ let orderInterval = null
 let orderSyncCheckInterval = null
 let knex = null
 
-
 const deleteAll = () => {
   stopOrderInterval()
   console.log('Updating the all orders to be draft')
@@ -22,7 +21,7 @@ const deleteAll = () => {
     .where('status', 'Activated')
     .returning('id')
     .update('status', 'Draft')
-    .then( ids => {
+    .then((ids) => {
       if (ids.length === 0) {
         return Promise.resolve()
       }
@@ -36,7 +35,7 @@ const deleteAll = () => {
               .whereIn('id', ids)
               .where('_hc_lastop', 'SYNCED')
               .returning('id')
-              .then( ids => {
+              .then((ids) => {
                 if (ids.length > 0) {
                   resolve()
                 } else {
@@ -68,14 +67,12 @@ const deleteAll = () => {
     })
 }
 
-
 const getPurchaseOrderCount = () => {
   return (
     Math.round(ORDER_QUANTITY * PURCHASE_ORDER_RATIO) +
     _.sample([1, -1]) * Math.floor(Math.random() * ORDER_QUANTITY_RANDOMNESS)
   )
 }
-
 
 const makeOrdersForCategory = (productInfo) => {
   let puchaseOrderCount = getPurchaseOrderCount()
@@ -115,7 +112,6 @@ const makeOrdersForCategory = (productInfo) => {
   return Promise.all(promises)
 }
 
-
 const makeOrders = () => {
   console.log('Making new ordres')
   let promises = []
@@ -125,14 +121,12 @@ const makeOrders = () => {
   return Promise.all(promises)
 }
 
-
 const activateOrders = (orders) => {
   console.log('Activating all orders')
   return knex('salesforce.order')
     .whereIn('sfid', _.map(orders, (order) => order.sfid))
     .update('status', 'Activated')
 }
-
 
 const createOrderItem = (count, orderid, productInfo) => {
   let orderItemData = {
@@ -147,7 +141,6 @@ const createOrderItem = (count, orderid, productInfo) => {
     .insert(orderItemData)
     .returning('*')
 }
-
 
 const createAllPendingOrderItems = (orders) => {
   let promises = []
@@ -171,13 +164,11 @@ const createAllPendingOrderItems = (orders) => {
   return Promise.all(promises)
 }
 
-
 /*
   This interval will keep checking if new order has been created and it has been synced.
   If it's synced then it will create orderitems that's associted with.
   It's stored in "pendingOrders"
 */
-
 
 const starOrderStatusCheckInterval = () => {
   return setInterval(() => {
@@ -196,7 +187,7 @@ const starOrderStatusCheckInterval = () => {
     request.whereIn('id', ids).whereNotNull('sfid')
 
     request
-      .then( _orders => {
+      .then((_orders) => {
         if (!_orders || _orders.length === 0) {
           return
         }
@@ -217,14 +208,12 @@ const starOrderStatusCheckInterval = () => {
   }, 5000)
 }
 
-
-const startOrderInterval  = () => {
+const startOrderInterval = () => {
   stopOrderInterval()
   console.log('Order creation interval started')
   orderInterval = setInterval(makeOrders, ORDER_INTERVAL)
   orderSyncCheckInterval = starOrderStatusCheckInterval()
 }
-
 
 const stopOrderInterval = () => {
   if (orderInterval) {
@@ -237,7 +226,6 @@ const stopOrderInterval = () => {
   }
   console.log('Order creation interval stopped')
 }
-
 
 const getStatus = () => {
   return {
@@ -253,13 +241,11 @@ const getStatus = () => {
   }
 }
 
-
-const init = ({_knex, _contractId, _products}) => {
+const init = ({ _knex, _contractId, _products }) => {
   knex = _knex
   contractId = _contractId
   products = _products
 }
-
 
 module.exports = {
   deleteAll,

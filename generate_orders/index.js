@@ -1,6 +1,8 @@
 const runner = require('./runner')
 const dbEventController = require('./db-event-controller')
-const subscriber = require('pg-listen')({connectionString: `${process.env.DATABASE_URL}?ssl=true`})
+const subscriber = require('pg-listen')({
+  connectionString: `${process.env.DATABASE_URL}?ssl=true`
+})
 const knex = require('knex')({
   client: 'pg',
   connection: `${process.env.DATABASE_URL}?ssl=true`
@@ -8,7 +10,6 @@ const knex = require('knex')({
 const COMMAND_QUEUE_EVENT_NAME = 'command_update'
 
 console.log(process.env.DATABASE_URL)
-
 
 const getProductList = () => {
   return knex
@@ -32,7 +33,6 @@ const getProductList = () => {
     )
 }
 
-
 const getContractIds = () => {
   return knex
     .select('sfid as contractId')
@@ -40,69 +40,70 @@ const getContractIds = () => {
     .where('pricebook2id', process.env.HEROKU_CONNECT_PRICEBOOK_ID)
 }
 
-
 let deletePromise = Promise.resolve()
 
 const initDBEvents = () => {
-
   subscriber.notifications.on(COMMAND_QUEUE_EVENT_NAME, (payload) => {
-
-    console.log(`Received notification in '${COMMAND_QUEUE_EVENT_NAME}':`, payload)
+    console.log(
+      `Received notification in '${COMMAND_QUEUE_EVENT_NAME}':`,
+      payload
+    )
     const command = payload.command
-    switch(command) {
+    switch (command) {
       case 'start':
-          deletePromise.then(runner.startOrderInterval)
+        deletePromise.then(runner.startOrderInterval)
         break
       case 'stop':
-          runner.stopOrderInterval()
+        runner.stopOrderInterval()
         break
       case 'reset':
-          deletePromise = deletePromise.then(runner.deleteAll)
+        deletePromise = deletePromise.then(runner.deleteAll)
         break
       default:
         console.log(`Invalid command: ${command}`)
     }
   })
-  
+
   subscriber.events.on('error', (error) => {
-    console.error("Fatal database connection error:", error)
+    console.error('Fatal database connection error:', error)
     process.exit(1)
   })
-  
-  return dbEventController.down(knex)
-    .then(()=> {
+
+  return dbEventController
+    .down(knex)
+    .then(() => {
       return dbEventController.up(knex)
-    }).then( () =>{
-      return subscriber.connect()
-      .catch(e => console.log(e))
-    }).then( () => {
+    })
+    .then(() => {
+      return subscriber.connect().catch((e) => console.log(e))
+    })
+    .then(() => {
       subscriber.listenTo(COMMAND_QUEUE_EVENT_NAME)
-    }).then( () => {
+    })
+    .then(() => {
       console.log('db listner ready')
     })
 }
-
 
 const init = () => {
   let products = null
   let contractId = null
 
   getProductList()
-    .then( _products => {
+    .then((_products) => {
       products = _products
       return getContractIds()
     })
-    .then( contractIds => {
+    .then((contractIds) => {
       contractId = contractIds[0].contractId
     })
     .then(() => {
       return initDBEvents()
     })
-    .then( () => {
-      runner.init({_knex: knex, _products: products, _contactId: contractId})
+    .then(() => {
+      runner.init({ _knex: knex, _products: products, _contactId: contractId })
       console.log('all ready')
     })
 }
-
 
 init()

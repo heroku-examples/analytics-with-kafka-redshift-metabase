@@ -28,7 +28,9 @@ exports.up = async (knex) => {
 }
 
 exports.down = async (knex) => {
-  await knex.raw('DROP TRIGGER IF EXISTS notify_update ON order_creation_command')
+  await knex.raw(
+    'DROP TRIGGER IF EXISTS notify_update ON order_creation_command'
+  )
   await knex.raw('DROP FUNCTION IF EXISTS notify_update()')
   await knex.schema.dropTableIfExists('order_creation_command')
 }
