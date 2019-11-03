@@ -37,7 +37,7 @@ const deleteAll = () => {
               .whereIn('id', ids)
               .where('_hc_lastop', 'SYNCED')
               .returning('id')
-              .then( _ids => {
+              .then((_ids) => {
                 console.log('Synced count:', _ids.length)
                 if (_ids.length > 0 && _ids.length >= idCounts) {
                   resolve()
@@ -174,7 +174,6 @@ const createAllPendingOrderItems = (orders) => {
 */
 
 const starOrderStatusCheckInterval = () => {
-
   let inProgress = false
 
   return setInterval(() => {

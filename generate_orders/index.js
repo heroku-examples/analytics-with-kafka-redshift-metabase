@@ -95,7 +95,7 @@ const init = () => {
       products = _products
       return getContractIds()
     })
-    .then( contractIds => { 
+    .then((contractIds) => {
       contractId = contractIds[0].contractId
     })
     .then(() => {
