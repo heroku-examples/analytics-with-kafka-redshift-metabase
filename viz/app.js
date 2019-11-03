@@ -143,7 +143,7 @@ if (PRODUCTION) {
     history({
       rewrites: [
         {
-          from: /\/(audience|booth|presentation|connect)/,
+          from: /\/(audience|booth|presentation|connect|ordercontrol)/,
           to: function(context) {
             return `${context.parsedUrl.pathname}.html`
           }

@@ -7,6 +7,7 @@ const CHART_VISIBLE_PAST_MINUTES_MAX = 30
 const DATA_PERIOD = '1 month'
 const FULLFILLMENT_ORDER_TYPE = 'Fulfillment Order'
 const PURCHASE_ORDER_TYPE = 'Purchase Order'
+const COMMAND_QUEUE_TABLE_NAME = 'order_creation_command'
 
 const getQuery = (ago, isPrior = false) => {
   //sanitizing
@@ -216,7 +217,7 @@ const initRoutes = (app, NODB, db) => {
   */
   app.get('/demand/data', (req, res) => {
     if (NODB) {
-      return res.send('App running without a progres database.')
+      return res.status(500).send('App running without a progres database.')
     }
     let period = parseInt(req.query.period)
 
@@ -254,9 +255,10 @@ const initRoutes = (app, NODB, db) => {
       })
   })
 
+
   app.post('/demand/orders', (req, res) => {
     if (NODB) {
-      return res.send('App running without a progres database.')
+      return res.status(500).send('App running without a progres database.')
     }
 
     let orderData
@@ -301,6 +303,33 @@ const initRoutes = (app, NODB, db) => {
       })
   })
 
+
+  app.post('/demand/command', (req, res) => {
+    if (NODB) {
+      return res.status(500).send('App running without a postgres database.')
+    }
+    
+    let command = req.body.command
+    if (['start', 'stop', 'reset'].indexOf(command) > -1) {
+      //insert into order_creation_command (command, created_at) values('reset', now())
+      let query = knex(COMMAND_QUEUE_TABLE_NAME).insert({command, created_at: moment().toISOString()}).toString()
+      
+      db
+        .any(query)
+        .then( () => {
+          res.send({})
+        })
+        .catch( e => {
+          console.log(e)
+          res.status(500).send('Error:')
+        })
+        
+    } else {
+      res.status(500).send('Invalid command')
+    }
+  })
+  
+
   db.any(
     knex
       .select('pricebook2id', 'sfid')
@@ -314,6 +343,7 @@ const initRoutes = (app, NODB, db) => {
       console.log(e)
     })
 }
+
 
 const init = (wss, db, NODB) => {
   if (NODB) {
