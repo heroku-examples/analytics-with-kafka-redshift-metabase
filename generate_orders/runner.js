@@ -1,10 +1,11 @@
 const _ = require('lodash')
 const moment = require('moment')
+const logger = require('../logger')('generate_orders')
 
-const ORDER_INTERVAL = 60000
+const ORDER_INTERVAL = 120000
 const PURCHASE_ORDER_RATIO = 0.55 //55% of orders will be purchase orders but it will be some what random
-const ORDER_QUANTITY = 250
-const ORDER_QUANTITY_RANDOMNESS = 50 // +-
+const ORDER_QUANTITY = 500
+const ORDER_QUANTITY_RANDOMNESS = 100 // +-
 
 let contractId = null
 let pendingOrders = {}
@@ -16,13 +17,15 @@ let knex = null
 
 const deleteAll = () => {
   stopOrderInterval()
-  console.log('Updating the all orders to be draft')
+  logger.info('Updating the all orders to be draft')
   return knex('salesforce.order')
     .where('status', 'Activated')
     .returning('id')
     .update('status', 'Draft')
     .then((ids) => {
-      if (ids.length === 0) {
+      console.log('Total count:', ids.length)
+      let idCounts = ids.length
+      if (idCounts === 0) {
         return Promise.resolve()
       }
       return new Promise((resolve) => {
@@ -30,13 +33,14 @@ const deleteAll = () => {
           //checking if these orders are synced with salesforce.
           //Deleing orders when they are still Activated on salesforce, they don't get deleted there
           setTimeout(() => {
-            console.log('Checking if orders are synced')
+            logger.info('Checking if orders are synced')
             knex('salesforce.order')
               .whereIn('id', ids)
               .where('_hc_lastop', 'SYNCED')
               .returning('id')
-              .then((ids) => {
-                if (ids.length > 0) {
+              .then( _ids => {
+                console.log('Synced count:', _ids.length)
+                if (_ids.length > 0 && _ids.length >= idCounts) {
                   resolve()
                 } else {
                   check()
@@ -48,22 +52,22 @@ const deleteAll = () => {
       })
     })
     .then(() => {
-      console.log('all synced!')
-      console.log('Deleting all order items')
+      logger.info('all synced!')
+      logger.info('Deleting all order items')
     })
     .then(() => {
       return knex('salesforce.orderitem').del()
     })
     .then(() => {
-      console.log('All order items have been deleted')
-      console.log('Deleting all orders')
+      logger.info('All order items have been deleted')
+      logger.info('Deleting all orders')
       return knex('salesforce.order').del()
     })
     .then(() => {
-      console.log('All orders have been deleted')
+      logger.info('All orders have been deleted')
     })
     .catch((e) => {
-      console.log('Error in deleteAll method', e)
+      logger.info('Error in deleteAll method', e)
     })
 }
 
@@ -113,7 +117,7 @@ const makeOrdersForCategory = (productInfo) => {
 }
 
 const makeOrders = () => {
-  console.log('Making new ordres')
+  logger.info('Making new ordres')
   let promises = []
   _.forEach(products, (productInfo) => {
     promises.push(makeOrdersForCategory(productInfo))
@@ -122,7 +126,7 @@ const makeOrders = () => {
 }
 
 const activateOrders = (orders) => {
-  console.log('Activating all orders')
+  logger.info('Activating all orders')
   return knex('salesforce.order')
     .whereIn('sfid', _.map(orders, (order) => order.sfid))
     .update('status', 'Activated')
@@ -171,10 +175,14 @@ const createAllPendingOrderItems = (orders) => {
 */
 
 const starOrderStatusCheckInterval = () => {
+
+  let inProgress = false
+
   return setInterval(() => {
-    if (_.keys(pendingOrders).length === 0) {
+    if (_.keys(pendingOrders).length === 0 || inProgress) {
       return
     }
+    inProgress = true
     /*
     Creating a query to get all orders with pending id
      */
@@ -189,20 +197,23 @@ const starOrderStatusCheckInterval = () => {
     request
       .then((_orders) => {
         if (!_orders || _orders.length === 0) {
+          inProgress = false
           return
         }
         orders = _orders
         return createAllPendingOrderItems(orders)
           .then(() => {
-            console.log('All order items for pending orders have been created')
+            logger.info('All order items for pending orders have been created')
             return activateOrders(orders)
           })
           .then(() => {
+            inProgress = false
             totallOrdersCreated += orders.length
-            console.log('Successfully activated orders')
+            logger.info('Successfully activated orders')
           })
       })
       .catch((e) => {
+        inProgress = false
         console.log(e)
       })
   }, 5000)
@@ -210,7 +221,8 @@ const starOrderStatusCheckInterval = () => {
 
 const startOrderInterval = () => {
   stopOrderInterval()
-  console.log('Order creation interval started')
+  logger.info('Order creation interval started')
+  makeOrders()
   orderInterval = setInterval(makeOrders, ORDER_INTERVAL)
   orderSyncCheckInterval = starOrderStatusCheckInterval()
 }
@@ -224,7 +236,7 @@ const stopOrderInterval = () => {
     clearInterval(orderSyncCheckInterval)
     orderSyncCheckInterval = null
   }
-  console.log('Order creation interval stopped')
+  logger.info('Order creation interval stopped')
 }
 
 const getStatus = () => {

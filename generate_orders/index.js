@@ -1,4 +1,5 @@
 const runner = require('./runner')
+const logger = require('../logger')('generate_orders')
 const dbEventController = require('./db-event-controller')
 const subscriber = require('pg-listen')({
   connectionString: `${process.env.DATABASE_URL}?ssl=true`
@@ -44,7 +45,7 @@ let deletePromise = Promise.resolve()
 
 const initDBEvents = () => {
   subscriber.notifications.on(COMMAND_QUEUE_EVENT_NAME, (payload) => {
-    console.log(
+    logger.info(
       `Received notification in '${COMMAND_QUEUE_EVENT_NAME}':`,
       payload
     )
@@ -60,7 +61,7 @@ const initDBEvents = () => {
         deletePromise = deletePromise.then(runner.deleteAll)
         break
       default:
-        console.log(`Invalid command: ${command}`)
+        logger.info(`Invalid command: ${command}`)
     }
   })
 
@@ -81,7 +82,7 @@ const initDBEvents = () => {
       subscriber.listenTo(COMMAND_QUEUE_EVENT_NAME)
     })
     .then(() => {
-      console.log('db listner ready')
+      logger.info('db listner ready')
     })
 }
 
@@ -102,7 +103,7 @@ const init = () => {
     })
     .then(() => {
       runner.init({ _knex: knex, _products: products, _contactId: contractId })
-      console.log('all ready')
+      logger.info('all ready')
     })
 }
 

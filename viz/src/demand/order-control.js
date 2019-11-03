@@ -1,6 +1,4 @@
-
 module.exports = () => {
-
   const $ = require('jquery')
 
   let ajaxing = false
