@@ -95,14 +95,14 @@ const init = () => {
       products = _products
       return getContractIds()
     })
-    .then((contractIds) => {
+    .then( contractIds => { 
       contractId = contractIds[0].contractId
     })
     .then(() => {
       return initDBEvents()
     })
     .then(() => {
-      runner.init({ _knex: knex, _products: products, _contactId: contractId })
+      runner.init({ _knex: knex, _products: products, _contractId: contractId })
       logger.info('all ready')
     })
 }

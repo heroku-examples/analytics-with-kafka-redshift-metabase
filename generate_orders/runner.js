@@ -1,9 +1,8 @@
 const _ = require('lodash')
-const moment = require('moment')
 const logger = require('../logger')('generate_orders')
 
 const ORDER_INTERVAL = 120000
-const PURCHASE_ORDER_RATIO = 0.55 //55% of orders will be purchase orders but it will be some what random
+const PURCHASE_ORDER_RATIO = 0.5 //60% of orders will be purchase orders but it will be some what random
 const ORDER_QUANTITY = 500
 const ORDER_QUANTITY_RANDOMNESS = 100 // +-
 
@@ -90,7 +89,7 @@ const makeOrdersForCategory = (productInfo) => {
     ],
     (typeId, index) => {
       let order = {
-        effectivedate: moment().format('MM/DD/YYYY'),
+        effectivedate: new Date().toLocaleDateString('en-US'),
         accountid: process.env.HEROKU_CONNECT_ACCOUNT_ID,
         contractid: contractId,
         pricebook2id: process.env.HEROKU_CONNECT_PRICEBOOK_ID,
