@@ -14,7 +14,7 @@ export default class DemandChart {
     if (!this.newData) {
       return
     }
-    this.chart.config.data.datasets.forEach( dataset => {
+    this.chart.config.data.datasets.forEach((dataset) => {
       let clone = _.clone(dataset.data)
       clone.push({
         x: Date.now(),
