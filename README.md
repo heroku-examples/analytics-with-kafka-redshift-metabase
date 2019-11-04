@@ -109,7 +109,7 @@ This project also uses a `generate_orders` which is a worker automatically creat
 This project add new routes `/connect` and `/ordercontrol` to the viz app.
 `/connect` show the demand chart and `/ordercontrol` gives you UI to control the `generate_orders`.
 
-The detail of `generate_orders` can be found [here]('./generate_orders/README.md').
+The detail of `generate_orders` can be found [here](./generate_orders/README.md).
 
 ## Deploy Data Demo
 
@@ -135,11 +135,11 @@ You can retrive them from Salesforce.
 - `HEROKU_CONNECT_FULFILLMENT_TYPE_ID`: The id of fulfillment order type
 - `HEROKU_CONNECT_PURCHASE_YPTE_ID`: The id of purchase order type
 - `HEROKU_CONNECT_PRICEBOOK_ID`: Pricebook id that's connected with all products
-- `REDIS_URL`: Redis' endpoint url with credentials. You can run check here [https://devcenter.heroku.com/articles/heroku-redis#redis-credentials](https://devcenter.heroku.com/articles/heroku-redis#redis-credentials)
+- `REDIS_URL`: Redis' endpoint url with credentials. [https://devcenter.heroku.com/articles/heroku-redis#redis-credentials](https://devcenter.heroku.com/articles/heroku-redis#redis-credentials)
 
 ### new routes
 
 You can access these locally and from the Heroku app.
 
 - `/connect` This route shows the chart
-- `/ordercontrol`  please check the detail from [here]('./generate_orders/README.md').
+- `/ordercontrol`  please check the detail from [here](./generate_orders/README.md).
