@@ -62,7 +62,7 @@ export default class DemandChart {
   }
 
   render(datasets) {
-    let prevObj = { dataIndex: null, datasetIndex: null }
+    // let prevObj = { dataIndex: null, datasetIndex: null }
 
     let config = {
       plugins: [ChartDataLabels],
@@ -78,15 +78,13 @@ export default class DemandChart {
             font: {
               size: 20
             },
-            formatter: function(value, context) {
-              if (
-                prevObj.datasetIndex === context.datasetIndex &&
-                prevObj.YValue === value.y
-              ) {
-                return null
-              }
-              prevObj.datasetIndex = context.datasetIndex
-              prevObj.YValue = value.y
+
+            formatter: (value) => {
+              // let dataList = config.data.datasets[context.datasetIndex].data
+              // let nextData = dataList[context.dataIndex + 1]
+              // if (nextData) {
+              //   console.log(value.y, nextData.y)
+              // }
               return value.y
             }
           }

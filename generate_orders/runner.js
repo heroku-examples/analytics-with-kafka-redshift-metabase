@@ -248,8 +248,17 @@ const stopOrderInterval = () => {
 }
 
 const getStatus = () => {
+  let state
+  if (deleting) {
+    state = 'Deleting'
+  } else if (orderInterval) {
+    state = 'Running'
+  } else {
+    state = 'Stopped'
+  }
+
   return {
-    state: deleting ? 'Deleting' : orderInterval ? 'Running' : 'Stopped',
+    state,
     totallOrdersCreated,
     totalPendingOrders: _.keys(pendingOrders).length,
     isReady: !!contractId
