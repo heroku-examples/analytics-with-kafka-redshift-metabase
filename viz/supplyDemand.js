@@ -315,7 +315,6 @@ const initRoutes = (app, NODB, db) => {
 
     let command = req.body.command
     if (['start', 'stop', 'reset'].indexOf(command) > -1) {
-
       let query = knex(COMMAND_QUEUE_TABLE_NAME)
         .insert({ command, created_at: moment().toISOString() })
         .toString()

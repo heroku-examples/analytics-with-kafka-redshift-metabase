@@ -2,7 +2,7 @@ const _ = require('lodash')
 const logger = require('../logger')('generate_orders')
 
 const ORDER_INTERVAL = 120000
-const PURCHASE_ORDER_RATIO = 0.6 //60% of orders will be purchase orders but it will be some what random
+const PURCHASE_ORDER_RATIO = 0.65 //65% of orders will be purchase orders but it will be some what random
 const ORDER_QUANTITY = 500
 const ORDER_QUANTITY_RANDOMNESS = 100 //
 
@@ -78,7 +78,6 @@ const getPurchaseOrderCount = () => {
 }
 
 const makeOrdersForCategory = (productInfo) => {
-
   let puchaseOrderCount = getPurchaseOrderCount()
   let fulfillmentOrderCount = ORDER_QUANTITY - puchaseOrderCount
   let currentPromise = Promise.resolve()
@@ -104,7 +103,6 @@ const makeOrdersForCategory = (productInfo) => {
       process.env.HEROKU_CONNECT_PURCHASE_YPTE_ID
     ],
     (typeId, index) => {
-
       let order = {
         effectivedate: new Date().toLocaleDateString('en-US'),
         accountid: process.env.HEROKU_CONNECT_ACCOUNT_ID,
@@ -113,7 +111,7 @@ const makeOrdersForCategory = (productInfo) => {
         status: 'Draft',
         recordtypeid: typeId
       }
-      currentPromise = currentPromise.then( getOrderRequestMaker(order, index))
+      currentPromise = currentPromise.then(getOrderRequestMaker(order, index))
     }
   )
 
@@ -163,7 +161,7 @@ const createAllPendingOrderItems = (orders) => {
     delete pendingOrders[order.id]
 
     _.forEach(orderItemDataList, (orderItemData) => {
-      currentPromise = currentPromise.then( () => {
+      currentPromise = currentPromise.then(() => {
         return createOrderItem(
           orderItemData.count,
           order.sfid,

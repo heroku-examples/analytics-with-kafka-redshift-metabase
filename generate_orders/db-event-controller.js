@@ -30,9 +30,7 @@ exports.up = async (knex) => {
 }
 
 exports.down = async (knex) => {
-  await knex.raw(
-    `DROP TRIGGER IF EXISTS notify_command ON ${TABLE_NAME}`
-  )
+  await knex.raw(`DROP TRIGGER IF EXISTS notify_command ON ${TABLE_NAME}`)
   await knex.raw('DROP FUNCTION IF EXISTS notify_command()')
   await knex.schema.dropTableIfExists(TABLE_NAME)
 }
