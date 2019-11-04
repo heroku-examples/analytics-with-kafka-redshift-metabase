@@ -55,8 +55,11 @@ export default class DemandChart {
         borderColor: chartColors[index],
         borderWidth: demandConstants.CHART_LINE_THICKNESS,
         fill: false,
-        lineTension: 0,
-        data: currentData
+        lineTension: 0.2,
+        data: currentData,
+        datalabels: {
+          color: chartColors[index]
+        }
       }
     })
   }
@@ -73,18 +76,27 @@ export default class DemandChart {
       options: {
         plugins: {
           datalabels: {
-            align: 'top',
+            clip: true,
+            align: (context) => {
+              let dataList = config.data.datasets[context.datasetIndex].data
+              const curData = dataList[context.dataIndex]
+              const nextData = dataList[context.dataIndex + 1]
+              const prevData = dataList[context.dataIndex - 1]
+              let align = 'top'
+
+              if (nextData && prevData) {
+                if (prevData.y > curData.y) {
+                  align = 'bottom'
+                }
+                // console.log(prevData.y, curData.y, nextData.y, align)
+              }
+              return align
+            },
             offset: 10,
             font: {
               size: 20
             },
-
             formatter: (value) => {
-              // let dataList = config.data.datasets[context.datasetIndex].data
-              // let nextData = dataList[context.dataIndex + 1]
-              // if (nextData) {
-              //   console.log(value.y, nextData.y)
-              // }
               return value.y
             }
           }
