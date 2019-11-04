@@ -1,7 +1,7 @@
 import axios from 'axios'
 import _ from 'lodash'
 
-export default class DemandFullfillmentForm {
+export default class DemandFulfillmentForm {
   constructor(options) {
     this.cfg = this.getConfig(options)
     this.categories = options.categories

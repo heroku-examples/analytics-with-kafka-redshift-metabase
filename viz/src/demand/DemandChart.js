@@ -20,7 +20,6 @@ export default class DemandChart {
         x: Date.now(),
         y: this.newData[dataset.label] || 0 //dataset.data[dataset.data.length - 1]
       })
-      console.log()
       dataset.data = _.reverse(_.sortBy(clone, 'x'))
     })
   }
@@ -103,9 +102,9 @@ export default class DemandChart {
           yAxes: [
             {
               gridLines: {
-                // display: false
+                display: false
               },
-              // display: false,
+              display: false,
               ticks: {
                 // display: false,
                 // stepSize: 100,

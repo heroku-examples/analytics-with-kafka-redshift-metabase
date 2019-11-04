@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import axios from 'axios'
 import DemandChart from './DemandChart'
-import DemandFullfillmentForm from './DemandFullfillmentForm'
+import DemandFulfillmentForm from './DemandFulfillmentForm'
 import demandConstants from './demandConstants'
 
 export default class DemandControls {
@@ -28,7 +28,7 @@ export default class DemandControls {
         })
         this.renderCategories()
         this.renderXticks()
-        this.fulfillmentForm = new DemandFullfillmentForm({
+        this.fulfillmentForm = new DemandFulfillmentForm({
           openButtonSelector: options.formOpenSelector,
           categories: this.categories
         })

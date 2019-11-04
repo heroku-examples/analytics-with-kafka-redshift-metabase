@@ -365,7 +365,7 @@ const init = (wss, db, NODB) => {
       .then(() => {
         setTimeout(() => {
           setNextPromise()
-        }, 3000)
+        }, 10000)
       })
   }
 
