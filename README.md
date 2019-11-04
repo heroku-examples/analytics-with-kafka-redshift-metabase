@@ -1,5 +1,7 @@
 # Example Product/User Analytics System Using Apache Kafka, AWS Redshift, and Metabase
 
+**This app also includes** [Heroku Connect Data Demo](#heroku_connect_data_demo)
+
 This is an example of a system that captures a large stream of product usage data, or events, and provides both real-time data visualization and SQL-based data analytics. The stream of events is captured by [Apache Kafka](https://kafka.apache.org/) and made available to other downstream consumers. In this example, there are two downstream consumers of the data. The data flowing through Kafka can be viewed in near real-time using a web-based data visualization app. The other consumer stores all the data in [AWS Redshift](https://aws.amazon.com/redshift/), a relational database that Amazon describes as "a fast, scalable data warehouse." Then we can query and visualize the data in Redshift from a SQL-compliant analytics tool. This example uses [Metabase deployed to Heroku](https://elements.heroku.com/buttons/metabase/metabase-deploy). [Metabase](https://www.metabase.com/) is an open-source analytics tool used by many organizations, large and small.
 
 **This entire system can be deployed in 15 minutes -- most of that time spent waiting for Heroku and AWS to provision services -- and it requires very little ongoing operational maintenance.**
@@ -91,3 +93,52 @@ The following environment variables must be defined. If you used the Heroku depl
 Then in each of the `generate_data`, `viz`, and `redshift_batch` directories, run `npm start`.
 
 Open the URL in the startup output of the `viz` app. It will likely be `http://localhost:3000`.
+
+## Heroku Connect Data Demo
+
+**This is an addition to the project above and not required to run**
+This is an example of showing how Salesforce and Heroku Postgres can be synced using [Heroku Connect](https://www.heroku.com/connect).
+
+## Data Demo Structure
+
+This project uses `viz` for the web interface to show the chart that represents supply and demand using `fulfillment order` and `purchase order` of products in specific categories in Salesforce and Postgres.
+This project also uses a `generate_orders` which is a worker automatically creating orders periodically.
+
+`generate_orders` creates orders and the `viz` shows the chart.
+
+This project add new routes `/connect` and `/ordercontrol` to the viz app.
+`/connect` show the demand chart and `/ordercontrol` gives you UI to control the `generate_orders`.
+
+The detail of `generate_orders` can be found [here]('/link_to_the_readme_under_generate_orders').
+
+## Deploy Data Demo
+
+### Data Demo Prerequisites
+
+- This project is an addition to the existing project above so make sure you have everything running first
+- Salesforce account
+- Postgres add-on
+- Heroku Connect
+
+### Deploy Data Demo to Heroku
+
+This app gets deployed together with the original project.
+However, it requires additional environment variables.
+
+### Environment Variables
+
+These variables need to be set to run the app.
+You can retrive them from Salesforce.
+
+- `DATABASE_URL`: This is not new but this has to be a Heroku Postgres which is connected with Salesforce
+- `HEROKU_CONNECT_ACCOUNT_ID`: The accout id that's associated with the contract
+- `HEROKU_CONNECT_FULLFILLMENT_TYPE_ID`: The id of fulfillment order type
+- `HEROKU_CONNECT_PURCHASE_YPTE_ID`: The id of purchase order type
+- `HEROKU_CONNECT_PRICEBOOK_ID`: Pricebook id that's connected with all products
+
+### new routes
+
+You can access these locally and from the Heroku app.
+
+- `/connect` This route shows the chart
+- `/ordercontrol`  please check the detail from [here]('/link_to_the_readme_under_generate_orders').

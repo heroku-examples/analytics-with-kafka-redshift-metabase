@@ -56,8 +56,8 @@
     "install-viz": "cd viz && npm install --dev",
     "install-orders": "cd generate_orders && npm install",
     "lint": "npm run eslint && npm run prettier:list",
-    "prettier": "prettier --write '**/*.{js,md,css,json}'",
-    "prettier:list": "prettier --list-different '**/*.{js,md,css,json}'",
+    "prettier": "prettier --write '**/*.{js,css,json}'",
+    "prettier:list": "prettier --list-different '**/*.{js,css,json}'",
     "test": "echo \"Error: no test specified\" && exit 1"
   }
 }
