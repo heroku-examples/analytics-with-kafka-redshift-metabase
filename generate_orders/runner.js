@@ -4,7 +4,7 @@ const logger = require('../logger')('generate_orders')
 const ORDER_INTERVAL = 60000
 const PURCHASE_ORDER_RATIO = 0.6 //60% of orders will be purchase orders but it will be some what random
 const ORDER_QUANTITY = 250
-const ORDER_QUANTITY_RANDOMNESS = 50 // 
+const ORDER_QUANTITY_RANDOMNESS = 50 //
 
 let contractId = null
 let pendingOrders = {}

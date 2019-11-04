@@ -107,10 +107,10 @@ export default class DemandChart {
               // display: false,
               ticks: {
                 // display: false,
-                 stepSize: 100,
+                stepSize: 100,
                 // beginAtZero: true,
-                 max: 1000,
-                 min: -1000
+                max: 1000,
+                min: -1000
               }
             }
           ]
