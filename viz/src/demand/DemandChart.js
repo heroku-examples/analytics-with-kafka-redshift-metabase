@@ -104,12 +104,13 @@ export default class DemandChart {
               gridLines: {
                 display: false
               },
-              display: false,
+              // display: false,
               ticks: {
                 // display: false,
-                // stepSize: 100,
+                 stepSize: 100,
                 // beginAtZero: true,
-                // max: 100
+                 max: 1000,
+                 min: -1000
               }
             }
           ]
