@@ -10,6 +10,7 @@
     "body-parser": "^1.19.0",
     "c3": "^0.7.11",
     "chart.js": "^2.9.0",
+    "chartjs-plugin-datalabels": "^0.7.0",
     "chartjs-plugin-streaming": "^1.8.0",
     "d3": "^5.12.0",
     "dateformat": "^3.0.3",

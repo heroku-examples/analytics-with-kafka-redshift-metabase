@@ -10,14 +10,9 @@
     flex-direction: column;
   }
 
-  &-main {
-    display: flex;
-    width: 100%;
-  }
-
   &--x-ticks {
     display: flex;
-    margin: 20px 0px 20px 38px;
+    margin: 20px 0px 20px 0;
     justify-content: space-between;
     position: relative;
   }
@@ -32,19 +27,9 @@
     font-size: 18px;
   }
 
-  &-y-ticks--y100,
-  &-y-ticks--y0 {
-    position: absolute;
-  }
-
-  &-y-ticks--y0 {
-    bottom: 0;
-    left: 12px;
-  }
 }
 
 #demand-chart {
-  max-height: 60vh;
   width: 100%;
   border: solid 1px #ccc;
   background-color: #FFFFFF;

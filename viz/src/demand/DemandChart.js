@@ -1,8 +1,11 @@
 import _ from 'lodash'
 import moment from 'moment'
 import Chart from 'chart.js'
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import 'chartjs-plugin-streaming'
 import demandConstants from './demandConstants'
+
+Chart.plugins.unregister(ChartDataLabels);
 
 export default class DemandChart {
   constructor(options) {
@@ -31,7 +34,7 @@ export default class DemandChart {
     return this.categories.map((categoryName, index) => {
       originalData[categoryName] =
         originalData[categoryName] ||
-        _.times(demandConstants.CHART_VISIBLE_MINS + 1, 0)
+        _.times(demandConstants.CHART_VISIBLE_MINS + 1, ()=>0)
       let currentData = originalData[categoryName].map((value, i) => {
         return {
           x: moment()
@@ -59,12 +62,33 @@ export default class DemandChart {
   }
 
   render(datasets) {
+
+    let prevObj = {dataIndex:null, datasetIndex:null}
+
     let config = {
+      plugins: [ChartDataLabels],
       type: 'line',
       data: {
         datasets: datasets
       },
       options: {
+        plugins: {
+          datalabels: {
+            align: 'top',
+            offset: 10,
+            font: {
+              size: 20
+            },
+            formatter: function(value, context) {
+              if (prevObj.datasetIndex === context.datasetIndex && prevObj.YValue === value.y) {
+                return null
+              }
+              prevObj.datasetIndex = context.datasetIndex
+              prevObj.YValue = value.y
+              return value.y
+            }
+          }
+        },
         layout: {
           padding: {
             left: 0,
@@ -108,11 +132,11 @@ export default class DemandChart {
               },
               // display: false,
               ticks: {
-                display: false,
-                stepSize: 100,
-                // beginAtZero: true,
-                max: 1000,
-                min: -1000
+                // display: false,
+                // stepSize: 100,
+                // // beginAtZero: true,
+                // max: 1000,
+                // min: -1000
               }
             }
           ]
