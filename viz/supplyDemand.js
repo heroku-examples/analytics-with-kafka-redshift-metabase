@@ -4,10 +4,10 @@ const knex = require('knex')({ client: 'pg' })
 
 const CHART_VISIBLE_PAST_MINUTES_DEFAULT = 5
 const CHART_VISIBLE_PAST_MINUTES_MAX = 30
-const DATA_PERIOD = '1 month'
+const DATA_PERIOD = '1 week'
 const FULFILLMENT_ORDER_TYPE = 'Fulfillment Order'
 const PURCHASE_ORDER_TYPE = 'Purchase Order'
-const COMMAND_QUEUE_TABLE_NAME = 'order_creation_command'
+const COMMAND_QUEUE_TABLE_NAME = 'salesforce.order_creation_command'
 
 const getQuery = (ago, isPrior = false) => {
   //sanitizing
@@ -143,7 +143,7 @@ const getData = (db, query) => {
 
 let contracts
 
-const createOrder = (db) => {
+const createOrder = (db, name = null) => {
   const contract = _.sample(contracts)
 
   let order = {
@@ -153,6 +153,10 @@ const createOrder = (db) => {
     pricebook2id: contract.pricebook2id,
     status: 'Draft',
     recordtypeid: process.env.HEROKU_CONNECT_FULFILLMENT_TYPE_ID
+  }
+
+  if (name) {
+    order.name = name
   }
 
   const createOrderQuery = knex('salesforce.order')
@@ -255,6 +259,8 @@ const initRoutes = (app, NODB, db) => {
       })
   })
 
+  let demoOrderNumber = 1
+
   app.post('/demand/orders', (req, res) => {
     if (NODB) {
       return res.status(500).send('App running without a progres database.')
@@ -273,7 +279,7 @@ const initRoutes = (app, NODB, db) => {
 
     promise = promise
       .then(() => {
-        return createOrder(db)
+        return createOrder(db, 'From Demo ' + demoOrderNumber++)
       })
       .then((order) => {
         /*
@@ -309,7 +315,7 @@ const initRoutes = (app, NODB, db) => {
 
     let command = req.body.command
     if (['start', 'stop', 'reset'].indexOf(command) > -1) {
-      //insert into order_creation_command (command, created_at) values('reset', now())
+
       let query = knex(COMMAND_QUEUE_TABLE_NAME)
         .insert({ command, created_at: moment().toISOString() })
         .toString()

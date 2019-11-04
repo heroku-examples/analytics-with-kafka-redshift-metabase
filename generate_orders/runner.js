@@ -2,7 +2,7 @@ const _ = require('lodash')
 const logger = require('../logger')('generate_orders')
 
 const ORDER_INTERVAL = 120000
-const PURCHASE_ORDER_RATIO = 0.55 //55% of orders will be purchase orders but it will be some what random
+const PURCHASE_ORDER_RATIO = 0.6 //60% of orders will be purchase orders but it will be some what random
 const ORDER_QUANTITY = 500
 const ORDER_QUANTITY_RANDOMNESS = 100 //
 
@@ -78,26 +78,14 @@ const getPurchaseOrderCount = () => {
 }
 
 const makeOrdersForCategory = (productInfo) => {
+
   let puchaseOrderCount = getPurchaseOrderCount()
   let fulfillmentOrderCount = ORDER_QUANTITY - puchaseOrderCount
-  let promises = []
+  let currentPromise = Promise.resolve()
 
-  _.each(
-    [
-      process.env.HEROKU_CONNECT_FULFILLMENT_TYPE_ID,
-      process.env.HEROKU_CONNECT_PURCHASE_YPTE_ID
-    ],
-    (typeId, index) => {
-      let order = {
-        effectivedate: new Date().toLocaleDateString('en-US'),
-        accountid: process.env.HEROKU_CONNECT_ACCOUNT_ID,
-        contractid: contractId,
-        pricebook2id: process.env.HEROKU_CONNECT_PRICEBOOK_ID,
-        status: 'Draft',
-        recordtypeid: typeId
-      }
-
-      let promise = knex('salesforce.order')
+  const getOrderRequestMaker = (order, index) => {
+    return () => {
+      return knex('salesforce.order')
         .insert(order)
         .returning('*')
         .then((orderData) => {
@@ -107,21 +95,40 @@ const makeOrdersForCategory = (productInfo) => {
             count: index === 0 ? fulfillmentOrderCount : puchaseOrderCount
           })
         })
+    }
+  }
 
-      promises.push(promise)
+  _.each(
+    [
+      process.env.HEROKU_CONNECT_FULFILLMENT_TYPE_ID,
+      process.env.HEROKU_CONNECT_PURCHASE_YPTE_ID
+    ],
+    (typeId, index) => {
+
+      let order = {
+        effectivedate: new Date().toLocaleDateString('en-US'),
+        accountid: process.env.HEROKU_CONNECT_ACCOUNT_ID,
+        contractid: contractId,
+        pricebook2id: process.env.HEROKU_CONNECT_PRICEBOOK_ID,
+        status: 'Draft',
+        recordtypeid: typeId
+      }
+      currentPromise = currentPromise.then( getOrderRequestMaker(order, index))
     }
   )
 
-  return Promise.all(promises)
+  return currentPromise
 }
 
 const makeOrders = () => {
   logger.info('Making new ordres')
-  let promises = []
+  let currentPromise = Promise.resolve()
   _.forEach(products, (productInfo) => {
-    promises.push(makeOrdersForCategory(productInfo))
+    currentPromise = currentPromise.then(() => {
+      return makeOrdersForCategory(productInfo)
+    })
   })
-  return Promise.all(promises)
+  return currentPromise
 }
 
 const activateOrders = (orders) => {
@@ -146,7 +153,7 @@ const createOrderItem = (count, orderid, productInfo) => {
 }
 
 const createAllPendingOrderItems = (orders) => {
-  let promises = []
+  let currentPromise = Promise.resolve()
   _.forEach(orders, (order) => {
     if (!order.sfid) {
       return
@@ -156,15 +163,16 @@ const createAllPendingOrderItems = (orders) => {
     delete pendingOrders[order.id]
 
     _.forEach(orderItemDataList, (orderItemData) => {
-      let promise = createOrderItem(
-        orderItemData.count,
-        order.sfid,
-        _.find(products, { category: orderItemData.categoryName })
-      )
-      promises.push(promise)
+      currentPromise = currentPromise.then( () => {
+        return createOrderItem(
+          orderItemData.count,
+          order.sfid,
+          _.find(products, { category: orderItemData.categoryName })
+        )
+      })
     })
   })
-  return Promise.all(promises)
+  return currentPromise
 }
 
 /*
