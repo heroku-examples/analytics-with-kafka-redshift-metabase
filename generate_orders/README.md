@@ -24,7 +24,7 @@ You can find these variables on Salesforce
 - `HEROKU_CONNECT_FULFILLMENT_TYPE_ID`: The id of fulfillment order type
 - `HEROKU_CONNECT_PURCHASE_YPTE_ID`: The id of purchase order type
 - `HEROKU_CONNECT_PRICEBOOK_ID`: Pricebook id that's connected with all products
-- `REDIS_URL`: Redis' endpoint url with credentials. You can run check here [https://devcenter.heroku.com/articles/heroku-redis#redis-credentials](https://devcenter.heroku.com/articles/heroku-redis#redis-credentials)
+- `REDIS_URL`: Redis' endpoint url with credentials. [https://devcenter.heroku.com/articles/heroku-redis#redis-credentials](https://devcenter.heroku.com/articles/heroku-redis#redis-credentials)
 
 ### Development Server
 
@@ -34,11 +34,16 @@ node index.js
 
 ## How to start/stop/reset order creation process
 
-This worker creates a table `order_creation_command` in the database and start watching the table.
-The tables takes `command` and `created_at`.
-`command` takes `start`, `stop`, and `reset`.
-`created_at` takes a date value.
-When a new row is inserted with one of those three commands, this worker starts tasks based on it.
+It's using Redis and you can send a command to channel `generate_orders`.
+`command` takes `start`, `stop`, or `reset`.
+The format is:
+
+```
+{
+  type: 'command',
+  value: {'startt'|'stop'|'reset'}
+}
+```
 
 - **start** starts making new orders
 - **stop** stops the process
