@@ -1,10 +1,10 @@
 const _ = require('lodash')
 const logger = require('../logger')('generate_orders')
 
-const ORDER_INTERVAL = 60000
-const PURCHASE_ORDER_RATIO = 0.6 //60% of orders will be purchase orders but it will be some what random
-const ORDER_QUANTITY = 250
-const ORDER_QUANTITY_RANDOMNESS = 50 //
+const ORDER_INTERVAL = 120000
+const PURCHASE_ORDER_RATIO = 0.55 //55% of orders will be purchase orders but it will be some what random
+const ORDER_QUANTITY = 500
+const ORDER_QUANTITY_RANDOMNESS = 100 //
 
 let contractId = null
 let pendingOrders = {}
@@ -66,7 +66,7 @@ const deleteAll = () => {
       logger.info('All orders have been deleted')
     })
     .catch((e) => {
-      logger.info('Error in deleteAll method', e)
+      logger.error('Error in deleteAll method', e)
     })
 }
 
@@ -212,7 +212,7 @@ const starOrderStatusCheckInterval = () => {
       })
       .catch((e) => {
         inProgress = false
-        console.log(e)
+        logger.error(e)
       })
   }, 5000)
 }
