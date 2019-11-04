@@ -24,6 +24,7 @@ You can find these variables on Salesforce
 - `HEROKU_CONNECT_FULFILLMENT_TYPE_ID`: The id of fulfillment order type
 - `HEROKU_CONNECT_PURCHASE_YPTE_ID`: The id of purchase order type
 - `HEROKU_CONNECT_PRICEBOOK_ID`: Pricebook id that's connected with all products
+- `REDIS_URL`: Redis' endpoint url with credentials. You can run check here [https://devcenter.heroku.com/articles/heroku-redis#redis-credentials](https://devcenter.heroku.com/articles/heroku-redis#redis-credentials)
 
 ### Development Server
 
@@ -48,10 +49,6 @@ When a new row is inserted with one of those three commands, this worker starts 
 Heroku assign only one port for a Node app so this worker doesn't have UI but `viz` app has one.
 You can go to `/ordercontrol` and you will see three buttons with start, stop, and reset.
 By pressing these buttons, you can send commands to this woker.
-
-#### This UI doesn't show what this worker is doing
-
-You can press those buttons and it will respond when it creates a row in the database but it doesn't mean the worker is runnig and you can't know from the interface.
 
 #### Logs shows the current state of the worker
 

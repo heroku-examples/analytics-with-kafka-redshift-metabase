@@ -1,13 +1,18 @@
 const _ = require('lodash')
 const moment = require('moment')
 const knex = require('knex')({ client: 'pg' })
-
+const Redis = require('ioredis');
 const CHART_VISIBLE_PAST_MINUTES_DEFAULT = 5
 const CHART_VISIBLE_PAST_MINUTES_MAX = 30
 const DATA_PERIOD = '1 week'
 const FULFILLMENT_ORDER_TYPE = 'Fulfillment Order'
 const PURCHASE_ORDER_TYPE = 'Purchase Order'
-const COMMAND_QUEUE_TABLE_NAME = 'salesforce.order_creation_command'
+const REDIS_CHANNEL = 'generate_orders'
+
+const redisPub = new Redis(process.env.REDIS_URL)
+const redisSub = new Redis(process.env.REDIS_URL)
+
+let workerStatus = {}
 
 const getQuery = (ago, isPrior = false) => {
   //sanitizing
@@ -315,21 +320,15 @@ const initRoutes = (app, NODB, db) => {
 
     let command = req.body.command
     if (['start', 'stop', 'reset'].indexOf(command) > -1) {
-      let query = knex(COMMAND_QUEUE_TABLE_NAME)
-        .insert({ command, created_at: moment().toISOString() })
-        .toString()
-
-      db.any(query)
-        .then(() => {
-          res.send({})
-        })
-        .catch((e) => {
-          console.log(e)
-          res.status(500).send('Error:')
-        })
+      redisPub.publish(REDIS_CHANNEL, JSON.stringify({type: 'command', value:command}))
+      res.send({})
     } else {
       res.status(500).send('Invalid command')
     }
+  })
+
+  app.get('/demand/worker-status', (req, res) => {
+    res.json(workerStatus)
   })
 
   db.any(
@@ -344,6 +343,22 @@ const initRoutes = (app, NODB, db) => {
     .catch((e) => {
       console.log(e)
     })
+}
+
+
+const initWorkerStatusUpdate = () => {
+
+  redisSub.subscribe(REDIS_CHANNEL, () => {
+    console.log('Subscribing to redis')
+  })
+
+  redisSub.on('message', function(channel, _message) {
+    const message = JSON.parse(_message)
+    if (message.type === 'status') {
+      workerStatus = message.value
+    }
+  })
+
 }
 
 const init = (wss, db, NODB) => {
@@ -376,6 +391,7 @@ const init = (wss, db, NODB) => {
 
   setNextPromise()
   starOrderStatusCheckInterval(db)
+  initWorkerStatusUpdate()
 }
 
 module.exports = {

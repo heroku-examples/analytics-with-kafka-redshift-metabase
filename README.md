@@ -135,6 +135,7 @@ You can retrive them from Salesforce.
 - `HEROKU_CONNECT_FULFILLMENT_TYPE_ID`: The id of fulfillment order type
 - `HEROKU_CONNECT_PURCHASE_YPTE_ID`: The id of purchase order type
 - `HEROKU_CONNECT_PRICEBOOK_ID`: Pricebook id that's connected with all products
+- `REDIS_URL`: Redis' endpoint url with credentials. You can run check here [https://devcenter.heroku.com/articles/heroku-redis#redis-credentials](https://devcenter.heroku.com/articles/heroku-redis#redis-credentials)
 
 ### new routes
 

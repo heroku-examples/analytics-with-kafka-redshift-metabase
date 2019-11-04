@@ -13,8 +13,10 @@ let totallOrdersCreated = 0
 let orderInterval = null
 let orderSyncCheckInterval = null
 let knex = null
+let deleting = false
 
 const deleteAll = () => {
+  deleting = true
   stopOrderInterval()
   logger.info('Updating the all orders to be draft')
   return knex('salesforce.order')
@@ -63,9 +65,11 @@ const deleteAll = () => {
       return knex('salesforce.order').del()
     })
     .then(() => {
+      deleting = false
       logger.info('All orders have been deleted')
     })
     .catch((e) => {
+      deleting = false
       logger.error('Error in deleteAll method', e)
     })
 }
@@ -245,12 +249,7 @@ const stopOrderInterval = () => {
 
 const getStatus = () => {
   return {
-    running: !!orderInterval,
-    state: orderInterval ? 'Running' : 'Stopped',
-    interval: ORDER_INTERVAL,
-    quantity: ORDER_QUANTITY,
-    randomness: ORDER_QUANTITY_RANDOMNESS,
-    purchaseRatio: PURCHASE_ORDER_RATIO,
+    state: deleting? 'Deleting' : (orderInterval ? 'Running' : 'Stopped'),
     totallOrdersCreated,
     totalPendingOrders: _.keys(pendingOrders).length,
     isReady: !!contractId

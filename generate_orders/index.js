@@ -1,14 +1,14 @@
+const Redis = require('ioredis')
 const runner = require('./runner')
 const logger = require('../logger')('generate_orders')
-const dbEventController = require('./db-event-controller')
-const subscriber = require('pg-listen')({
-  connectionString: `${process.env.DATABASE_URL}?ssl=true`
-})
 const knex = require('knex')({
   client: 'pg',
   connection: `${process.env.DATABASE_URL}?ssl=true`
 })
-const COMMAND_QUEUE_EVENT_NAME = 'command_update'
+const redisSub = new Redis(process.env.REDIS_URL)
+const redisPub = new Redis(process.env.REDIS_URL)
+const REDIS_CHANNEL = 'generate_orders'
+
 
 console.log(process.env.DATABASE_URL)
 
@@ -43,13 +43,22 @@ const getContractIds = () => {
 
 let deletePromise = Promise.resolve()
 
-const initDBEvents = () => {
-  subscriber.notifications.on(COMMAND_QUEUE_EVENT_NAME, (payload) => {
-    logger.info(
-      `Received notification in '${COMMAND_QUEUE_EVENT_NAME}':`,
-      payload
-    )
-    const command = payload.command
+const initEvents = () => {
+
+  redisSub.subscribe(REDIS_CHANNEL, () => {
+    console.log('Subscribing to redis')
+  })
+
+  redisSub.on('message', function(channel, _message) {
+
+    const message = JSON.parse(_message)
+    if(message.type !== 'command') {
+      return
+    }
+
+    console.log(`Receive command ${message.value}`);
+
+    const command = message.value
     switch (command) {
       case 'start':
         deletePromise.then(runner.startOrderInterval)
@@ -63,27 +72,17 @@ const initDBEvents = () => {
       default:
         logger.info(`Invalid command: ${command}`)
     }
+
   })
 
-  subscriber.events.on('error', (error) => {
-    console.error('Fatal database connection error:', error)
-    process.exit(1)
-  })
+}
 
-  return dbEventController
-    .down(knex)
-    .then(() => {
-      return dbEventController.up(knex)
-    })
-    .then(() => {
-      return subscriber.connect().catch((e) => console.log(e))
-    })
-    .then(() => {
-      subscriber.listenTo(COMMAND_QUEUE_EVENT_NAME)
-    })
-    .then(() => {
-      logger.info('db listner ready')
-    })
+
+const stratStatusPubInterval = () => {
+  
+  setInterval( () => {
+    redisPub.publish(REDIS_CHANNEL, JSON.stringify({type: 'status', value: runner.getStatus()}))
+  }, 3000) 
 }
 
 const init = () => {
@@ -99,11 +98,12 @@ const init = () => {
       contractId = contractIds[0].contractId
     })
     .then(() => {
-      return initDBEvents()
+      return initEvents()
     })
     .then(() => {
       runner.init({ _knex: knex, _products: products, _contractId: contractId })
       logger.info('all ready')
+      stratStatusPubInterval()
     })
 }
 

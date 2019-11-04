@@ -1,11 +1,11 @@
 import _ from 'lodash'
 import moment from 'moment'
 import Chart from 'chart.js'
-import ChartDataLabels from 'chartjs-plugin-datalabels';
+import ChartDataLabels from 'chartjs-plugin-datalabels'
 import 'chartjs-plugin-streaming'
 import demandConstants from './demandConstants'
 
-Chart.plugins.unregister(ChartDataLabels);
+Chart.plugins.unregister(ChartDataLabels)
 
 export default class DemandChart {
   constructor(options) {
@@ -34,7 +34,7 @@ export default class DemandChart {
     return this.categories.map((categoryName, index) => {
       originalData[categoryName] =
         originalData[categoryName] ||
-        _.times(demandConstants.CHART_VISIBLE_MINS + 1, ()=>0)
+        _.times(demandConstants.CHART_VISIBLE_MINS + 1, () => 0)
       let currentData = originalData[categoryName].map((value, i) => {
         return {
           x: moment()
@@ -62,8 +62,7 @@ export default class DemandChart {
   }
 
   render(datasets) {
-
-    let prevObj = {dataIndex:null, datasetIndex:null}
+    let prevObj = { dataIndex: null, datasetIndex: null }
 
     let config = {
       plugins: [ChartDataLabels],
@@ -80,7 +79,10 @@ export default class DemandChart {
               size: 20
             },
             formatter: function(value, context) {
-              if (prevObj.datasetIndex === context.datasetIndex && prevObj.YValue === value.y) {
+              if (
+                prevObj.datasetIndex === context.datasetIndex &&
+                prevObj.YValue === value.y
+              ) {
                 return null
               }
               prevObj.datasetIndex = context.datasetIndex

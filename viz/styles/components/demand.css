@@ -235,3 +235,17 @@
     cursor: pointer;
   }
 }
+
+.worker-running [start-button],
+.worker-stopped [stop-button],
+.worker-deleting button{
+  display: none;
+}
+
+.worker-deleting [status] {
+  color: red;
+}
+
+.worker-running [status] {
+  color: green;
+}
