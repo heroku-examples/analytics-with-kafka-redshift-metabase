@@ -1,6 +1,6 @@
 # Example Product/User Analytics System Using Apache Kafka, AWS Redshift, and Metabase
 
-**This app also includes** [Heroku Connect Data Demo](#heroku_connect_data_demo)
+**This app also includes** [Heroku Connect Data Demo](#heroku-connect-data-demo)
 
 This is an example of a system that captures a large stream of product usage data, or events, and provides both real-time data visualization and SQL-based data analytics. The stream of events is captured by [Apache Kafka](https://kafka.apache.org/) and made available to other downstream consumers. In this example, there are two downstream consumers of the data. The data flowing through Kafka can be viewed in near real-time using a web-based data visualization app. The other consumer stores all the data in [AWS Redshift](https://aws.amazon.com/redshift/), a relational database that Amazon describes as "a fast, scalable data warehouse." Then we can query and visualize the data in Redshift from a SQL-compliant analytics tool. This example uses [Metabase deployed to Heroku](https://elements.heroku.com/buttons/metabase/metabase-deploy). [Metabase](https://www.metabase.com/) is an open-source analytics tool used by many organizations, large and small.
 
@@ -109,7 +109,7 @@ This project also uses a `generate_orders` which is a worker automatically creat
 This project add new routes `/connect` and `/ordercontrol` to the viz app.
 `/connect` show the demand chart and `/ordercontrol` gives you UI to control the `generate_orders`.
 
-The detail of `generate_orders` can be found [here]('/link_to_the_readme_under_generate_orders').
+The detail of `generate_orders` can be found [here]('./generate_orders/README.md').
 
 ## Deploy Data Demo
 
@@ -141,4 +141,4 @@ You can retrive them from Salesforce.
 You can access these locally and from the Heroku app.
 
 - `/connect` This route shows the chart
-- `/ordercontrol`  please check the detail from [here]('/link_to_the_readme_under_generate_orders').
+- `/ordercontrol`  please check the detail from [here]('./generate_orders/README.md').
