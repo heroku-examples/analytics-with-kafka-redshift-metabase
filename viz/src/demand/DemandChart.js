@@ -29,7 +29,9 @@ export default class DemandChart {
 
     // chartColors = _.shuffle(chartColors)
     return this.categories.map((categoryName, index) => {
-      originalData[categoryName] = originalData[categoryName] || _.times(demandConstants.CHART_VISIBLE_MINS + 1, 0)
+      originalData[categoryName] =
+        originalData[categoryName] ||
+        _.times(demandConstants.CHART_VISIBLE_MINS + 1, 0)
       let currentData = originalData[categoryName].map((value, i) => {
         return {
           x: moment()
