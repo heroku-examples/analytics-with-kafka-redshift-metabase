@@ -51,8 +51,7 @@ The format is:
 
 ### User interface
 
-Heroku assign only one port for a Node app so this worker doesn't have UI but `viz` app has one.
-You can go to `/ordercontrol` and you will see three buttons with start, stop, and reset.
+You can run `viz` and go to `/ordercontrol` and you will see three buttons with start, stop, and delete all(reset).
 By pressing these buttons, you can send commands to this woker.
 
 #### Logs shows the current state of the worker
