@@ -5,7 +5,7 @@ const knex = require('knex')({ client: 'pg' })
 const CHART_VISIBLE_PAST_MINUTES_DEFAULT = 5
 const CHART_VISIBLE_PAST_MINUTES_MAX = 30
 const DATA_PERIOD = '1 month'
-const FULLFILLMENT_ORDER_TYPE = 'Fulfillment Order'
+const FULFILLMENT_ORDER_TYPE = 'Fulfillment Order'
 const PURCHASE_ORDER_TYPE = 'Purchase Order'
 const COMMAND_QUEUE_TABLE_NAME = 'order_creation_command'
 
@@ -122,9 +122,9 @@ const normalizeData = (rawData) => {
 
   _.forEach(data, (orders, categoryName) => {
     let orderTypes = _.groupBy(orders, 'type')
-    const fCounts = _.sumBy(orderTypes[FULLFILLMENT_ORDER_TYPE], 'count')
+    const fCounts = _.sumBy(orderTypes[FULFILLMENT_ORDER_TYPE], 'count')
     const pCounts = _.sumBy(orderTypes[PURCHASE_ORDER_TYPE], 'count')
-    //if fullfillment order is 0 then the demand is 0
+    //if fulfillment order is 0 then the demand is 0
     const demand = fCounts - pCounts //fCounts === 0 ? 0 : (pCounts / fCounts) * 100
     //if demand is higher than 100 then it's set to 100
     data[categoryName] = demand
@@ -152,7 +152,7 @@ const createOrder = (db) => {
     contractid: contract.sfid,
     pricebook2id: contract.pricebook2id,
     status: 'Draft',
-    recordtypeid: process.env.HEROKU_CONNECT_FULLFILLMENT_TYPE_ID
+    recordtypeid: process.env.HEROKU_CONNECT_FULFILLMENT_TYPE_ID
   }
 
   const createOrderQuery = knex('salesforce.order')

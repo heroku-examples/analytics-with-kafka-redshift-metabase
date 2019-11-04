@@ -132,7 +132,7 @@ You can retrive them from Salesforce.
 
 - `DATABASE_URL`: This is not new but this has to be a Heroku Postgres which is connected with Salesforce
 - `HEROKU_CONNECT_ACCOUNT_ID`: The accout id that's associated with the contract
-- `HEROKU_CONNECT_FULLFILLMENT_TYPE_ID`: The id of fulfillment order type
+- `HEROKU_CONNECT_FULFILLMENT_TYPE_ID`: The id of fulfillment order type
 - `HEROKU_CONNECT_PURCHASE_YPTE_ID`: The id of purchase order type
 - `HEROKU_CONNECT_PRICEBOOK_ID`: Pricebook id that's connected with all products
 

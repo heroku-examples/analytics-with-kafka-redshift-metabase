@@ -28,7 +28,7 @@ export default class DemandControls {
         })
         this.renderCategories()
         this.renderXticks()
-        this.fullfillmentForm = new DemandFullfillmentForm({
+        this.fulfillmentForm = new DemandFullfillmentForm({
           openButtonSelector: options.formOpenSelector,
           categories: this.categories
         })

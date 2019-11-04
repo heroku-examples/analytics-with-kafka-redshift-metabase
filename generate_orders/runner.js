@@ -84,7 +84,7 @@ const makeOrdersForCategory = (productInfo) => {
 
   _.each(
     [
-      process.env.HEROKU_CONNECT_FULLFILLMENT_TYPE_ID,
+      process.env.HEROKU_CONNECT_FULFILLMENT_TYPE_ID,
       process.env.HEROKU_CONNECT_PURCHASE_YPTE_ID
     ],
     (typeId, index) => {

@@ -1,7 +1,7 @@
 
 # generate_orders
 
-This worker creates both fullfillment and purchase orders periodically.
+This worker creates both fulfillment and purchase orders periodically.
 
 ## Development Setup
 
@@ -21,7 +21,7 @@ npm install
 You can find these variables on Salesforce
 
 - `HEROKU_CONNECT_ACCOUNT_ID`: The accout id that's associated with the contract
-- `HEROKU_CONNECT_FULLFILLMENT_TYPE_ID`: The id of fulfillment order type
+- `HEROKU_CONNECT_FULFILLMENT_TYPE_ID`: The id of fulfillment order type
 - `HEROKU_CONNECT_PURCHASE_YPTE_ID`: The id of purchase order type
 - `HEROKU_CONNECT_PRICEBOOK_ID`: Pricebook id that's connected with all products
 

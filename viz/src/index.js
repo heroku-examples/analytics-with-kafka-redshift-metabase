@@ -47,7 +47,7 @@ const BoothControls = new BoothController({ selector: '.big-button' })
 
 const demandControls = new DemandControls({
   chartSelector: '#demand-chart',
-  formOpenSelector: '.demand--fullfillment-button'
+  formOpenSelector: '.demand--fulfillment-button'
 })
 
 const url = `ws${window.location.href.match(/^http(s?:\/\/.*)\/.*$/)[1]}`

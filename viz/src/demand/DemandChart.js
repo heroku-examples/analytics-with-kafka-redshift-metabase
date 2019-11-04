@@ -14,12 +14,13 @@ export default class DemandChart {
     if (!this.newData) {
       return
     }
-    this.chart.config.data.datasets.forEach((dataset) => {
+    this.chart.config.data.datasets.forEach( dataset => {
       let clone = _.clone(dataset.data)
       clone.push({
         x: Date.now(),
-        y: this.newData[dataset.label] || dataset.data[dataset.data.length - 1]
+        y: this.newData[dataset.label] || 0 //dataset.data[dataset.data.length - 1]
       })
+      console.log()
       dataset.data = _.reverse(_.sortBy(clone, 'x'))
     })
   }
@@ -102,9 +103,9 @@ export default class DemandChart {
           yAxes: [
             {
               gridLines: {
-                display: false
+                // display: false
               },
-              display: false,
+              // display: false,
               ticks: {
                 // display: false,
                 // stepSize: 100,
