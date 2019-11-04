@@ -1,7 +1,7 @@
 const _ = require('lodash')
 const moment = require('moment')
 const knex = require('knex')({ client: 'pg' })
-const Redis = require('ioredis');
+const Redis = require('ioredis')
 const CHART_VISIBLE_PAST_MINUTES_DEFAULT = 5
 const CHART_VISIBLE_PAST_MINUTES_MAX = 30
 const DATA_PERIOD = '1 week'
@@ -320,7 +320,10 @@ const initRoutes = (app, NODB, db) => {
 
     let command = req.body.command
     if (['start', 'stop', 'reset'].indexOf(command) > -1) {
-      redisPub.publish(REDIS_CHANNEL, JSON.stringify({type: 'command', value:command}))
+      redisPub.publish(
+        REDIS_CHANNEL,
+        JSON.stringify({ type: 'command', value: command })
+      )
       res.send({})
     } else {
       res.status(500).send('Invalid command')
@@ -345,9 +348,7 @@ const initRoutes = (app, NODB, db) => {
     })
 }
 
-
 const initWorkerStatusUpdate = () => {
-
   redisSub.subscribe(REDIS_CHANNEL, () => {
     console.log('Subscribing to redis')
   })
@@ -358,7 +359,6 @@ const initWorkerStatusUpdate = () => {
       workerStatus = message.value
     }
   })
-
 }
 
 const init = (wss, db, NODB) => {

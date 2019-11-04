@@ -9,7 +9,6 @@ const redisSub = new Redis(process.env.REDIS_URL)
 const redisPub = new Redis(process.env.REDIS_URL)
 const REDIS_CHANNEL = 'generate_orders'
 
-
 console.log(process.env.DATABASE_URL)
 
 const getProductList = () => {
@@ -44,19 +43,17 @@ const getContractIds = () => {
 let deletePromise = Promise.resolve()
 
 const initEvents = () => {
-
   redisSub.subscribe(REDIS_CHANNEL, () => {
     console.log('Subscribing to redis')
   })
 
   redisSub.on('message', function(channel, _message) {
-
     const message = JSON.parse(_message)
-    if(message.type !== 'command') {
+    if (message.type !== 'command') {
       return
     }
 
-    console.log(`Receive command ${message.value}`);
+    console.log(`Receive command ${message.value}`)
 
     const command = message.value
     switch (command) {
@@ -72,17 +69,16 @@ const initEvents = () => {
       default:
         logger.info(`Invalid command: ${command}`)
     }
-
   })
-
 }
 
-
 const stratStatusPubInterval = () => {
-  
-  setInterval( () => {
-    redisPub.publish(REDIS_CHANNEL, JSON.stringify({type: 'status', value: runner.getStatus()}))
-  }, 3000) 
+  setInterval(() => {
+    redisPub.publish(
+      REDIS_CHANNEL,
+      JSON.stringify({ type: 'status', value: runner.getStatus() })
+    )
+  }, 3000)
 }
 
 const init = () => {

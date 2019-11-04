@@ -40,25 +40,23 @@ module.exports = () => {
   const bodyClassList = document.body.classList
 
   const updateStatus = () => {
-    $.get('/demand/worker-status')
-      .then( (res) =>{
-        if (prevState === res.state) {
-          return
-        }
+    $.get('/demand/worker-status').then((res) => {
+      if (prevState === res.state) {
+        return
+      }
 
-        let state = res.state || ''
-        if (prevClass) {
-          bodyClassList.remove(prevClass)
-        }
-        prevState = res.state
-        prevClass = `worker-${state.toLowerCase()}`
-        bodyClassList.add(prevClass)
-        $('[status]').text(res.state)
-      })
+      let state = res.state || ''
+      if (prevClass) {
+        bodyClassList.remove(prevClass)
+      }
+      prevState = res.state
+      prevClass = `worker-${state.toLowerCase()}`
+      bodyClassList.add(prevClass)
+      $('[status]').text(res.state)
+    })
   }
 
   setInterval(updateStatus, 3000)
 
   updateStatus()
-
 }
