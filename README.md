@@ -123,10 +123,18 @@ Following items are needed:
 - Redis add-on
 - Heroku Connect
 
+You can install Posgres and Redis add-ons by runnning these:
+```
+heroku addons:create heroku-postgresql:<PLAN_NAME>
+heroku addons:create heroku-redis:<PLAN_NAME>
+```
+
+Conneting your Heroku Postgres and Salesforce, please check [this instruction](https://devcenter.heroku.com/articles/getting-started-with-heroku-and-connect-without-local-dev).
+
 ### Deploy Data Demo to Heroku
 
 This app is automatically deployed together with the main project.
-**However, it requires additional environment variables.**
+**However, it requires additional environment variables and those add-ons above.**
 
 ### Environment Variables
 
