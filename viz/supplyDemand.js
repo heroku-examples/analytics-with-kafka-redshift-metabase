@@ -147,7 +147,6 @@ const getData = (db, query) => {
 }
 
 const createOrder = (db, name = null) => {
-
   let order = {
     effectivedate: moment().format('MM/DD/YYYY'),
     accountid: process.env.HEROKU_CONNECT_ACCOUNT_ID,
@@ -344,7 +343,6 @@ const initWorkerStatusUpdate = () => {
     }
   })
 }
-
 
 const init = (wss, db, NODB) => {
   if (NODB) {

@@ -82,8 +82,10 @@ const getOrderCount = () => {
 }
 
 const makeOrdersForCategory = (productInfo) => {
-
-  let id = Math.floor(Math.random()*100)%4 === 0? process.env.HEROKU_CONNECT_FULFILLMENT_TYPE_ID : process.env.HEROKU_CONNECT_PURCHASE_TYPE_ID
+  let id =
+    Math.floor(Math.random() * 100) % 4 === 0
+      ? process.env.HEROKU_CONNECT_FULFILLMENT_TYPE_ID
+      : process.env.HEROKU_CONNECT_PURCHASE_TYPE_ID
 
   let order = {
     effectivedate: new Date().toLocaleDateString('en-US'),
@@ -103,7 +105,6 @@ const makeOrdersForCategory = (productInfo) => {
         count: getOrderCount()
       })
     })
-
 }
 
 const makeOrders = () => {

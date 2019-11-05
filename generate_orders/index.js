@@ -83,7 +83,11 @@ const init = () => {
       return initEvents()
     })
     .then(() => {
-      runner.init({ _knex: knex, _products: products, _contractId: process.env.HEROKU_CONNECT_CONTRACT_ID })
+      runner.init({
+        _knex: knex,
+        _products: products,
+        _contractId: process.env.HEROKU_CONNECT_CONTRACT_ID
+      })
       logger.info('all ready')
       stratStatusPubInterval()
     })
