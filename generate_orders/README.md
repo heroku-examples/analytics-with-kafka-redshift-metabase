@@ -3,12 +3,23 @@
 
 This worker creates both fulfillment and purchase orders periodically.
 
+## How often and how many
+
+It produces 500 orders total every 2 minutes and it creates more puchase orders than fulfillment orders overtime.
+Sometimes it creates more fulfillment orders in one period.
+
+### Why 2 minutes?
+
+Heroku connects synces every 2 minutes with the enterprise plan.
+It's 10 minutes for the normal plan.
+
 ## Development Setup
 
 ### Requirements
 
 - Heroku connect
-- Heroku Postgres
+- Heroku Postgres add-on
+- Redis add-on
 
 ### Nodejs setup
 
@@ -18,7 +29,7 @@ npm install
 
 ### Environment variables
 
-You can find these variables on Salesforce
+You can find the most of these variables on Salesforce
 
 - `HEROKU_CONNECT_ACCOUNT_ID`: The accout id that's associated with the contract
 - `HEROKU_CONNECT_FULFILLMENT_TYPE_ID`: The id of fulfillment order type
@@ -34,14 +45,17 @@ node index.js
 
 ## How to start/stop/reset order creation process
 
-It's using Redis and you can send a command to channel `generate_orders`.
+By default, it's stopped.
+The worker is subscribing to Redis and you can send a command to channel `generate_orders`.
+
 `command` takes `start`, `stop`, or `reset`.
+
 The format is:
 
 ```
 {
   type: 'command',
-  value: {'startt'|'stop'|'reset'}
+  value: '{start|stop|reset}''
 }
 ```
 
@@ -53,9 +67,10 @@ The format is:
 
 You can run `viz` and go to `/ordercontrol` and you will see three buttons with start, stop, and delete all(reset).
 By pressing these buttons, you can send commands to this woker.
+There is a status text you can see to know what it's doing.
 
 #### Logs shows the current state of the worker
 
-The logs section of the Heroku dashboard should show what this worker is doing.
+The logs section of the Heroku dashboard should show what this worker is doing in detail.
 The worker's name is `order_maker` in the log.
-So if you want to test this, open this log and the UI.
+If you want to test this worker, open this log and the UI.

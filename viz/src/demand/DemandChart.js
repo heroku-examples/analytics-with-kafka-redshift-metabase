@@ -77,6 +77,7 @@ export default class DemandChart {
         plugins: {
           datalabels: {
             clip: true,
+            clamp: true,
             align: (context) => {
               let dataList = config.data.datasets[context.datasetIndex].data
               const curData = dataList[context.dataIndex]
@@ -84,11 +85,16 @@ export default class DemandChart {
               const prevData = dataList[context.dataIndex - 1]
               let align = 'top'
 
-              if (nextData && prevData) {
+              if (prevData) {
                 if (prevData.y > curData.y) {
                   align = 'bottom'
                 }
-                // console.log(prevData.y, curData.y, nextData.y, align)
+              }
+
+              if (nextData) {
+                if (nextData.y > curData.y) {
+                  align = 'bottom'
+                }
               }
               return align
             },
@@ -109,7 +115,9 @@ export default class DemandChart {
             bottom: 20
           }
         },
+        aspectRatio: 3,
         responsive: true,
+        maintainAspectRatio: true,
         elements: {
           point: {
             radius: 0

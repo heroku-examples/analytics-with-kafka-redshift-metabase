@@ -30,7 +30,9 @@
 }
 
 #demand-chart {
-  width: 100%;
+  /* width: 100%; */
+  /* max-width: 1440px; */
+  /* max-height: 60vh; */
   border: solid 1px #ccc;
   background-color: #FFFFFF;
 }

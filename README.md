@@ -97,14 +97,15 @@ Open the URL in the startup output of the `viz` app. It will likely be `http://l
 ## Heroku Connect Data Demo
 
 **This is an addition to the project above and not required to run**
-This is an example of showing how Salesforce and Heroku Postgres can be synced using [Heroku Connect](https://www.heroku.com/connect).
+
+This is an example project of showing how Salesforce and Heroku Postgres can be synced using [Heroku Connect](https://www.heroku.com/connect).
 
 ## Data Demo Structure
 
-This project uses `viz` for the web interface to show the chart that represents supply and demand using `fulfillment order` and `purchase order` of products in specific categories in Salesforce and Postgres.
+This project uses `viz` for the web interface to show the chart that represents supply and demand using `fulfillment order` and `purchase order` of products in specific categories in Salesforce.
 This project also uses a `generate_orders` which is a worker automatically creating orders periodically.
 
-`generate_orders` creates orders and the `viz` shows the chart.
+`generate_orders` creates orders and the `viz` shows the demand chart.
 
 This project add new routes `/connect` and `/ordercontrol` to the viz app.
 `/connect` show the demand chart and `/ordercontrol` gives you UI to control the `generate_orders`.
@@ -115,29 +116,30 @@ The detail of `generate_orders` can be found [here](./generate_orders/README.md)
 
 ### Data Demo Prerequisites
 
-- This project is an addition to the existing project above so make sure you have everything running first
+This project is an addition to the existing project above so make sure you have everything running first.
+Following items are needed:
 - Salesforce account
 - Postgres add-on
+- Redis add-on
 - Heroku Connect
 
 ### Deploy Data Demo to Heroku
 
-This app gets deployed together with the original project.
-However, it requires additional environment variables.
+This app is automatically deployed together with the main project.
+**However, it requires additional environment variables.**
 
 ### Environment Variables
 
 These variables need to be set to run the app.
-You can retrive them from Salesforce.
+Most of them are from Salesforce.
 
-- `DATABASE_URL`: This is not new but this has to be a Heroku Postgres which is connected with Salesforce
 - `HEROKU_CONNECT_ACCOUNT_ID`: The accout id that's associated with the contract
 - `HEROKU_CONNECT_FULFILLMENT_TYPE_ID`: The id of fulfillment order type
 - `HEROKU_CONNECT_PURCHASE_YPTE_ID`: The id of purchase order type
 - `HEROKU_CONNECT_PRICEBOOK_ID`: Pricebook id that's connected with all products
 - `REDIS_URL`: Redis' endpoint url with credentials. [https://devcenter.heroku.com/articles/heroku-redis#redis-credentials](https://devcenter.heroku.com/articles/heroku-redis#redis-credentials)
 
-### new routes
+### New Routes
 
 You can access these locally and from the Heroku app.
 
