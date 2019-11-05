@@ -19,7 +19,8 @@ export default class DemandChart {
       let clone = _.clone(dataset.data)
       clone.push({
         x: Date.now(),
-        y: this.newData[dataset.label] || dataset.data[dataset.data.length - 1].y
+        y:
+          this.newData[dataset.label] || dataset.data[dataset.data.length - 1].y
       })
       dataset.data = _.reverse(_.sortBy(clone, 'x'))
     })
@@ -63,7 +64,6 @@ export default class DemandChart {
   }
 
   render(datasets) {
-
     let config = {
       plugins: [ChartDataLabels],
       type: 'line',
@@ -146,7 +146,7 @@ export default class DemandChart {
             {
               gridLines: {
                 display: false
-              },
+              }
               // display: false,
             }
           ]
