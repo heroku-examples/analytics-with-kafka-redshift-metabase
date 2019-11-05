@@ -7,7 +7,7 @@ const knex = require('knex')({
 })
 const redisSub = new Redis(process.env.REDIS_URL)
 const redisPub = new Redis(process.env.REDIS_URL)
-const REDIS_CHANNEL = 'generate_orders'
+const REDIS_CHANNEL = 'generate_orders2'
 
 console.log(process.env.DATABASE_URL)
 
@@ -31,13 +31,6 @@ const getProductList = () => {
       'pricebookentry.pricebook2id',
       process.env.HEROKU_CONNECT_PRICEBOOK_ID
     )
-}
-
-const getContractIds = () => {
-  return knex
-    .select('sfid as contractId')
-    .from('salesforce.contract')
-    .where('pricebook2id', process.env.HEROKU_CONNECT_PRICEBOOK_ID)
 }
 
 let deletePromise = Promise.resolve()
@@ -83,21 +76,14 @@ const stratStatusPubInterval = () => {
 
 const init = () => {
   let products = null
-  let contractId = null
 
   getProductList()
     .then((_products) => {
       products = _products
-      return getContractIds()
-    })
-    .then((contractIds) => {
-      contractId = contractIds[0].contractId
-    })
-    .then(() => {
       return initEvents()
     })
     .then(() => {
-      runner.init({ _knex: knex, _products: products, _contractId: contractId })
+      runner.init({ _knex: knex, _products: products, _contractId: process.env.HEROKU_CONNECT_CONTRACT_ID })
       logger.info('all ready')
       stratStatusPubInterval()
     })

@@ -14,14 +14,12 @@ export default class DemandChart {
   }
 
   onRefresh() {
-    if (!this.newData) {
-      return
-    }
+    this.newData = this.newData || {}
     this.chart.config.data.datasets.forEach((dataset) => {
       let clone = _.clone(dataset.data)
       clone.push({
         x: Date.now(),
-        y: this.newData[dataset.label] || 0 //dataset.data[dataset.data.length - 1]
+        y: this.newData[dataset.label] || dataset.data[dataset.data.length - 1].y
       })
       dataset.data = _.reverse(_.sortBy(clone, 'x'))
     })
@@ -65,7 +63,6 @@ export default class DemandChart {
   }
 
   render(datasets) {
-    // let prevObj = { dataIndex: null, datasetIndex: null }
 
     let config = {
       plugins: [ChartDataLabels],
@@ -76,7 +73,7 @@ export default class DemandChart {
       options: {
         plugins: {
           datalabels: {
-            clip: true,
+            // clip: true,
             clamp: true,
             align: (context) => {
               let dataList = config.data.datasets[context.datasetIndex].data
@@ -111,8 +108,8 @@ export default class DemandChart {
           padding: {
             left: 0,
             right: 0,
-            top: 20,
-            bottom: 20
+            top: 40,
+            bottom: 40
           }
         },
         aspectRatio: 3,
@@ -151,13 +148,6 @@ export default class DemandChart {
                 display: false
               },
               // display: false,
-              ticks: {
-                // display: false,
-                // stepSize: 100,
-                // // beginAtZero: true,
-                // max: 1000,
-                // min: -1000
-              }
             }
           ]
         },
