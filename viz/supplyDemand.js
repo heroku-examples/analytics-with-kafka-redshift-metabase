@@ -7,7 +7,7 @@ const CHART_VISIBLE_PAST_MINUTES_MAX = 30
 const DATA_PERIOD = '1 week'
 const FULFILLMENT_ORDER_TYPE = 'Fulfillment Order'
 const PURCHASE_ORDER_TYPE = 'Purchase Order'
-const REDIS_CHANNEL = 'generate_orders'
+const REDIS_CHANNEL = 'generate_orders2'
 
 const redisPub = new Redis(process.env.REDIS_URL)
 const redisSub = new Redis(process.env.REDIS_URL)
@@ -146,16 +146,13 @@ const getData = (db, query) => {
     .catch((error) => console.error(`ERROR: ${error}`))
 }
 
-let contracts
-
 const createOrder = (db, name = null) => {
-  const contract = _.sample(contracts)
 
   let order = {
     effectivedate: moment().format('MM/DD/YYYY'),
     accountid: process.env.HEROKU_CONNECT_ACCOUNT_ID,
-    contractid: contract.sfid,
-    pricebook2id: contract.pricebook2id,
+    contractid: process.env.HEROKU_CONNECT_CONTRACT_ID,
+    pricebook2id: process.env.HEROKU_CONNECT_PRICEBOOK_ID,
     status: 'Draft',
     recordtypeid: process.env.HEROKU_CONNECT_FULFILLMENT_TYPE_ID
   }
@@ -333,19 +330,6 @@ const initRoutes = (app, NODB, db) => {
   app.get('/demand/worker-status', (req, res) => {
     res.json(workerStatus)
   })
-
-  db.any(
-    knex
-      .select('pricebook2id', 'sfid')
-      .from('salesforce.contract')
-      .toString()
-  )
-    .then((_contarcts) => {
-      contracts = _contarcts
-    })
-    .catch((e) => {
-      console.log(e)
-    })
 }
 
 const initWorkerStatusUpdate = () => {
@@ -361,12 +345,14 @@ const initWorkerStatusUpdate = () => {
   })
 }
 
+
 const init = (wss, db, NODB) => {
   if (NODB) {
     return console.log('App running without a progres database.')
   }
 
-  const query = getQuery(DATA_PERIOD)
+  // const query = getQuery(DATA_PERIOD)
+  const query = getQuery('1 minute', true)
 
   const sendData = (data) => {
     const sendingData = {

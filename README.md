@@ -143,8 +143,9 @@ Most of them are from Salesforce.
 
 - `HEROKU_CONNECT_ACCOUNT_ID`: The accout id that's associated with the contract
 - `HEROKU_CONNECT_FULFILLMENT_TYPE_ID`: The id of fulfillment order type
-- `HEROKU_CONNECT_PURCHASE_YPTE_ID`: The id of purchase order type
+- `HEROKU_CONNECT_PURCHASE_TYPE_ID`: The id of purchase order type
 - `HEROKU_CONNECT_PRICEBOOK_ID`: Pricebook id that's connected with all products
+- `HEROKU_CONNECT_CONTRACT_ID`: Contract Id that's associated with the account
 - `REDIS_URL`: Redis' endpoint url with credentials. [https://devcenter.heroku.com/articles/heroku-redis#redis-credentials](https://devcenter.heroku.com/articles/heroku-redis#redis-credentials)
 
 ### New Routes
