@@ -146,9 +146,15 @@ export default class DemandChart {
             {
               gridLines: {
                 display: false
-              }
+              },
               // display: false,
-            }
+              ticks: {
+                suggestedMin: -2000,
+                suggestedMax: 1000,
+                // min: -2000,
+                // max: 1500
+              }
+            },
           ]
         },
         tooltips: {
