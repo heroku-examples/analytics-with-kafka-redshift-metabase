@@ -16,7 +16,7 @@ let navConfig = {
 }
 
 if (document.querySelector('#demand-chart')) {
-  navConfig.iframeUrl = '/public/diagram/heroku-connect-diagram.html'
+  navConfig.iframeUrl = '/public/heroku-connect-diagram/heroku-connect.html'
   navConfig.type = 'herokuConnect'
 }
 

@@ -7,7 +7,7 @@ const knex = require('knex')({
 })
 const redisSub = new Redis(process.env.REDIS_URL)
 const redisPub = new Redis(process.env.REDIS_URL)
-const REDIS_CHANNEL = 'generate_orders2'
+const REDIS_CHANNEL = 'generate_orders'
 
 console.log(process.env.DATABASE_URL)
 
