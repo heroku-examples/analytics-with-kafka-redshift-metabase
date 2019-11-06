@@ -2,8 +2,9 @@ const _ = require('lodash')
 const logger = require('../logger')('generate_orders')
 
 const ORDER_INTERVAL = 60000
-const ORDER_QUANTITY = 500
-const ORDER_QUANTITY_RANDOMNESS = 300 // +- 300
+const ORDER_QUANTITY = 50
+const ORDER_QUANTITY_RANDOMNESS = 30 // +- 30
+const FULFILLMENT_ORDER_RATIO = 3 // About 1 in 3 orders will be fulfillment orders
 
 let contractId = null
 let pendingOrders = {}
@@ -87,9 +88,14 @@ let countObj = {}
 const makeOrdersForCategory = (productInfo) => {
   countObj[productInfo.category] = countObj[productInfo.category] || 0
 
-  const count = getOrderCount()
+  let count = getOrderCount()
   //It sometimes makes fulfillment orders instead of purchase order(33% of the time)
-  const isFulfillmentOrder = Math.floor(Math.random() * 100) % 3 === 0
+  const isFulfillmentOrder = Math.floor(Math.random() * 100) % FULFILLMENT_ORDER_RATIO === 0
+
+  if (isFulfillmentOrder) {
+    // If it's a fulfillment order, double it
+    count *= 2
+  }
   const _count = (isFulfillmentOrder ? 1 : -1) * count
 
   countObj[productInfo.category] += _count
@@ -256,8 +262,9 @@ const getStatus = () => {
   return {
     state,
     totallOrdersCreated,
+    countByCategories: countObj,
     totalPendingOrders: _.keys(pendingOrders).length,
-    isReady: !!contractId
+    isReady: !!contractId,
   }
 }
 

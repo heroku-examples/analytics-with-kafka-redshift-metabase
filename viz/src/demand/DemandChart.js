@@ -27,10 +27,9 @@ export default class DemandChart {
   }
 
   generateDatasets(originalData) {
-    console.log(originalData)
+    console.log('original data', originalData)
     let chartColors = demandConstants.COLOR_LIST
 
-    // chartColors = _.shuffle(chartColors)
     return this.categories.map((categoryName, index) => {
       originalData[categoryName] =
         originalData[categoryName] ||
@@ -74,9 +73,9 @@ export default class DemandChart {
       options: {
         plugins: {
           datalabels: {
-            // clip: true,
             clamp: true,
             align: (context) => {
+              //controlling the position of the data label
               let dataList = config.data.datasets[context.datasetIndex].data
               const curData = dataList[context.dataIndex]
               const nextData = dataList[context.dataIndex + 1]
@@ -150,10 +149,8 @@ export default class DemandChart {
               },
               // display: false,
               ticks: {
-                suggestedMin: -500,
-                suggestedMax: 500
-                // min: -2000,
-                // max: 1500
+                suggestedMin: -100,
+                suggestedMax: 100
               }
             }
           ]

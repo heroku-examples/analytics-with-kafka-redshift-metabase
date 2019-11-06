@@ -7,13 +7,16 @@ const CHART_VISIBLE_PAST_MINUTES_MAX = 30
 const DATA_PERIOD = '1 week'
 const FULFILLMENT_ORDER_TYPE = 'Fulfillment Order'
 const PURCHASE_ORDER_TYPE = 'Purchase Order'
-const REDIS_CHANNEL = 'generate_orders'
+const REDIS_CHANNEL = 'generate_orders2'
 const UPDATE_INTERVAL = 10000
 const redisPub = new Redis(process.env.REDIS_URL)
 const redisSub = new Redis(process.env.REDIS_URL)
 
 let workerStatus = {}
 
+/*
+This query counts number of order items grouped by category and order type
+*/
 const getQuery = (ago, isPrior = false) => {
   //sanitizing
   let agoChunks = ago ? ago.match(/[A-Za-z0-9 ]+/gi) : null
@@ -86,9 +89,6 @@ const starOrderStatusCheckInterval = (db) => {
         }
         return createAllPendingOrderItems(orders, db)
       })
-      // .then((orderItems) => {
-      //   console.log('Order items were created:', orderItems)
-      // })
       .catch((e) => {
         console.log(e)
       })
@@ -152,8 +152,8 @@ const createOrder = (db, name = null) => {
     accountid: process.env.HEROKU_CONNECT_ACCOUNT_ID,
     contractid: process.env.HEROKU_CONNECT_CONTRACT_ID,
     pricebook2id: process.env.HEROKU_CONNECT_PRICEBOOK_ID,
-    status: 'Draft',
-    recordtypeid: process.env.HEROKU_CONNECT_FULFILLMENT_TYPE_ID
+    recordtypeid: process.env.HEROKU_CONNECT_FULFILLMENT_TYPE_ID,
+    status: 'Draft'
   }
 
   if (name) {
@@ -242,6 +242,7 @@ const initRoutes = (app, NODB, db) => {
     Promise.all(promises)
       .then((list) => {
         let data = {}
+        //generating an object that grouped by category name
         _.reduce(
           list,
           (d, items) => {
@@ -284,7 +285,7 @@ const initRoutes = (app, NODB, db) => {
       })
       .then((order) => {
         /*
-          An order has been created but ithasn't been syned with salesforce at this point.
+          An order has been created but it hasn't been syned with salesforce at this point.
           orderitem requires "sfid" of the order to be associated with in the database.
           This code below will keep the information about the order so it will try to create orderitems later.
           It's using "id" of order and pushing a list of information about orders.
@@ -348,8 +349,11 @@ const init = (wss, db, NODB) => {
   if (NODB) {
     return console.log('App running without a progres database.')
   }
-
-  const query = getQuery('70 seconds', true)
+  //Orders are created every min and there are some delay and also it's sycned with salesforce every 2 mins.
+  //Getting data up to 130 seconds ago seems to work the best.
+  //If it's before 2 mins(120) seconds, the data might not be there yet and it will be added to the next round.
+  //It seems a lot but it doesn't sync for 2 mins anyway so it's only 10 seconds delay
+  const query = getQuery('130 seconds', true)
 
   const sendData = (data) => {
     const sendingData = {
