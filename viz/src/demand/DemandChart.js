@@ -27,6 +27,7 @@ export default class DemandChart {
   }
 
   generateDatasets(originalData) {
+    console.log(originalData)
     let chartColors = demandConstants.COLOR_LIST
 
     // chartColors = _.shuffle(chartColors)
@@ -54,7 +55,7 @@ export default class DemandChart {
         borderColor: chartColors[index],
         borderWidth: demandConstants.CHART_LINE_THICKNESS,
         fill: false,
-        lineTension: 0.2,
+        lineTension: 0.1,
         data: currentData,
         datalabels: {
           color: chartColors[index]
@@ -149,12 +150,12 @@ export default class DemandChart {
               },
               // display: false,
               ticks: {
-                suggestedMin: -2000,
-                suggestedMax: 1000,
+                suggestedMin: -500,
+                suggestedMax: 500
                 // min: -2000,
                 // max: 1500
               }
-            },
+            }
           ]
         },
         tooltips: {
