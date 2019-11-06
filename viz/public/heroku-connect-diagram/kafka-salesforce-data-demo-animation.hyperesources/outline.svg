@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="534px" height="167px" viewBox="0 0 534 167" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 59.1 (86144) - https://sketch.com -->
+    <title>outline</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-dasharray="5">
+        <g id="animation-mockup-rev2-copy" transform="translate(-231.000000, -119.000000)" stroke="#DBCDE5">
+            <path d="M235,120 L761,120 C762.656854,120 764,121.343146 764,123 L764,282 C764,283.656854 762.656854,285 761,285 L235,285 C233.343146,285 232,283.656854 232,282 L232,123 C232,121.343146 233.343146,120 235,120 Z" id="outline"></path>
+        </g>
+    </g>
+</svg>

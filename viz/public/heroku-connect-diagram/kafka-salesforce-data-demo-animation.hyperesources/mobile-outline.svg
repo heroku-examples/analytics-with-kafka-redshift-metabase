@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="279px" height="366px" viewBox="0 0 279 366" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 59.1 (86144) - https://sketch.com -->
+    <title>mobile-outline</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-dasharray="5">
+        <g id="animation-mockup-rev2-copy-2" transform="translate(-48.000000, -120.000000)" stroke="#DBCDE5">
+            <path d="M51.5,121 L323.5,121 C325.156854,121 326.5,122.343146 326.5,124 L326.5,482 C326.5,483.656854 325.156854,485 323.5,485 L51.5,485 C49.8431458,485 48.5,483.656854 48.5,482 L48.5,124 C48.5,122.343146 49.8431458,121 51.5,121 Z" id="mobile-outline"></path>
+        </g>
+    </g>
+</svg>
