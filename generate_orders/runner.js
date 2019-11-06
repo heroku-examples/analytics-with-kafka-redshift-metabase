@@ -2,9 +2,8 @@ const _ = require('lodash')
 const logger = require('../logger')('generate_orders')
 
 const ORDER_INTERVAL = 60000
-const ORDER_RATIO = 0.7 //70% of orders will be purchase orders but it will be some what random
 const ORDER_QUANTITY = 500
-const ORDER_QUANTITY_RANDOMNESS = 100 //
+const ORDER_QUANTITY_RANDOMNESS = 300 // +- 300
 
 let contractId = null
 let pendingOrders = {}
@@ -76,14 +75,27 @@ const deleteAll = () => {
 
 const getOrderCount = () => {
   return (
-    Math.round(ORDER_QUANTITY * ORDER_RATIO) +
+    ORDER_QUANTITY +
     _.sample([1, -1]) * Math.floor(Math.random() * ORDER_QUANTITY_RANDOMNESS)
   )
 }
 
+//This object holds the current count of each orders but only the ones that this wokrer made
+let countObj = {}
+
 const makeOrdersForCategory = (productInfo) => {
+  
+  countObj[productInfo.category] = countObj[productInfo.category] || 0
+  
+  const count = getOrderCount()
+  //It sometimes makes fulfillment orders instead of purchase order
+  const isFulfillmentOrder = Math.floor(Math.random() * 100) % 3 === 0
+  const _count = (isFulfillmentOrder? 1 : -1) * count
+  
+  countObj[productInfo.category] += _count
+
   let id =
-    Math.floor(Math.random() * 100) % 4 === 0
+    isFulfillmentOrder
       ? process.env.HEROKU_CONNECT_FULFILLMENT_TYPE_ID
       : process.env.HEROKU_CONNECT_PURCHASE_TYPE_ID
 
@@ -102,7 +114,7 @@ const makeOrdersForCategory = (productInfo) => {
       pendingOrders[orderData[0].id] = pendingOrders[orderData[0].id] || []
       pendingOrders[orderData[0].id].push({
         categoryName: productInfo.category,
-        count: getOrderCount()
+        count: count
       })
     })
 }
@@ -115,7 +127,7 @@ const makeOrders = () => {
       return makeOrdersForCategory(productInfo)
     })
   })
-  return currentPromise
+  return currentPromise.then(()=>{console.log(countObj)})
 }
 
 const activateOrders = (orders) => {

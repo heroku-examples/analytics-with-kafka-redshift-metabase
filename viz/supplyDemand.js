@@ -7,7 +7,7 @@ const CHART_VISIBLE_PAST_MINUTES_MAX = 30
 const DATA_PERIOD = '1 week'
 const FULFILLMENT_ORDER_TYPE = 'Fulfillment Order'
 const PURCHASE_ORDER_TYPE = 'Purchase Order'
-const REDIS_CHANNEL = 'generate_orders2'
+const REDIS_CHANNEL = 'generate_orders'
 
 const redisPub = new Redis(process.env.REDIS_URL)
 const redisSub = new Redis(process.env.REDIS_URL)
