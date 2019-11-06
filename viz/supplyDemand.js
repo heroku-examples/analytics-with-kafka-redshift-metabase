@@ -8,7 +8,7 @@ const DATA_PERIOD = '1 week'
 const FULFILLMENT_ORDER_TYPE = 'Fulfillment Order'
 const PURCHASE_ORDER_TYPE = 'Purchase Order'
 const REDIS_CHANNEL = 'generate_orders'
-
+const UPDATE_INTERVAL = 10000
 const redisPub = new Redis(process.env.REDIS_URL)
 const redisSub = new Redis(process.env.REDIS_URL)
 
@@ -349,8 +349,7 @@ const init = (wss, db, NODB) => {
     return console.log('App running without a progres database.')
   }
 
-  // const query = getQuery(DATA_PERIOD)
-  const query = getQuery('1 minute', true)
+  const query = getQuery('70 seconds', true)
 
   const sendData = (data) => {
     const sendingData = {
@@ -369,7 +368,7 @@ const init = (wss, db, NODB) => {
       .then(() => {
         setTimeout(() => {
           setNextPromise()
-        }, 10000)
+        }, UPDATE_INTERVAL)
       })
   }
 

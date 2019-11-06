@@ -81,23 +81,22 @@ const getOrderCount = () => {
 }
 
 //This object holds the current count of each orders but only the ones that this wokrer made
+//This is for debugging purpose
 let countObj = {}
 
 const makeOrdersForCategory = (productInfo) => {
-  
   countObj[productInfo.category] = countObj[productInfo.category] || 0
-  
+
   const count = getOrderCount()
-  //It sometimes makes fulfillment orders instead of purchase order
+  //It sometimes makes fulfillment orders instead of purchase order(33% of the time)
   const isFulfillmentOrder = Math.floor(Math.random() * 100) % 3 === 0
-  const _count = (isFulfillmentOrder? 1 : -1) * count
-  
+  const _count = (isFulfillmentOrder ? 1 : -1) * count
+
   countObj[productInfo.category] += _count
 
-  let id =
-    isFulfillmentOrder
-      ? process.env.HEROKU_CONNECT_FULFILLMENT_TYPE_ID
-      : process.env.HEROKU_CONNECT_PURCHASE_TYPE_ID
+  let id = isFulfillmentOrder
+    ? process.env.HEROKU_CONNECT_FULFILLMENT_TYPE_ID
+    : process.env.HEROKU_CONNECT_PURCHASE_TYPE_ID
 
   let order = {
     effectivedate: new Date().toLocaleDateString('en-US'),
@@ -127,7 +126,7 @@ const makeOrders = () => {
       return makeOrdersForCategory(productInfo)
     })
   })
-  return currentPromise.then(()=>{console.log(countObj)})
+  return currentPromise
 }
 
 const activateOrders = (orders) => {
