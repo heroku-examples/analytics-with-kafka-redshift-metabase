@@ -90,7 +90,8 @@ const makeOrdersForCategory = (productInfo) => {
 
   let count = getOrderCount()
   //It sometimes makes fulfillment orders instead of purchase order(33% of the time)
-  const isFulfillmentOrder = Math.floor(Math.random() * 100) % FULFILLMENT_ORDER_RATIO === 0
+  const isFulfillmentOrder =
+    Math.floor(Math.random() * 100) % FULFILLMENT_ORDER_RATIO === 0
 
   if (isFulfillmentOrder) {
     // If it's a fulfillment order, double it
@@ -264,7 +265,7 @@ const getStatus = () => {
     totallOrdersCreated,
     countByCategories: countObj,
     totalPendingOrders: _.keys(pendingOrders).length,
-    isReady: !!contractId,
+    isReady: !!contractId
   }
 }
 
