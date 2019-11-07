@@ -100,6 +100,8 @@ Open the URL in the startup output of the `viz` app. It will likely be `http://l
 
 This is an example project of showing how Salesforce and Heroku Postgres can be synced using [Heroku Connect](https://www.heroku.com/connect).
 
+Please setup your Salesforce and Heroku Connect following [this documentation](./HerokuConnect.md).
+
 ## Data Demo Structure
 
 This project uses `viz` for the web interface to show the chart that represents supply and demand using `fulfillment order` and `purchase order` of products in specific categories in Salesforce.
