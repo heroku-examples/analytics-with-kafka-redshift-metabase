@@ -19,7 +19,7 @@ const deleteAll = () => {
   deleting = true
   stopOrderInterval()
   logger.info('Updating the all orders to be draft')
-  
+
   return knex('salesforce.order')
     .where('status', 'Activated')
     .returning('id')
