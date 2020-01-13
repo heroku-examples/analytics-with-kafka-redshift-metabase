@@ -1,8 +1,8 @@
 const _ = require('lodash')
 const logger = require('../logger')('generate_orders')
 
-const ORDER_INTERVAL = 60000
-const ORDER_QUANTITY = 50
+const ORDER_INTERVAL = 30000
+const ORDER_QUANTITY = 25
 const ORDER_QUANTITY_RANDOMNESS = 30 // +- 30
 const FULFILLMENT_ORDER_RATIO = 3 // About 1 in 3 orders will be fulfillment orders
 
@@ -19,7 +19,6 @@ const deleteAll = () => {
   deleting = true
   stopOrderInterval()
   logger.info('Updating the all orders to be draft')
-  
   return knex('salesforce.order')
     .where('status', 'Activated')
     .returning('id')

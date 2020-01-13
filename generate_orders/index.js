@@ -5,9 +5,10 @@ const knex = require('knex')({
   client: 'pg',
   connection: `${process.env.DATABASE_URL}?ssl=true`
 })
-const redisSub = new Redis(process.env.REDIS_URL)
-const redisPub = new Redis(process.env.REDIS_URL)
-const REDIS_CHANNEL = 'generate_orders'
+console.log(process.env.REDIS_URL)
+const redisSub = new Redis(process.env.REDIS_URL, { connectTimeout: 10000})
+const redisPub = new Redis(process.env.REDIS_URL, { connectTimeout: 10000})
+const REDIS_CHANNEL = 'generate_orders2'
 
 console.log(process.env.DATABASE_URL)
 
