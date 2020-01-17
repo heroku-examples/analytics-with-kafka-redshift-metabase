@@ -10,6 +10,8 @@ Chart.plugins.unregister(ChartDataLabels)
 export default class DemandChart {
   constructor(options) {
     this.categories = options.categories
+    this.prevValue = {}
+    this.categories.forEach((cat) => (this.prevValue[cat] = -1))
     this.render(this.generateDatasets(options.originalData || {}))
   }
 
@@ -19,8 +21,9 @@ export default class DemandChart {
       let clone = _.clone(dataset.data)
       clone.push({
         x: Date.now(),
-        y:
-          this.newData[dataset.label] || dataset.data[dataset.data.length - 1].y
+        y: _.isUndefined(this.newData[dataset.label])
+          ? dataset.data[dataset.data.length - 1].y
+          : this.newData[dataset.label]
       })
       dataset.data = _.reverse(_.sortBy(clone, 'x'))
     })
@@ -99,8 +102,14 @@ export default class DemandChart {
             font: {
               size: 20
             },
-            formatter: (value) => {
-              return value.y
+            formatter: (value, data) => {
+              //removing redundant label - basically if there is no change in the amount, it doens't show any label
+              let prevData = data.dataset.data[data.dataIndex + 1]
+              if (prevData && prevData.y === value.y) {
+                return null
+              } else {
+                return value.y
+              }
             }
           }
         },
@@ -176,10 +185,10 @@ export default class DemandChart {
    * new data is coming from the server
    */
   update(newData) {
-    console.log(newData)
     if (!this.chart) {
       return
     }
+    console.log(newData)
     this.newData = newData
   }
 }

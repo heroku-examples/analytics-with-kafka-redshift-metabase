@@ -5,34 +5,11 @@ const knex = require('knex')({
   client: 'pg',
   connection: `${process.env.DATABASE_URL}?ssl=true`
 })
-console.log(process.env.REDIS_URL)
-const redisSub = new Redis(process.env.REDIS_URL, { connectTimeout: 10000})
-const redisPub = new Redis(process.env.REDIS_URL, { connectTimeout: 10000})
+
+const redisSub = new Redis(process.env.REDIS_URL, { connectTimeout: 10000 })
+const redisPub = new Redis(process.env.REDIS_URL, { connectTimeout: 10000 })
 const REDIS_CHANNEL = 'generate_orders2'
-
-console.log(process.env.DATABASE_URL)
-
-const getProductList = () => {
-  return knex
-    .select(
-      'pricebookentry.sfid as pricebookEntryId',
-      'unitprice',
-      'product2id',
-      'family as category'
-    )
-    .from('salesforce.pricebookentry')
-    .innerJoin(
-      'salesforce.product2',
-      'pricebookentry.product2id',
-      '=',
-      'product2.sfid'
-    )
-    .whereNotNull('family')
-    .where(
-      'pricebookentry.pricebook2id',
-      process.env.HEROKU_CONNECT_PRICEBOOK_ID
-    )
-}
+const CATEGORY_LIST = process.env.HEROKU_CONNECT_CATEGORY_LIST.split(',')
 
 let deletePromise = Promise.resolve()
 
@@ -76,22 +53,13 @@ const stratStatusPubInterval = () => {
 }
 
 const init = () => {
-  let products = null
-
-  getProductList()
-    .then((_products) => {
-      products = _products
-      return initEvents()
-    })
-    .then(() => {
-      runner.init({
-        _knex: knex,
-        _products: products,
-        _contractId: process.env.HEROKU_CONNECT_CONTRACT_ID
-      })
-      logger.info('all ready')
-      stratStatusPubInterval()
-    })
+  initEvents()
+  runner.init({
+    _knex: knex,
+    _CATEGORY_LIST: CATEGORY_LIST
+  })
+  logger.info('all ready')
+  stratStatusPubInterval()
 }
 
 init()

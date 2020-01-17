@@ -55,6 +55,7 @@ export default class DemandControls {
 
   initCategories() {
     return axios.get('/demand/categories').then((res) => {
+      console.log(res)
       this.categories = res.data
     })
   }
