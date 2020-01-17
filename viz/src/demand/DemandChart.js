@@ -3,13 +3,14 @@ import moment from 'moment'
 import Chart from 'chart.js'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
 import 'chartjs-plugin-streaming'
-import demandConstants from './demandConstants'
 
 Chart.plugins.unregister(ChartDataLabels)
 
 export default class DemandChart {
   constructor(options) {
-    this.categories = options.categories
+    console.log(options)
+    this.config = options.config.chart
+    this.categories = options.config.CATEGORY_LIST
     this.prevValue = {}
     this.categories.forEach((cat) => (this.prevValue[cat] = -1))
     this.render(this.generateDatasets(options.originalData || {}))
@@ -31,12 +32,11 @@ export default class DemandChart {
 
   generateDatasets(originalData) {
     console.log('original data', originalData)
-    let chartColors = demandConstants.COLOR_LIST
-
+    let chartColors = this.config.COLOR_LIST
     return this.categories.map((categoryName, index) => {
       originalData[categoryName] =
         originalData[categoryName] ||
-        _.times(demandConstants.CHART_VISIBLE_MINS + 1, () => 0)
+        _.times(this.config.CHART_VISIBLE_MINS + 1, () => 0)
       let currentData = originalData[categoryName].map((value, i) => {
         return {
           x: moment()
@@ -55,7 +55,7 @@ export default class DemandChart {
         label: categoryName,
         backgroundColor: chartColors[index],
         borderColor: chartColors[index],
-        borderWidth: demandConstants.CHART_LINE_THICKNESS,
+        borderWidth: this.config.CHART_LINE_THICKNESS,
         fill: false,
         lineTension: 0.1,
         data: currentData,
@@ -144,9 +144,9 @@ export default class DemandChart {
               type: 'realtime',
               display: false,
               realtime: {
-                duration: demandConstants.CHART_DURATION,
-                refresh: demandConstants.CHART_REFRESH_DURATION,
-                delay: demandConstants.CHART_DELAY,
+                duration: this.config.CHART_VISIBLE_MINS * 60 * 1000,
+                refresh: this.config.CHART_REFRESH_DURATION,
+                delay: this.config.CHART_DELAY,
                 onRefresh: this.onRefresh.bind(this)
               }
             }

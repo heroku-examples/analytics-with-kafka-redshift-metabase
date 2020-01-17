@@ -1,0 +1,19 @@
+{
+	"CATEGORY_LIST": [
+    "Lawn  Garden", 
+    "Electronics", 
+    "Apparel", 
+    "Home Furnishing", 
+    "Housewares", 
+    "Toys", 
+    "Books"
+  ],
+	"ORDER_INTERVAL": 20000,
+	"ORDER_QUANTITY": 50,
+	"ORDER_QUANTITY_RANDOMNESS": 30,
+	"FULFILLMENT_ORDER_MULTIPLY": 2,
+	"FULFILLMENT_ORDER_RATIO": 5,
+	"FULFILLMENT_ORDER_TYPE": "Fulfillment Order",
+	"PURCHASE_ORDER_TYPE": "Purchase Order",
+	"REDIS_CHANNEL": "generate_orders2"
+}

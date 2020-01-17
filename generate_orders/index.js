@@ -5,16 +5,14 @@ const knex = require('knex')({
   client: 'pg',
   connection: `${process.env.DATABASE_URL}?ssl=true`
 })
-
+const config = require('config')
 const redisSub = new Redis(process.env.REDIS_URL, { connectTimeout: 10000 })
 const redisPub = new Redis(process.env.REDIS_URL, { connectTimeout: 10000 })
-const REDIS_CHANNEL = 'generate_orders2'
-const CATEGORY_LIST = process.env.HEROKU_CONNECT_CATEGORY_LIST.split(',')
 
 let deletePromise = Promise.resolve()
 
 const initEvents = () => {
-  redisSub.subscribe(REDIS_CHANNEL, () => {
+  redisSub.subscribe(config.REDIS_CHANNEL, () => {
     console.log('Subscribing to redis')
   })
 
@@ -46,7 +44,7 @@ const initEvents = () => {
 const stratStatusPubInterval = () => {
   setInterval(() => {
     redisPub.publish(
-      REDIS_CHANNEL,
+      config.REDIS_CHANNEL,
       JSON.stringify({ type: 'status', value: runner.getStatus() })
     )
   }, 3000)
@@ -55,8 +53,7 @@ const stratStatusPubInterval = () => {
 const init = () => {
   initEvents()
   runner.init({
-    _knex: knex,
-    _CATEGORY_LIST: CATEGORY_LIST
+    _knex: knex
   })
   logger.info('all ready')
   stratStatusPubInterval()

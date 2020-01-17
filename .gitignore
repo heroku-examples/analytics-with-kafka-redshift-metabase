@@ -58,6 +58,9 @@ typings/
 # dotenv environment variables file
 .env
 
+# local config file
+local.json
+
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 
@@ -82,3 +85,4 @@ client.key
 .DS_Store
 viz/sql/fixture.csv
 viz/dist
+

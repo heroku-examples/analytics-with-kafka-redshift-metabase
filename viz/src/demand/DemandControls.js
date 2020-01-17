@@ -15,16 +15,18 @@ export default class DemandControls {
     if (this.isDisabled) {
       return
     }
+    let chartData
     this.isAllReady = this.getCurrentChartData()
-      .then((res) => {
-        return this.initCategories().then(() => {
-          return res
-        })
+      .then((_chartData) => {
+        chartData = _chartData
+        return axios.get('/demand/chart-config')
       })
-      .then((res) => {
+      .then((chartConfig) => {
+        this.categories = chartConfig.data.CATEGORY_LIST
+        console.log(this.categories)
         this.chart = new DemandChart({
-          originalData: res.data,
-          categories: this.categories
+          originalData: chartData.data,
+          config: chartConfig.data
         })
         this.renderCategories()
         this.renderXticks()

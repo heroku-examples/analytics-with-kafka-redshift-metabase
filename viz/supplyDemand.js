@@ -1,5 +1,6 @@
 const _ = require('lodash')
 const moment = require('moment')
+const config = require('config')
 const knex = require('knex')({ client: 'pg' })
 const Redis = require('ioredis')
 const CHART_VISIBLE_PAST_MINUTES_DEFAULT = 5
@@ -76,14 +77,6 @@ const createOrder = (db, orderData) => {
 const initRoutes = (app, NODB, db) => {
   app.get('/demand/categories', (req, res) => {
     res.json(CATEGORY_LIST)
-    // let query = knex
-    //   .select('category')
-    //   .from('orders')
-    //   .groupBy('category')
-    //   .toString()
-    // db.any(query).then((categories) => {
-    //   res.json(_.map(categories, (c) => c.category))
-    // })
   })
 
   /*
@@ -172,6 +165,10 @@ const initRoutes = (app, NODB, db) => {
 
   app.get('/demand/worker-status', (req, res) => {
     res.json(workerStatus)
+  })
+
+  app.get('/demand/chart-config', (req, res) => {
+    res.json(config.get('supplyDemand') || {})
   })
 }
 
