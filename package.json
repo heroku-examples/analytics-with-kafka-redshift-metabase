@@ -5,11 +5,11 @@
     "winston": "^3.2.1"
   },
   "devDependencies": {
-    "eslint": "^6.4.0",
-    "eslint-config-prettier": "^6.3.0",
-    "eslint-plugin-prettier": "^3.1.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.9.0",
+    "eslint-plugin-prettier": "^3.1.2",
     "git-validate": "^2.2.4",
-    "prettier": "^1.18.2"
+    "prettier": "^1.19.1"
   },
   "engines": {
     "node": "~10.13.0",
