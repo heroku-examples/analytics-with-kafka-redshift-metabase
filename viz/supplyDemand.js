@@ -16,31 +16,32 @@ const redisSub = new Redis(process.env.REDIS_URL)
 let workerStatus = {}
 
 const getDataByType = (type, db, timeCondition) => {
-
   let query = knex('orders')
     .select('category', knex.raw('sum(amount) as total'))
     .where('type', type)
     .where('approved', true)
-    .where('createdat', timeCondition[0], knex.raw(`now() - interval '${timeCondition[1]}'`))
+    .where(
+      'createdat',
+      timeCondition[0],
+      knex.raw(`now() - interval '${timeCondition[1]}'`)
+    )
     .groupBy('category')
     .toQuery()
 
   return db.any(query)
 }
 
-
 const getData = (db, timeCondition = ['>', DATA_PERIOD]) => {
-
   let fulfillmentData = null
 
   return getDataByType(FULFILLMENT_ORDER_TYPE, db, timeCondition)
     .then((data) => {
       fulfillmentData = data
       return getDataByType(PURCHASE_ORDER_TYPE, db, timeCondition)
-    }).then((purchaseData) => {
-    
+    })
+    .then((purchaseData) => {
       let data = {}
-      _.forEach(CATEGORY_LIST, (cat) => data[cat] = 0)
+      _.forEach(CATEGORY_LIST, (cat) => (data[cat] = 0))
 
       _.forEach(fulfillmentData, (order) => {
         data[order.category] += parseInt(order.total)
@@ -54,9 +55,7 @@ const getData = (db, timeCondition = ['>', DATA_PERIOD]) => {
     })
 }
 
-
 const createOrder = (db, orderData) => {
-
   const category = _.keys(orderData)[0]
   let order = {
     category,
@@ -73,7 +72,6 @@ const createOrder = (db, orderData) => {
 
   return db.any(query)
 }
-
 
 const initRoutes = (app, NODB, db) => {
   app.get('/demand/categories', (req, res) => {
@@ -105,7 +103,7 @@ const initRoutes = (app, NODB, db) => {
     let i = 0
     let promises = []
     while (i <= period) {
-      promises.push(getData(db, ['<',period - i + ' minutes']))
+      promises.push(getData(db, ['<', period - i + ' minutes']))
       i++
     }
 
