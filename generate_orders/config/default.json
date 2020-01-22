@@ -1,11 +1,11 @@
 {
 	"CATEGORY_LIST": [
-    "Lawn  Garden", 
-    "Electronics", 
-    "Apparel", 
-    "Home Furnishing", 
-    "Housewares", 
-    "Toys", 
+    "Lawn & Garden",
+    "Electronics",
+    "Apparel",
+    "Home Furnishing",
+    "Housewares",
+    "Toys",
     "Books"
   ],
 	"ORDER_INTERVAL": 20000,

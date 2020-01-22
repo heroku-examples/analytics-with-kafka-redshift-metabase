@@ -1,5 +1,7 @@
 {
   "supplyDemand": {
+    "FULFILLMENT_ORDER_TYPE": "Fulfillment Order",
+    "PURCHASE_ORDER_TYPE": "Purchase Order",
     "CATEGORY_LIST": [
       "Lawn & Garden",
       "Electronics",

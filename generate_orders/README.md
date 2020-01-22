@@ -5,13 +5,8 @@ This worker creates both fulfillment and purchase orders periodically.
 
 ## How often and how many
 
-It produces 500 orders total every 2 minutes and it creates more puchase orders than fulfillment orders overtime.
+It produces about 150 orders total every minute and it creates more puchase orders than fulfillment orders overtime.
 Sometimes it creates more fulfillment orders in one period.
-
-### Why 2 minutes?
-
-Heroku connects synces every 2 minutes with the enterprise plan.
-It's 10 minutes for the normal plan.
 
 ## Development Setup
 
@@ -31,11 +26,6 @@ npm install
 
 You can find the most of these variables on Salesforce
 
-- `HEROKU_CONNECT_ACCOUNT_ID`: The accout id that's associated with the contract
-- `HEROKU_CONNECT_FULFILLMENT_TYPE_ID`: The id of fulfillment order type
-- `HEROKU_CONNECT_PURCHASE_TYPE_ID`: The id of purchase order type
-- `HEROKU_CONNECT_PRICEBOOK_ID`: Pricebook id that's connected with all products
-- `HEROKU_CONNECT_CONTRACT_ID`: Contract Id that's associated with the account
 - `REDIS_URL`: Redis' endpoint url with credentials. [https://devcenter.heroku.com/articles/heroku-redis#redis-credentials](https://devcenter.heroku.com/articles/heroku-redis#redis-credentials)
 
 ### Development Server

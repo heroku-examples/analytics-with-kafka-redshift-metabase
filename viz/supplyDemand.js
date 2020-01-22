@@ -61,8 +61,8 @@ const createOrder = (db, orderData) => {
   let order = {
     category,
     amount: orderData[category],
-    approved: true,
-    type: 'Fulfillment Order',
+    approved: false,
+    type: config.supplyDemand.FULFILLMENT_ORDER_TYPE,
     createdat: moment().toISOString()
   }
 
