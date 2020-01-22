@@ -3,12 +3,12 @@ const moment = require('moment')
 const config = require('config')
 const knex = require('knex')({ client: 'pg' })
 const Redis = require('ioredis')
-const CHART_VISIBLE_PAST_MINUTES_DEFAULT = 5
-const CHART_VISIBLE_PAST_MINUTES_MAX = 30
-const DATA_PERIOD = '1 week'
-const FULFILLMENT_ORDER_TYPE = 'Fulfillment Order'
-const PURCHASE_ORDER_TYPE = 'Purchase Order'
-const REDIS_CHANNEL = 'generate_orders2'
+const CHART_VISIBLE_PAST_MINUTES_DEFAULT = config.supplyDemand.chart.CHART_VISIBLE_MINS
+const CHART_VISIBLE_PAST_MINUTES_MAX = config.supplyDemand.CHART_VISIBLE_PAST_MINUTES_MAX
+const DEFAULT_DATA_PERIOD = config.supplyDemand.DEFAULT_DATA_PERIOD
+const FULFILLMENT_ORDER_TYPE = config.supplyDemand.FULFILLMENT_ORDER_TYPE
+const PURCHASE_ORDER_TYPE = config.supplyDemand.PURCHASE_ORDER_TYPE
+const REDIS_CHANNEL = config.supplyDemand.REDIS_CHANNEL
 const CATEGORY_LIST = config.supplyDemand.CATEGORY_LIST
 const UPDATE_INTERVAL = 10000
 const redisPub = new Redis(process.env.REDIS_URL)
@@ -32,7 +32,7 @@ const getDataByType = (type, db, timeCondition) => {
   return db.any(query)
 }
 
-const getData = (db, timeCondition = ['>', DATA_PERIOD]) => {
+const getData = (db, timeCondition = ['>', DEFAULT_DATA_PERIOD]) => {
   let fulfillmentData = null
 
   return getDataByType(FULFILLMENT_ORDER_TYPE, db, timeCondition)
@@ -80,7 +80,7 @@ const initRoutes = (app, NODB, db) => {
   })
 
   /*
-    This route returns a list of snapshop of demand in past 5 mins
+    This route returns a list of snapshots of the past period of demands vs supplies
   */
   app.get('/demand/data', (req, res) => {
     if (NODB) {

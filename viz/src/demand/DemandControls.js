@@ -2,7 +2,6 @@ import _ from 'lodash'
 import axios from 'axios'
 import DemandChart from './DemandChart'
 import DemandFulfillmentForm from './DemandFulfillmentForm'
-import demandConstants from './demandConstants'
 
 export default class DemandControls {
   constructor(options) {
@@ -15,18 +14,17 @@ export default class DemandControls {
     if (this.isDisabled) {
       return
     }
-    let chartData
-    this.isAllReady = this.getCurrentChartData()
-      .then((_chartData) => {
-        chartData = _chartData
-        return axios.get('/demand/chart-config')
-      })
+
+    this.isAllReady = axios.get('/demand/chart-config')
       .then((chartConfig) => {
+        this.config = chartConfig.data
         this.categories = chartConfig.data.CATEGORY_LIST
-        console.log(this.categories)
+        return this.getCurrentChartData()
+      })
+      .then((chartData) => {
         this.chart = new DemandChart({
           originalData: chartData.data,
-          config: chartConfig.data
+          config: this.config
         })
         this.renderCategories()
         this.renderXticks()
@@ -35,6 +33,7 @@ export default class DemandControls {
           categories: this.categories
         })
       })
+
   }
 
   init(ws) {
@@ -64,7 +63,7 @@ export default class DemandControls {
 
   renderXticks() {
     let tickLabels = _.reverse(
-      _.times(demandConstants.CHART_VISIBLE_MINS + 1, (x) => {
+      _.times(this.config.chart.CHART_VISIBLE_MINS + 1, (x) => {
         return x === 0 ? 'Now' : x + 'mins'
       })
     )
@@ -97,7 +96,7 @@ export default class DemandControls {
 
     let html = template({
       categories: this.categories,
-      colorList: demandConstants.COLOR_LIST
+      colorList: this.config.chart.COLOR_LIST
     })
     document.querySelectorAll('.demand-category-container')[0].innerHTML = html
   }
@@ -105,7 +104,7 @@ export default class DemandControls {
   getCurrentChartData() {
     return axios.get('/demand/data', {
       params: {
-        period: demandConstants.CHART_VISIBLE_MINS
+        period: this.config.chart.CHART_VISIBLE_MINS
       }
     })
   }

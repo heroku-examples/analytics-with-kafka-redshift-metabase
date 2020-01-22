@@ -2,6 +2,9 @@
   "supplyDemand": {
     "FULFILLMENT_ORDER_TYPE": "Fulfillment Order",
     "PURCHASE_ORDER_TYPE": "Purchase Order",
+    "CHART_VISIBLE_PAST_MINUTES_MAX": 30,
+    "DEFAULT_DATA_PERIOD": "1 week",
+    "REDIS_CHANNEL": "generate_orders2",
     "CATEGORY_LIST": [
       "Lawn & Garden",
       "Electronics",
@@ -11,7 +14,7 @@
       "Toys","Books"
     ],
     "chart": {
-      "CHART_VISIBLE_MINS": 3,
+      "CHART_VISIBLE_MINS": 2,
       "COLOR_LIST": [
         "rgba(255, 99, 132, 0.9)",
         "rgba(255, 159, 64, 0.9)",
