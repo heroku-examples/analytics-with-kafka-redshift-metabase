@@ -3,8 +3,10 @@ const moment = require('moment')
 const config = require('config')
 const knex = require('knex')({ client: 'pg' })
 const Redis = require('ioredis')
-const CHART_VISIBLE_PAST_MINUTES_DEFAULT = config.supplyDemand.chart.CHART_VISIBLE_MINS
-const CHART_VISIBLE_PAST_MINUTES_MAX = config.supplyDemand.CHART_VISIBLE_PAST_MINUTES_MAX
+const CHART_VISIBLE_PAST_MINUTES_DEFAULT =
+  config.supplyDemand.chart.CHART_VISIBLE_MINS
+const CHART_VISIBLE_PAST_MINUTES_MAX =
+  config.supplyDemand.CHART_VISIBLE_PAST_MINUTES_MAX
 const DEFAULT_DATA_PERIOD = config.supplyDemand.DEFAULT_DATA_PERIOD
 const FULFILLMENT_ORDER_TYPE = config.supplyDemand.FULFILLMENT_ORDER_TYPE
 const PURCHASE_ORDER_TYPE = config.supplyDemand.PURCHASE_ORDER_TYPE

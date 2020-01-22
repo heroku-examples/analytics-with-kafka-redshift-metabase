@@ -15,7 +15,8 @@ export default class DemandControls {
       return
     }
 
-    this.isAllReady = axios.get('/demand/chart-config')
+    this.isAllReady = axios
+      .get('/demand/chart-config')
       .then((chartConfig) => {
         this.config = chartConfig.data
         this.categories = chartConfig.data.CATEGORY_LIST
@@ -33,7 +34,6 @@ export default class DemandControls {
           categories: this.categories
         })
       })
-
   }
 
   init(ws) {
