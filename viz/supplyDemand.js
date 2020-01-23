@@ -13,34 +13,6 @@ const REDIS_CHANNEL = config.REDIS_CHANNEL
 const CATEGORY_LIST = config.CATEGORY_LIST
 const UPDATE_INTERVAL = config.UPDATE_INTERVAL
 
-/*
-- CHART_VISIBLE_MINS -
-This variable defines the visible period of the chart.
-If it's set to 2, then the chart shows the past 2 mins.
-
-- MAX_SNAPSHOTS_PAST_MINUTES -
-This variable defines how far back the user can request the list of snapshots of each miniutes.
-
-- DEFAULT_DATA_PERIOD -
-When this service pull the data from the database, it looks up the data in this period.
-If it's set to 1 week then the data is calculated from a week ago to now.
-
-- FULFILLMENT_ORDER_TYPE - 
-The name of the fulfilment order type
-
-- PURCHASE_ORDER_TYPE -
-The name of the purchase order type
-
-- REDIS_CHANNEL -
-The name of the redis channel
-
-- CATEGORY_LIST -
-The list of the category to use
-
-- UPDATE_INTERVAL - 
-This variable defines how often this service pulls the new data from the database
-*/
-
 const redisPub = new Redis(process.env.REDIS_URL)
 const redisSub = new Redis(process.env.REDIS_URL)
 

@@ -201,3 +201,6 @@ For example, if it's set to 15000, chart is always showing the data from 15 seco
 
 - CHART_LINE_THICKNESS
 This defines the thickness of each lines in the chart
+
+### generate_orders/config
+It's explained [here](./generate_orders/README.md).
