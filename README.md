@@ -143,7 +143,6 @@ This app is automatically deployed together with the main project.
 These variables need to be set to run the app.
 Most of them are from Salesforce.
 
-- `HEROKU_CONNECT_FULFILLMENT_TYPE_ID`: The id of fulfillment order type
 - `REDIS_URL`: Redis' endpoint url with credentials. [https://devcenter.heroku.com/articles/heroku-redis#redis-credentials](https://devcenter.heroku.com/articles/heroku-redis#redis-credentials)
 
 ### New Routes
@@ -153,3 +152,52 @@ You can access these locally and from the Heroku app.
 - `/connect` This route shows the chart
 - `/ordercontrol`  please check the detail from [here](./generate_orders/README.md).
 
+
+### Heroku Connect Demo Configuration
+There are two config folders for the heroku connect demo.
+It's using https://github.com/lorenwest/node-config
+
+#### vis/config
+This config is for the visual part of the chart
+
+- MAX_SNAPSHOTS_PAST_MINUTES
+This variable defines how far back the user can request the list of snapshots of each miniutes.
+
+- DEFAULT_DATA_PERIOD
+When this service pull the data from the database, it looks up the data in this period.
+If it's set to 1 week then the data is calculated from a week ago to now.
+
+- FULFILLMENT_ORDER_TYPE
+The name of the fulfilment order type
+
+- PURCHASE_ORDER_TYPE
+The name of the purchase order type
+
+- REDIS_CHANNEL
+The name of the redis channel
+
+- CATEGORY_LIST
+The list of the category to use
+
+- UPDATE_INTERVAL
+This variable defines how often this service pulls the new data from the database
+
+##### chrat.js Config
+Configuration for the chrat.js
+
+- CHART_VISIBLE_MINS
+This variable defines the visible period of the chart.
+If it's set to 2, then the chart shows the past 2 mins.
+
+- CHART_COLOR_LIST
+This list defines the color of each lines in the chart.
+
+- CHART_REFRESH_DURATION
+This defines the how often the chart updates with the new data
+
+- CHART_DELAY
+This defines the offset period before the new data gets revealed.
+For example, if it's set to 15000, chart is always showing the data from 15 seconds ago
+
+- CHART_LINE_THICKNESS
+This defines the thickness of each lines in the chart

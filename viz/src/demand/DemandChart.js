@@ -8,7 +8,6 @@ Chart.plugins.unregister(ChartDataLabels)
 
 export default class DemandChart {
   constructor(options) {
-    console.log(options)
     this.config = options.config.chart
     this.categories = options.config.CATEGORY_LIST
     this.prevValue = {}
@@ -32,7 +31,7 @@ export default class DemandChart {
 
   generateDatasets(originalData) {
     console.log('original data', originalData)
-    let chartColors = this.config.COLOR_LIST
+    let chartColors = this.config.CHART_COLOR_LIST
     return this.categories.map((categoryName, index) => {
       originalData[categoryName] =
         originalData[categoryName] ||

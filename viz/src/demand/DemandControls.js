@@ -96,7 +96,7 @@ export default class DemandControls {
 
     let html = template({
       categories: this.categories,
-      colorList: this.config.chart.COLOR_LIST
+      colorList: this.config.chart.CHART_COLOR_LIST
     })
     document.querySelectorAll('.demand-category-container')[0].innerHTML = html
   }

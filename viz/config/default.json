@@ -1,21 +1,8 @@
 {
   "supplyDemand": {
-    "FULFILLMENT_ORDER_TYPE": "Fulfillment Order",
-    "PURCHASE_ORDER_TYPE": "Purchase Order",
-    "CHART_VISIBLE_PAST_MINUTES_MAX": 30,
-    "DEFAULT_DATA_PERIOD": "1 week",
-    "REDIS_CHANNEL": "generate_orders2",
-    "CATEGORY_LIST": [
-      "Lawn & Garden",
-      "Electronics",
-      "Apparel",
-      "Home Furnishing",
-      "Housewares",
-      "Toys","Books"
-    ],
     "chart": {
       "CHART_VISIBLE_MINS": 2,
-      "COLOR_LIST": [
+      "CHART_COLOR_LIST": [
         "rgba(255, 99, 132, 0.9)",
         "rgba(255, 159, 64, 0.9)",
         "rgba(255, 205, 86, 0.9)",
@@ -27,6 +14,20 @@
       "CHART_REFRESH_DURATION": 15000,
       "CHART_DELAY": 15000,
       "CHART_LINE_THICKNESS": 6
-    }
+    },
+    "CATEGORY_LIST": [
+      "Lawn & Garden",
+      "Electronics",
+      "Apparel",
+      "Home Furnishing",
+      "Housewares",
+      "Toys","Books"
+    ],
+    "FULFILLMENT_ORDER_TYPE": "Fulfillment Order",
+    "PURCHASE_ORDER_TYPE": "Purchase Order",
+    "MAX_SNAPSHOTS_PAST_MINUTES": 30,
+    "DEFAULT_DATA_PERIOD": "1 week",
+    "REDIS_CHANNEL": "generate_orders2",
+    "UPDATE_INTERVAL": 10000
   }
 }

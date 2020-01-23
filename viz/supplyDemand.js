@@ -1,18 +1,46 @@
 const _ = require('lodash')
 const moment = require('moment')
-const config = require('config')
+const config = require('config').supplyDemand
 const knex = require('knex')({ client: 'pg' })
 const Redis = require('ioredis')
-const CHART_VISIBLE_PAST_MINUTES_DEFAULT =
-  config.supplyDemand.chart.CHART_VISIBLE_MINS
-const CHART_VISIBLE_PAST_MINUTES_MAX =
-  config.supplyDemand.CHART_VISIBLE_PAST_MINUTES_MAX
-const DEFAULT_DATA_PERIOD = config.supplyDemand.DEFAULT_DATA_PERIOD
-const FULFILLMENT_ORDER_TYPE = config.supplyDemand.FULFILLMENT_ORDER_TYPE
-const PURCHASE_ORDER_TYPE = config.supplyDemand.PURCHASE_ORDER_TYPE
-const REDIS_CHANNEL = config.supplyDemand.REDIS_CHANNEL
-const CATEGORY_LIST = config.supplyDemand.CATEGORY_LIST
-const UPDATE_INTERVAL = 10000
+
+const CHART_VISIBLE_MINS = config.chart.CHART_VISIBLE_MINS
+const MAX_SNAPSHOTS_PAST_MINUTES = config.MAX_SNAPSHOTS_PAST_MINUTES
+const DEFAULT_DATA_PERIOD = config.DEFAULT_DATA_PERIOD
+const FULFILLMENT_ORDER_TYPE = config.FULFILLMENT_ORDER_TYPE
+const PURCHASE_ORDER_TYPE = config.PURCHASE_ORDER_TYPE
+const REDIS_CHANNEL = config.REDIS_CHANNEL
+const CATEGORY_LIST = config.CATEGORY_LIST
+const UPDATE_INTERVAL = config.UPDATE_INTERVAL
+
+/*
+- CHART_VISIBLE_MINS -
+This variable defines the visible period of the chart.
+If it's set to 2, then the chart shows the past 2 mins.
+
+- MAX_SNAPSHOTS_PAST_MINUTES -
+This variable defines how far back the user can request the list of snapshots of each miniutes.
+
+- DEFAULT_DATA_PERIOD -
+When this service pull the data from the database, it looks up the data in this period.
+If it's set to 1 week then the data is calculated from a week ago to now.
+
+- FULFILLMENT_ORDER_TYPE - 
+The name of the fulfilment order type
+
+- PURCHASE_ORDER_TYPE -
+The name of the purchase order type
+
+- REDIS_CHANNEL -
+The name of the redis channel
+
+- CATEGORY_LIST -
+The list of the category to use
+
+- UPDATE_INTERVAL - 
+This variable defines how often this service pulls the new data from the database
+*/
+
 const redisPub = new Redis(process.env.REDIS_URL)
 const redisSub = new Redis(process.env.REDIS_URL)
 
@@ -64,7 +92,7 @@ const createOrder = (db, orderData) => {
     category,
     amount: orderData[category],
     approved: false,
-    type: config.supplyDemand.FULFILLMENT_ORDER_TYPE,
+    type: FULFILLMENT_ORDER_TYPE,
     createdat: moment().toISOString()
   }
 
@@ -91,9 +119,9 @@ const initRoutes = (app, NODB, db) => {
     let period = parseInt(req.query.period)
 
     if (!period || !_.isNumber(period) || period < 0) {
-      period = CHART_VISIBLE_PAST_MINUTES_DEFAULT
-    } else if (period > CHART_VISIBLE_PAST_MINUTES_MAX) {
-      period = CHART_VISIBLE_PAST_MINUTES_MAX
+      period = CHART_VISIBLE_MINS
+    } else if (period > MAX_SNAPSHOTS_PAST_MINUTES) {
+      period = MAX_SNAPSHOTS_PAST_MINUTES
     }
     let i = 0
     let promises = []
@@ -170,7 +198,7 @@ const initRoutes = (app, NODB, db) => {
   })
 
   app.get('/demand/chart-config', (req, res) => {
-    res.json(config.get('supplyDemand') || {})
+    res.json(config || {})
   })
 }
 
