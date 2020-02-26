@@ -1,6 +1,5 @@
 import * as d3 from 'd3'
 import _ from 'lodash'
-import abbrev from 'number-abbreviate'
 import SizedArray from './sizedArray'
 
 export default class QueueChart {
@@ -213,12 +212,12 @@ export default class QueueChart {
 
     const count = data[data.length - this.leadingDataPoints][this.yVariable]
 
-    this.queueCount.textContent = abbrev(count)
+    this.queueCount.textContent = `${count.toFixed(3)}s`
 
     let countIndicator = ''
-    if (countIndicator <= 100) {
+    if (countIndicator <= 1) {
       countIndicator = 'low'
-    } else if (countIndicator <= 500) {
+    } else if (countIndicator <= 5) {
       countIndicator = 'medium'
     } else {
       countIndicator = 'high'

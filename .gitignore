@@ -81,3 +81,4 @@ client.crt
 client.key
 .DS_Store
 viz/sql/fixture.csv
+viz/dist
