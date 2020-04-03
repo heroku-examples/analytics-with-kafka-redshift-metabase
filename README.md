@@ -100,7 +100,33 @@ Open the URL in the startup output of the `viz` app. It will likely be `http://l
 
 This is an example project of showing how Salesforce and Heroku Postgres can be synced using [Heroku Connect](https://www.heroku.com/connect).
 
-Please setup your Salesforce and Heroku Connect following [this documentation](./HerokuConnect.md).
+## Prerequisites
+
+1. Create a Salesforce DevHub Account - https://developer.salesforce.com
+2. Add a `Heroku Connect` addon to the application
+3. Connect the `Heroku Connect` addon to your Salesforce DevHub organization and to the PostgreSQL Database
+4. Go to `External Objects` tab and enable external objects, select `orders` and copy the URL, Username, and password from the credentials section
+
+## Deploy Salesforce Application
+
+1. Deploy the `Supply Demand` app to Salesforce by running
+
+```
+cd sfdx/order-fulfillment
+sfdx force:auth:web:login -a DevHub # This will open a browser for you to login to Salesforce
+sfdx force:source:push
+sfdx force:org:open
+```
+
+2. Configure `Heroku Connect` External Data Source
+
+- On Salesforce go to `Setup > Integrations > External Data Sources` click on `edit` on the `Heroku Connect` data source.
+- Replace the URL with the one from Step 4 on the prerequisites section.
+- Go to the `Authentication` section and select `Password Authentication` on the `Authentication Protocol` dropdown
+- Fill Username and Password from Step 4 on the prerequisites section.
+- Click on Save
+
+3. Go to the app menu and open `Supply Demand` and voila!
 
 ## Data Demo Structure
 
@@ -151,7 +177,6 @@ You can access these locally and from the Heroku app.
 
 - `/connect` This route shows the chart
 - `/ordercontrol`  please check the detail from [here](./generate_orders/README.md).
-
 
 ### Heroku Connect Demo Configuration
 There are two config folders for the heroku connect demo.

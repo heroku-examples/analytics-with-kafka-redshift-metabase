@@ -32,7 +32,8 @@
   },
   "eslintIgnore": [
     "dist/*",
-    "public/*"
+    "public/*",
+    "sfdx/*"
   ],
   "license": "ISC",
   "main": "index.js",
