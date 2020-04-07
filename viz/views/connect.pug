@@ -1,0 +1,26 @@
+extends layout
+
+block nav
+  ul.nav-items
+    li.nav-link.architecture-link
+      a(href="#")
+        img(src='/public/images/metrics-28.svg')
+    li.nav-link.has-dropdown
+      img(src='/public/images/layout-list-28.svg')
+      ul.dropdown.nav-learn
+        li: a(href='https://github.com/heroku-examples/analytics-with-kafka-redshift-metabase') Fork on GitHub
+     
+
+block architecture
+  include includes/architecture.pug
+
+block content
+
+  h1.title Orders by category
+  a.demand--fulfillment-button New Fulfillment
+
+  div.demand-chart
+    canvas#demand-chart
+    div.demand-chart--x-ticks
+            
+  div.demand-category-container

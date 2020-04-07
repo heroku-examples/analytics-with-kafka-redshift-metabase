@@ -1,8 +1,11 @@
+require('dotenv').config()
+
 const path = require('path')
 const server = require('http').createServer()
 const { spawn } = require('child_process')
 const WebSocketServer = require('ws').Server
 const express = require('express')
+const bodyParser = require('body-parser')
 const basicAuth = require('express-basic-auth')
 const webpack = require('webpack')
 const history = require('connect-history-api-fallback')
@@ -19,11 +22,12 @@ if (NODB) {
 if (NODB) {
   logger.info('KAFKA DISABLED')
 }
-
+const supplyDemandController = require('./supplyDemand')
 const webpackConfig = require('./webpack.config')
 const Consumer = require('./consumer')
 const Kafka = require('no-kafka')
 const app = express()
+app.use(bodyParser.json())
 const constants = require('./consumer/constants')
 let dataGeneratorProcess = null
 
@@ -128,6 +132,8 @@ app.get('/admin/kill', auth, (req, res) => {
   }
 })
 
+supplyDemandController.initRoutes(app, NODB, db)
+
 if (PRODUCTION) {
   app.use(express.static(path.join(__dirname, 'dist')))
   app.get('/:route', (req, res) => {
@@ -139,7 +145,7 @@ if (PRODUCTION) {
     history({
       rewrites: [
         {
-          from: /\/(audience|booth|presentation)/,
+          from: /\/(audience|booth|presentation|connect|ordercontrol)/,
           to: function(context) {
             return `${context.parsedUrl.pathname}.html`
           }
@@ -158,6 +164,8 @@ server.on('request', app)
  *
  */
 const wss = new WebSocketServer({ server })
+
+supplyDemandController.init(wss, db, NODB)
 
 /*
  * Configure Kafka consumer

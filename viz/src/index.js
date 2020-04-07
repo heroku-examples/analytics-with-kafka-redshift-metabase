@@ -6,13 +6,22 @@ import Nav from './lib/nav'
 import { MAX_SIZE, MAX_BUFFER_SIZE, INTERVAL } from '../consumer/constants'
 import AudienceControl from './lib/audienceControls'
 import BoothController from './lib/boothControls'
+import DemandControls from './demand/DemandControls'
 import ReconnectingWebSocket from 'reconnecting-websocket'
 
+let navConfig = {
+  legend: '.footer-legend ul',
+  architecture: '.architecture-link',
+  iframeUrl: '/public/kafka-diagram/kafka-diagram-v2.html'
+}
+
+if (document.querySelector('#demand-chart')) {
+  navConfig.iframeUrl = '/public/heroku-connect-diagram/heroku-connect.html'
+  navConfig.type = 'herokuConnect'
+}
+
 const aggregate = [
-  new Nav({
-    legend: '.footer-legend ul',
-    architecture: '.architecture-link'
-  }),
+  new Nav(navConfig),
   new Stream({
     selector: '.chart-stream .chart',
     transition: INTERVAL,
@@ -32,8 +41,14 @@ const QueueGraph = new Queue({
   maxSize: MAX_BUFFER_SIZE,
   maxDisplaySize: MAX_SIZE
 })
+
 const AudienceControls = new AudienceControl({})
 const BoothControls = new BoothController({ selector: '.big-button' })
+
+const demandControls = new DemandControls({
+  chartSelector: '#demand-chart',
+  formOpenSelector: '.demand--fulfillment-button'
+})
 
 const url = `ws${window.location.href.match(/^http(s?:\/\/.*)\/.*$/)[1]}`
 const ws = new ReconnectingWebSocket(url, null, {
@@ -47,6 +62,7 @@ aggregate.forEach((a) => a.init())
 AudienceControls.init(ws)
 BoothControls.init(ws)
 QueueGraph.init()
+demandControls.init(ws)
 
 ws.onmessage = (e) => {
   const msg = JSON.parse(e.data)

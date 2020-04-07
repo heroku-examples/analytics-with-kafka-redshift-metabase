@@ -5,11 +5,11 @@
     "winston": "^3.2.1"
   },
   "devDependencies": {
-    "eslint": "^6.4.0",
-    "eslint-config-prettier": "^6.3.0",
-    "eslint-plugin-prettier": "^3.1.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.9.0",
+    "eslint-plugin-prettier": "^3.1.2",
     "git-validate": "^2.2.4",
-    "prettier": "^1.18.2"
+    "prettier": "^1.19.1"
   },
   "engines": {
     "node": "~10.13.0",
@@ -32,7 +32,8 @@
   },
   "eslintIgnore": [
     "dist/*",
-    "public/*"
+    "public/*",
+    "sfdx/*"
   ],
   "license": "ISC",
   "main": "index.js",
@@ -48,15 +49,16 @@
     "build": "cd viz && npm run build",
     "eslint": "eslint -c .eslintrc.json --no-eslintrc --fix .",
     "get-fixture": "bin/getfixture",
-    "install": "npm run install-redshift && npm run install-generate && npm run install-viz && npm run install-mq && npm run install-mq-worker && npm run get-fixture",
+    "install": "npm run install-redshift && npm run install-generate && npm run install-viz && npm run install-mq && npm run install-mq-worker && npm run install-orders && npm run get-fixture",
     "install-generate": "cd generate_data && npm install",
     "install-mq": "cd mq_broker && npm install",
     "install-mq-worker": "cd mq_worker && npm install",
     "install-redshift": "cd redshift_batch && npm install",
     "install-viz": "cd viz && npm install --dev",
+    "install-orders": "cd generate_orders && npm install",
     "lint": "npm run eslint && npm run prettier:list",
-    "prettier": "prettier --write '**/*.{js,md,css,json}'",
-    "prettier:list": "prettier --list-different '**/*.{js,md,css,json}'",
+    "prettier": "prettier --write '**/*.{js,css,json}'",
+    "prettier:list": "prettier --list-different '**/*.{js,css,json}'",
     "test": "echo \"Error: no test specified\" && exit 1"
   }
 }

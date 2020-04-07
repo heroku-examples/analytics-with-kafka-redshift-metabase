@@ -1,5 +1,7 @@
 # Example Product/User Analytics System Using Apache Kafka, AWS Redshift, and Metabase
 
+**This app also includes** [Heroku Connect Data Demo](#heroku-connect-data-demo)
+
 This is an example of a system that captures a large stream of product usage data, or events, and provides both real-time data visualization and SQL-based data analytics. The stream of events is captured by [Apache Kafka](https://kafka.apache.org/) and made available to other downstream consumers. In this example, there are two downstream consumers of the data. The data flowing through Kafka can be viewed in near real-time using a web-based data visualization app. The other consumer stores all the data in [AWS Redshift](https://aws.amazon.com/redshift/), a relational database that Amazon describes as "a fast, scalable data warehouse." Then we can query and visualize the data in Redshift from a SQL-compliant analytics tool. This example uses [Metabase deployed to Heroku](https://elements.heroku.com/buttons/metabase/metabase-deploy). [Metabase](https://www.metabase.com/) is an open-source analytics tool used by many organizations, large and small.
 
 **This entire system can be deployed in 15 minutes -- most of that time spent waiting for Heroku and AWS to provision services -- and it requires very little ongoing operational maintenance.**
@@ -91,3 +93,139 @@ The following environment variables must be defined. If you used the Heroku depl
 Then in each of the `generate_data`, `viz`, and `redshift_batch` directories, run `npm start`.
 
 Open the URL in the startup output of the `viz` app. It will likely be `http://localhost:3000`.
+
+## Heroku Connect Data Demo
+
+**This is an addition to the project above and not required to run**
+
+This is an example project of showing how Salesforce and Heroku Postgres can be synced using [Heroku Connect](https://www.heroku.com/connect).
+
+## Prerequisites
+
+1. Create a Salesforce DevHub Account - https://developer.salesforce.com
+2. Add a `Heroku Connect` addon to the application
+3. Connect the `Heroku Connect` addon to your Salesforce DevHub organization and to the PostgreSQL Database
+4. Go to `External Objects` tab and enable external objects, select `orders` and copy the URL, Username, and password from the credentials section
+
+## Deploy Salesforce Application
+
+1. Deploy the `Supply Demand` app to Salesforce by running
+
+```
+cd sfdx/order-fulfillment
+sfdx force:auth:web:login -a DevHub # This will open a browser for you to login to Salesforce
+sfdx force:source:push
+sfdx force:org:open
+```
+
+2. Configure `Heroku Connect` External Data Source
+
+- On Salesforce go to `Setup > Integrations > External Data Sources` click on `edit` on the `Heroku Connect` data source.
+- Replace the URL with the one from Step 4 on the prerequisites section.
+- Go to the `Authentication` section and select `Password Authentication` on the `Authentication Protocol` dropdown
+- Fill Username and Password from Step 4 on the prerequisites section.
+- Click on Save
+
+3. Go to the app menu and open `Supply Demand` and voila!
+
+## Data Demo Structure
+
+This project uses `viz` for the web interface to show the chart that represents supply and demand using `fulfillment order` and `purchase order` of products in specific categories in Salesforce.
+This project also uses a `generate_orders` which is a worker automatically creating orders periodically.
+
+`generate_orders` creates orders and the `viz` shows the demand chart.
+
+This project add new routes `/connect` and `/ordercontrol` to the viz app.
+`/connect` show the demand chart and `/ordercontrol` gives you UI to control the `generate_orders`.
+
+The detail of `generate_orders` can be found [here](./generate_orders/README.md).
+
+## Deploy Data Demo
+
+### Data Demo Prerequisites
+
+This project is an addition to the existing project above so make sure you have everything running first.
+Following items are needed:
+- Salesforce account
+- Postgres add-on
+- Redis add-on
+- Heroku Connect
+
+You can install Posgres and Redis add-ons by runnning these:
+```
+heroku addons:create heroku-postgresql:<PLAN_NAME>
+heroku addons:create heroku-redis:<PLAN_NAME>
+```
+
+Conneting your Heroku Postgres and Salesforce, please check [this instruction](https://devcenter.heroku.com/articles/getting-started-with-heroku-and-connect-without-local-dev).
+
+### Deploy Data Demo to Heroku
+
+This app is automatically deployed together with the main project.
+**However, it requires additional environment variables and those add-ons above.**
+
+### Environment Variables
+
+These variables need to be set to run the app.
+Most of them are from Salesforce.
+
+- `REDIS_URL`: Redis' endpoint url with credentials. [https://devcenter.heroku.com/articles/heroku-redis#redis-credentials](https://devcenter.heroku.com/articles/heroku-redis#redis-credentials)
+
+### New Routes
+
+You can access these locally and from the Heroku app.
+
+- `/connect` This route shows the chart
+- `/ordercontrol`  please check the detail from [here](./generate_orders/README.md).
+
+### Heroku Connect Demo Configuration
+There are two config folders for the heroku connect demo.
+It's using https://github.com/lorenwest/node-config
+
+#### vis/config
+This config is for the visual part of the chart
+
+- MAX_SNAPSHOTS_PAST_MINUTES
+This variable defines how far back the user can request the list of snapshots of each miniutes.
+
+- DEFAULT_DATA_PERIOD
+When this service pull the data from the database, it looks up the data in this period.
+If it's set to 1 week then the data is calculated from a week ago to now.
+
+- FULFILLMENT_ORDER_TYPE
+The name of the fulfilment order type
+
+- PURCHASE_ORDER_TYPE
+The name of the purchase order type
+
+- REDIS_CHANNEL
+The name of the redis channel
+
+- CATEGORY_LIST
+The list of the category to use
+
+- UPDATE_INTERVAL
+This variable defines how often this service pulls the new data from the database
+
+##### chrat.js Config
+Configuration for the chrat.js
+
+- CHART_VISIBLE_MINS
+This variable defines the visible period of the chart.
+If it's set to 2, then the chart shows the past 2 mins.
+
+- CHART_COLOR_LIST
+This list defines the color of each lines in the chart.
+
+- CHART_REFRESH_DURATION
+This defines the how often the chart updates with the new data
+
+- CHART_DELAY
+This defines the offset period before the new data gets revealed.
+For example, if it's set to 15000, chart is always showing the data from 15 seconds ago
+
+- CHART_LINE_THICKNESS
+This defines the thickness of each lines in the chart
+
+### generate_orders/config
+It's explained [here](./generate_orders/README.md).

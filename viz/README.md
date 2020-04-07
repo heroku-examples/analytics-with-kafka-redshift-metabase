@@ -25,7 +25,3 @@ npm run dev
 ```
 
 Open http://localhost:3000 in a browser and watch data stream in...
-
-```
-
-```

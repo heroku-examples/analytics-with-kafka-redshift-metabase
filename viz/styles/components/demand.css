@@ -1,0 +1,253 @@
+.demand-chart { 
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  
+  &-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &--x-ticks {
+    display: flex;
+    margin: 20px 0px 20px 0;
+    justify-content: space-between;
+    position: relative;
+  }
+
+  &--x-tick {
+    font-size: 18px;
+  }
+
+  &-y-ticks {
+    width: 38px;
+    position: relative;
+    font-size: 18px;
+  }
+
+}
+
+#demand-chart {
+  /* width: 100%; */
+  /* max-width: 1440px; */
+  /* max-height: 60vh; */
+  border: solid 1px #ccc;
+  background-color: #FFFFFF;
+}
+
+.demand-category {
+  text-align: center;
+
+  li {
+    list-style: none;
+    display: inline-block;
+    margin-right: 20px;
+    padding: 9px 0;
+    padding-left: 20px;
+    font-size: 12px;
+    line-height: 14px;
+    color: #757a7d;
+    text-transform: capitalize;
+    margin-left: 8px;
+    font-weight: bold;
+  }
+
+  &--color-box {
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    margin-right: 3px;
+    border-radius: 4px;
+    top: 7px;
+    position: relative;
+  }
+}
+
+.demand--fulfillment-button {
+  background-color: #42a1d7;
+  border-radius: 3px;
+  color: #ffffff;
+  font-weight: bold;
+  padding: 10px 15px;
+  margin-right: 21px;
+  display: inline-block;
+  position: absolute;
+  right: 0;
+  top: 15px;
+  cursor: pointer;
+
+  @media screen and (min-width: 730px) {
+    padding: 15px 55px;
+    top: 35px;
+  }
+}
+
+.demand-modal {
+  display: none;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+
+  &__active {
+    display: block;
+  }
+
+  &__submitting {
+    .demand-modal--overlay {
+      display: block;
+    }
+  }
+
+  &--title {
+    text-align: center;
+
+    &__success,
+    &__error {
+      display: none
+    }
+  }
+
+  &__success,
+  &__error {
+    .demand-form,
+    .demand-modal--title {
+      display: none
+    }
+  }
+
+  &__success {
+    .demand-modal--title__success {
+      display: block;
+    }
+  }
+
+  &__error {
+    .demand-modal--title__error {
+      display: block;
+    }
+  }
+
+  &--overlay {
+    display: none;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-color: rgba(256,256,256,0.7);
+    top: 0;
+    left: 0;
+    border-radius: 5px;
+
+    img {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 50px;
+      height: 50px;
+      margin-left: -25px;
+      margin-top: -25px;
+    }
+  }
+}
+
+.demand-form-container {
+  border-radius: 5px;
+  background-color: #ffffff;
+  padding: 20px 45px;
+  position: fixed;
+  width: 500px;
+  height: 400;
+  top: calc(50% - 200px);
+  left: calc(50% - 250px);
+}
+
+.demand-form {
+  &--fields-container {
+    display: flex;
+    label {
+      display: none;
+    }
+    &:first-child {
+      label {
+        display: block;
+      }
+    }
+  }
+
+  &--field-item {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &--field-item-category {
+    width: 70%;
+    margin-right: 10%;
+  }
+
+  &--field-item-amount {
+    width: 20%;
+  }
+
+  &--field-input {
+    margin-top: 7px;
+    border-radius: 1px;
+    text-align: center;
+    border-style: solid;
+    border-color: #ccc;
+    height: 40px;
+  }
+
+  &--add-button-container {
+    padding: 10px 0;
+  }
+
+  &--add-button {
+    display: inline-block;
+    color: #42a1d7;
+
+    &:hover {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    &:before {
+      content: '⊕';
+      margin-right: 4px;
+      display: inline-block;
+      font-size: 130%;
+    }
+  }
+
+  &--submit-button-container {
+    text-align: center;
+    margin: 20px;
+  }
+
+  &--submit-button {
+    text-align: center;
+    padding: 10px 79px;
+    background-color: #42a1d7;
+    color: #ffffff;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+}
+
+.worker-running [start-button],
+.worker-stopped [stop-button],
+.worker-deleting button{
+  display: none;
+}
+
+.worker-deleting [status] {
+  color: red;
+}
+
+.worker-running [status] {
+  color: green;
+}

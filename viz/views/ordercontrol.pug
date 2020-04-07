@@ -1,0 +1,16 @@
+extends layout
+
+block content
+    h4
+      | Order Maker Status: 
+      span(status='')
+    p
+      | These buttons will send a requset to the woker. Please look at the status above to see if it worked.
+    div.order-control-buttons
+      button(start-button='')
+        | Start
+      button(stop-button='')
+        | Stop
+      button(reset-button='')
+        | Delete All
+
