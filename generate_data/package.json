@@ -11,7 +11,7 @@
   "dependencies": {
     "bunyan": "^1.8.12",
     "csv-stringify": "^5.3.3",
-    "minimist": "^1.2.0",
+    "minimist": "^1.2.3",
     "moment": "^2.24.0",
     "no-kafka": "^3.4.3",
     "progress": "^2.0.3",
