@@ -59,21 +59,23 @@ const getData = (db, timeCondition = ['>', DEFAULT_DATA_PERIOD]) => {
 }
 
 const createOrder = (db, orderData) => {
-  const category = _.keys(orderData)[0]
-  let order = {
-    category,
-    amount: orderData[category],
-    approved: false,
-    type: FULFILLMENT_ORDER_TYPE,
-    createdat: moment().toISOString()
-  }
+  const categories = _.keys(orderData)
+  const orders = categories.map((category) => {
+    const order = {
+      category,
+      amount: orderData[category],
+      approved: false,
+      type: FULFILLMENT_ORDER_TYPE,
+      createdat: moment().toISOString()
+    }
+    const query = knex('orders')
+      .insert(order)
+      .returning('*')
+      .toQuery()
+    return db.any(query)
+  })
 
-  const query = knex('orders')
-    .insert(order)
-    .returning('*')
-    .toQuery()
-
-  return db.any(query)
+  return Promise.all(orders)
 }
 
 const initRoutes = (app, NODB, db) => {

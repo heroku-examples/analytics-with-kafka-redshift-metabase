@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const path = require('path')
 const server = require('http').createServer()
 const { spawn } = require('child_process')
@@ -39,7 +41,7 @@ if (!NODB) {
   const dbUrl = `${process.env.DATABASE_URL ||
     process.env.AWS_DATABASE_URL ||
     'postgresql://localhost:5432'}?ssl=true`
-  console.log(dbUrl)
+
   db = Postgres(dbUrl)
   if (process.env.USE_DB === 'redshift') {
     query = Postgres.helpers.concat([
