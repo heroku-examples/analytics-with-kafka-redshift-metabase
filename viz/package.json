@@ -19,7 +19,7 @@
     "express": "^4.17.1",
     "express-basic-auth": "^1.2.0",
     "ioredis": "^4.14.1",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "knex": "^0.20.0",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
