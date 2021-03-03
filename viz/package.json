@@ -28,7 +28,7 @@
     "normalize.css": "^8.0.1",
     "optimist": "^0.6.1",
     "pg-promise": "^9.1.4",
-    "pug": "^2.0.4",
+    "pug": "^3.0.1",
     "reconnecting-websocket": "^4.2.0",
     "ws": "^7.1.2"
   },
