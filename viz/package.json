@@ -30,7 +30,7 @@
     "pg-promise": "^9.1.4",
     "pug": "^2.0.4",
     "reconnecting-websocket": "^4.2.0",
-    "ws": "^7.1.2"
+    "ws": "^7.4.5"
   },
   "devDependencies": {
     "@babel/core": "^7.6.0",
